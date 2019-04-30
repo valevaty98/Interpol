@@ -3,7 +3,9 @@ package by.training.interpol.command;
 public enum CommandEnum {
     LOGIN (new LoginCommand()),
     SIGNUP (new SignUpCommand()),
-    LOGOUT (new LogoutCommand());
+    HOME (new HomeCommand()),
+    LOGOUT (new LogoutCommand()),
+    SEARCH (new SearchCommand());
 
     private Command command;
 

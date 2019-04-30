@@ -5,14 +5,13 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title>Interpol</title>
-    <link rel="stylesheet" href="css/mp-style.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/mapag-style.css" type="text/css" media="all"/>
     <!--[if lte IE 6]>
     <link rel="stylesheet" href="css/ie6.css" type="text/css" media="all"/><![endif]-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="shortcut icon" href="images/interpol-logo.png" type="image/png"/>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <!-- JS -->
     <!-- End JS -->
@@ -26,7 +25,7 @@
 
     <!-- Header -->
     <div id="header">
-        <h1 id="logo"><a href="#">INTERPOL</a></h1>
+        <h1 id="logo"><a href="../controller?command=home">INTERPOL</a></h1>
 
         <!-- Navigation -->
         <div id="navigation">
@@ -42,84 +41,48 @@
     <div class="tab-content">
         <!-- Main -->
         <div id="main">
-            <!-- Content -->
-            <div id="content">
-                <div class="wanted-persons">
-                    <%--                    <div class="cl">&nbsp;</div>--%>
-                    <ul><c:forEach var="person" items="${wantedPeople}">
+            <div class="wanted-persons">
+                <ul>
+                    <c:forEach var="person" items="${wantedPeople}">
                         <li>
-                            <a href="#"><img src="data:image/png;base64,<c:out value="${person.image}"/>" alt=""/>
-                            </a>
-                            <div class="person-info">
-                                <h4><c:out value="${person.name}"/> <c:out value="${person.surname}"/></h4>
-                                <div class="person-desc">
-                                    <p class="age-info"><c:out value="${person.age}"/> years old</p>
-                                    <strong class="state-info"><c:out value="${person.birthPlace}"/></strong>
+                            <a class="tab" href="#wanted-full">
+                                <img src="data:image/png;base64,<c:out value="${person.image}"/>" alt=""/>
+                                <div class="person-info">
+                                    <h4><c:out value="${person.name}"/> <c:out value="${person.surname}"/></h4>
+                                    <div class="person-desc">
+                                        <p class="age-info"><c:out value="${person.age}"/> years old</p>
+                                        <strong class="state-info"><c:out value="${person.birthPlace}"/></strong>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </li>
                     </c:forEach>
-<%--                        <li>--%>
-<%--                            <a href="#"><img src="css/images/big1.jpg" alt=""/></a>--%>
-<%--                            <div class="person-info">--%>
-<%--                                <h4>NAME SURNAME</h4>--%>
-<%--                                <div class="person-desc">--%>
-<%--                                    <p class="age-info">30 years old</p>--%>
-<%--                                    <strong class="state-info">State</strong>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </li>--%>
-<%--                        <li>--%>
-<%--                            <a href="#"><img src="css/images/big1.jpg" alt=""/></a>--%>
-<%--                            <div class="person-info">--%>
-<%--                                <h4>NAME SURNAME</h4>--%>
-<%--                                <div class="person-desc">--%>
-<%--                                    <p class="age-info">30 years old</p>--%>
-<%--                                    <strong class="state-info">State</strong>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </li>--%>
-<%--                        <li>--%>
-<%--                            <a href="#"><img src="css/images/big1.jpg" alt=""/></a>--%>
-<%--                            <div class="person-info">--%>
-<%--                                <h4>NAME SURNAME</h4>--%>
-<%--                                <div class="person-desc">--%>
-<%--                                    <p class="age-info">30 years old</p>--%>
-<%--                                    <strong class="state-info">State</strong>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </li>--%>
-                    </ul>
-                    <%--                    <div class="cl">&nbsp;</div>--%>
-                </div>
+                </ul>
             </div>
-            <!-- End Content -->
             <!-- Sidebar -->
             <div id="sidebar">
                 <!-- Search -->
                 <div class="box search">
                     <h2>Filter</h2>
                     <div class="box-content">
-                        <form action="controller" method="post">
-
+                        <form action="../controller" method="post">
+                            <input type="hidden" name="command" value="search">
                             <div class="form-group">
                                 <label for="usr" class="filter-label">Name:</label>
                                 <input type="text" class="form-control form-control-sm" id="usr"
                                        name="wanted_person_name">
                             </div>
-
                             <div class="form-group">
                                 <label for="surname" class="filter-label">Surname:</label>
                                 <input type="text" class="form-control form-control-sm" id="surname"
                                        name="wanted_person_surname">
                             </div>
-
                             <div class="gender-group">
                                 <label class="filter-label">Gender:</label>
                                 <label class="radio-inline male-label"><input type="radio" name="gender"
-                                                                              value="M">Male</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="F">Female</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="U"
+                                                                              value="Male">Male</label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="Female">Female</label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="Unknown"
                                                                    checked>Unknown</label>
                             </div>
 
@@ -128,18 +91,18 @@
                                 <p>From:
                                     <input class="form-control form-control-lg" pattern="[0-9]{1,3}" size="2"
                                            type="text"
-                                           name="minAge"
+                                           name="fromAge"
                                            id="minAge"
                                            value="0" maxlength="3"/>
                                     To:
-                                    <input class="form-control form-control-sm" size="2" type="text" name="maxAge"
+                                    <input class="form-control form-control-sm" size="2" type="text" name="toAge"
                                            id="maxAge" value="120"
                                            maxlength="3"/>
                                 </p>
                             </div>
                             <div class="form-group">
                                 <label for="state" class="filter-label">Nationality:</label>
-                                <select class="form-control" id="state" name="state">
+                                <select class="form-control" id="state" name="nation">
                                     <option></option>
                                     <option value="AF">Afghanistan</option>
                                     <option value="AL">Albania</option>
@@ -342,10 +305,7 @@
                                     <option value="ZW">Zimbabwe</option>
                                 </select>
                             </div>
-
-
-                            <input type="submit" class="search-submit" value="Search"/>
-
+                            <button type="submit" class="search-submit">Search</button>
                         </form>
                     </div>
                 </div>
@@ -397,65 +357,67 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="wanted-full">
-        <div class="container">
-            <div class="row info-table">
-                <div class="col-sm-4 col-md-4">
-                    <img src="images/interpol-logo.png"
-                         alt="" class="img-rounded img-responsive"/>
-                </div>
-                <div class="col-sm-8 col-md-8">
-                    <table class="table table-bordered">
-                        <tbody>
-                        <tr>
-                            <th scope="row">Name</th>
-                            <td>Mark</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Surname</th>
-                            <td>Otto</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Gender</th>
-                            <td>Male</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Age</th>
-                            <td>35</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">State</th>
-                            <td>Belarus</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Height</th>
-                            <td>1.75m</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Weight</th>
-                            <td>75kg</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Charges</th>
-                            <td>murderer</td>
-                        </tr>
-                        <tr>
-                            <th scope="row" class="col-sm-3">Description</th>
-                            <td>kssssssssssssssssss sssssssssssssssssssssss sssssssssssssssssssssssss
-                                sssssssssssssssssss sssssssss
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div>
-                        <button type="button" class="btn send-button">Send message</button>
-                        <button type="button" class="btn back-button" onclick="history.back()">Back</button>
+
+        <div id="wanted-full">
+            <div class="container">
+                <div class="row info-table">
+                    <div class="col-sm-4 col-md-4">
+                        <img src="images/interpol-logo.png"
+                             alt="" class="img-rounded img-responsive"/>
+                    </div>
+                    <div class="col-sm-8 col-md-8">
+                        <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <th scope="row">Name</th>
+                                <td>Mark</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Surname</th>
+                                <td>Otto</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Gender</th>
+                                <td>Male</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Age</th>
+                                <td>35</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">State</th>
+                                <td>Belarus</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Height</th>
+                                <td>1.75m</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Weight</th>
+                                <td>75kg</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Charges</th>
+                                <td>murderer</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="col-sm-3">Description</th>
+                                <td>kssssssssssssssssss sssssssssssssssssssssss sssssssssssssssssssssssss
+                                    sssssssssssssssssss sssssssss
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div>
+                            <button type="button" class="btn send-button">Send message</button>
+                            <button type="button" class="btn back-button" onclick="history.back()">Back</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Footer -->
     <div id="footer">
         <p class="right">

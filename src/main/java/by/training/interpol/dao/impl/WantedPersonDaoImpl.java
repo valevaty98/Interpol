@@ -3,6 +3,7 @@ package by.training.interpol.dao.impl;
 import by.training.interpol.dao.BaseDao;
 import by.training.interpol.dao.DaoException;
 import by.training.interpol.dao.WantedPersonDao;
+import by.training.interpol.entity.Gender;
 import by.training.interpol.entity.WantedPerson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +17,8 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
     private static Logger logger = LogManager.getLogger();
 
     private static final String SQL_SELECT_WANTED_PEOPLE_BRIEF =
-            "SELECT w.person_id, w.name, w.surname, w.age, b.birth_place, w.image " +
+            "SELECT w.person_id, w.name, w.surname, w.gender, w.characteristics, w.height, w.weight, w.charges, " +
+                    "b.birth_place, w.age, w.image " +
                     "FROM wanted_people w INNER JOIN birth_places b " +
                     "ON w.birth_place_id = b.bearth_place_id";
 
@@ -42,11 +44,17 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
             long wantedPersonId = rs.getLong(1);
             String name = rs.getString(2);
             String surname = rs.getString(3);
-            int age = rs.getInt(4);
-            String birthPlace = rs.getString(5);
-            Blob image = rs.getBlob(6);
+            Gender gender = Gender.valueOf(rs.getString(4).toUpperCase());
+            String characteristics = rs.getString("characteristics");
+            float height = rs.getFloat("height");
+            float weight = rs.getFloat("weight");
+            String charges = rs.getString("charges");
+            String birthPlace = rs.getString("birth_place");
+            int age = rs.getInt("age");
+            Blob image = rs.getBlob("image");
 
-            WantedPerson person = new WantedPerson(wantedPersonId, name, surname, age, birthPlace, image);
+            WantedPerson person = new WantedPerson(wantedPersonId, name, surname, gender, characteristics,
+                    height, weight, charges, birthPlace, age, image);
             wantedPeople.add(person);
         }
         return wantedPeople;

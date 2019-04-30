@@ -11,8 +11,8 @@ public class WantedPerson extends Entity {
     private String surname;
     private Gender gender;
     private String characteristics;
-    private Float height;
-    private Float weight;
+    private float height;
+    private float weight;
     private String charges;
     private int age;
     private String birthPlace;
@@ -31,7 +31,8 @@ public class WantedPerson extends Entity {
         }
     }
 
-    public WantedPerson(long id, String name, String surname, Gender gender, String characteristics, Float height, Float weight, String charges, String birthPlace, int age, Blob img) {
+    public WantedPerson(long id, String name, String surname, Gender gender, String characteristics, float height, 
+                        float weight, String charges, String birthPlace, int age, Blob img) {
         super(id);
         this.name = name;
         this.surname = surname;
@@ -105,19 +106,19 @@ public class WantedPerson extends Entity {
         this.characteristics = characteristics;
     }
 
-    public Float getHeight() {
+    public float getHeight() {
         return height;
     }
 
-    public void setHeight(Float height) {
+    public void setHeight(float height) {
         this.height = height;
     }
 
-    public Float getWeight() {
+    public float getWeight() {
         return weight;
     }
 
-    public void setWeight(Float weight) {
+    public void setWeight(float weight) {
         this.weight = weight;
     }
 
