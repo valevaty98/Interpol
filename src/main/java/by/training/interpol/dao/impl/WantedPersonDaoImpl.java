@@ -5,6 +5,7 @@ import by.training.interpol.dao.DaoException;
 import by.training.interpol.dao.WantedPersonDao;
 import by.training.interpol.entity.Gender;
 import by.training.interpol.entity.WantedPerson;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,6 +22,13 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
                     "b.birth_place, w.age, w.image " +
                     "FROM wanted_people w INNER JOIN birth_places b " +
                     "ON w.birth_place_id = b.bearth_place_id";
+    private static final String SQL_SELECT_PERSON_BY_ID =
+            "SELECT w.person_id, w.name, w.surname, w.gender, w.characteristics, w.height, w.weight, w.charges, " +
+                    "b.birth_place, w.age, w.image " +
+                    "FROM wanted_people w INNER JOIN birth_places b " +
+                    "ON w.birth_place_id = b.bearth_place_id " +
+                    "WHERE w.person_id=?";
+
 
     @Override
     public List<WantedPerson> findWantedPeopleBrief() throws DaoException {
@@ -67,7 +75,26 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
 
     @Override
     protected Optional<WantedPerson> parseResultSet(ResultSet rs) throws SQLException {
-        return Optional.empty();
+        if (rs.next()) {
+            long wantedPersonId = rs.getLong(1);
+            String name = rs.getString(2);
+            String surname = rs.getString(3);
+            Gender gender = Gender.valueOf(rs.getString(4).toUpperCase());
+            String characteristics = rs.getString("characteristics");
+            float height = rs.getFloat("height");
+            float weight = rs.getFloat("weight");
+            String charges = rs.getString("charges");
+            String birthPlace = rs.getString("birth_place");
+            int age = rs.getInt("age");
+            Blob image = rs.getBlob("image");
+
+            return Optional.of(
+                    new WantedPerson(wantedPersonId, name, surname, gender, characteristics,
+                            height, weight, charges, birthPlace, age, image));
+        } else {
+            logger.log(Level.WARN, "No elements in result set!");
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -92,7 +119,7 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
 
     @Override
     protected String selectByIdSQLQuery() {
-        return null;
+        return SQL_SELECT_PERSON_BY_ID;
     }
 
     @Override

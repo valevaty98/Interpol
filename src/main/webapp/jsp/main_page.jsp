@@ -5,11 +5,12 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title>Interpol</title>
-    <link rel="stylesheet" href="css/mapag-style.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/maipai.css" type="text/css" media="all"/>
     <!--[if lte IE 6]>
     <link rel="stylesheet" href="css/ie6.css" type="text/css" media="all"/><![endif]-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
     <link rel="shortcut icon" href="images/interpol-logo.png" type="image/png"/>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -45,7 +46,7 @@
                 <ul>
                     <c:forEach var="person" items="${wantedPeople}">
                         <li>
-                            <a class="tab" href="#wanted-full">
+                            <a href="../controller?command=show_full_person&person_id=<c:out value="${person.id}"/>">
                                 <img src="data:image/png;base64,<c:out value="${person.image}"/>" alt=""/>
                                 <div class="person-info">
                                     <h4><c:out value="${person.name}"/> <c:out value="${person.surname}"/></h4>
@@ -70,12 +71,12 @@
                             <div class="form-group">
                                 <label for="usr" class="filter-label">Name:</label>
                                 <input type="text" class="form-control form-control-sm" id="usr"
-                                       name="wanted_person_name">
+                                       name="wanted_person_name" value="<c:out value="${personName}"/>">
                             </div>
                             <div class="form-group">
                                 <label for="surname" class="filter-label">Surname:</label>
                                 <input type="text" class="form-control form-control-sm" id="surname"
-                                       name="wanted_person_surname">
+                                       name="wanted_person_surname" value="${personSurname}">
                             </div>
                             <div class="gender-group">
                                 <label class="filter-label">Gender:</label>
@@ -93,10 +94,10 @@
                                            type="text"
                                            name="fromAge"
                                            id="minAge"
-                                           value="0" maxlength="3"/>
+                                           value="${fromAge}" maxlength="3"/>
                                     To:
                                     <input class="form-control form-control-sm" size="2" type="text" name="toAge"
-                                           id="maxAge" value="120"
+                                           id="maxAge" value="${toAge}"
                                            maxlength="3"/>
                                 </p>
                             </div>
@@ -315,10 +316,40 @@
             <!-- End Sidebar -->
 
             <div class="cl">&nbsp;</div>
+            <nav aria-label="Navigation for countries">
+                <ul class="pagination">
+                    <c:if test="${currentPage != 1}">
+                        <li class="page-item"><a class="page-link"
+                                                 href="../controller?command=get_page&recordsPerPage=${recordsPerPage}&currentPage=${currentPage-1}">Previous</a>
+                        </li>
+                    </c:if>
+
+                    <c:forEach begin="1" end="${noOfPages}" var="i">
+                        <c:choose>
+                            <c:when test="${currentPage eq i}">
+                                <li class="page-item active"><a class="page-link">
+                                        ${i} <span class="sr-only">(current)</span></a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="page-item"><a class="page-link"
+                                                         href="../controller?command=get_page&recordsPerPage=${recordsPerPage}&currentPage=${i}">${i}</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+
+                    <c:if test="${currentPage lt noOfPages}">
+                        <li class="page-item"><a class="page-link"
+                                                 href="../controller?command=get_page&recordsPerPage=${recordsPerPage}&currentPage=${currentPage+1}">Next</a>
+                        </li>
+                    </c:if>
+                </ul>
+            </nav>
         </div>
         <!-- End Main -->
         <div id="profile">
-            <div class="container">
+            <div class="container" style="width: 100%;">
                 <div class="row info-table">
 
                     <div class="col-sm-8 col-md-8 center-block">
@@ -336,6 +367,10 @@
                                 <td>${user.email}</td>
                             </tr>
                             <tr>
+                                <th scope="row">Role</th>
+                                <td>${user.role}</td>
+                            </tr>
+                            <tr>
                                 <th scope="row" colspan="2" class="general-field"><h4>Assessment</h4></th>
                             </tr>
                             <tr>
@@ -349,9 +384,8 @@
                             </tbody>
                         </table>
                         <div class="center-btn">
-                            <button type="button" class="btn send-button us-prof-btn">Edit Email</button>
-                            <button type="button" class="btn back-button us-prof-btn" onclick="history.back()">Back
-                            </button>
+                            <a class="btn send-button us-prof-btn" href="edit_email.jsp">Edit Email</a>
+                            <a class="btn back-button us-prof-btn" href="../controller?command=logout">Log out</a>
                         </div>
                     </div>
                 </div>
@@ -427,9 +461,14 @@
     </div>
     <!-- End Footer -->
 
+
 </div>
 <!-- End Shell -->
 <!-- jQuery -->
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src="${pageContext.request.contextPath}/jsp/js/login-ind.js"></script>
 </body>

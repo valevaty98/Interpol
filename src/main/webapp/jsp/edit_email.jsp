@@ -10,42 +10,29 @@
 <body>
 
 <div class="form">
-            <h1>Send Message</h1>
+            <h1>Edit Email</h1>
+            <p>${edit_email_error}</p>
+            <form action="../controller" method="post">
+                <input type="hidden" name="command" value="edit_email">
 
-            <form action="../controller?command=send_message" method="post">
                 <div class="field-wrap">
                     <label>
-                        Subject<span class="req">*</span>
+                        New email...
                     </label>
-                    <input type="text" name="subject" required autocomplete="off"/>
+                    <input type="email" name="email" required autocomplete="off"/>
                 </div>
 
                 <div class="field-wrap">
                     <label>
-                        Email Address (if you don't want to use account email)
+                        Password<span class="req">*</span>
                     </label>
-                    <input type="email" autocomplete="off"/>
+                    <input type="password" name="password" required autocomplete="off"/>
                 </div>
-
-                <div class="field-wrap">
-                    <label>
-                        Write A Message..<span class="req">*</span>
-                    </label>
-                    <textarea name="message" rows="4" required autocomplete="off"></textarea>
-                    <!--                    <input type="text"required autocomplete="off"/>-->
-                </div>
-
                 <div>
-                    <button type="submit" class="button button-block send-button">Send</button>
+                    <button type="submit" class="button button-block send-button">Save</button>
                     <button type="button" class="button button-block back-button" onclick="history.back()">Back</button>
                 </div>
-
             </form>
-
-        </div>
-
-        <div id="login">
-
         </div>
 
     </div><!-- tab-content -->

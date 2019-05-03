@@ -14,6 +14,7 @@ public class SignUpCommand implements Command {
     private static final String PASSWORD_PARAM = "password";
     private static final String ERROR_PAGE_PATH = "/jsp/error.jsp";
     private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
+    private static final String INDEX_PAGE = "/index.jsp";
 
     @Override
     public ResponseType execute(SessionRequestContent content) {
@@ -40,8 +41,9 @@ public class SignUpCommand implements Command {
             content.putInSessionAttributes("wantedPeople", wantedPeople);
             return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
         } else {
-            content.putInSessionAttributes("error", "Illegal params.");
-            return builder.buildResponseType(ERROR_PAGE_PATH, SendType.REDIRECT);
+            content.invalidateSession();
+            content.putInRequestAttributes("error", "Login already Taken.");
+            return builder.buildResponseType(INDEX_PAGE, SendType.FORWARD);
         }
     }
 }

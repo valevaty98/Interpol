@@ -234,6 +234,7 @@ a.cart-link:hover {
 
 .container {
     padding: 10px 0 0 0;
+    width: 100%;
 }
 .box {
     padding: 1px;
@@ -251,9 +252,6 @@ a.cart-link:hover {
 .general-field {
     text-align: center;
 }
-.back-button {
-    color: #E9F0F0;
-}
 
 .center-block {
     display: block;
@@ -266,10 +264,7 @@ a.cart-link:hover {
     background: #1AB188;
     border: 0;
     color: #fff;
-    height: 40px;
-    display: block;
     line-height: 27px;
-    cursor: pointer;
     margin: 12px 0 10px 0;
     font-size: 16px;
 }
@@ -284,12 +279,8 @@ a.cart-link:hover {
 .send-button {
     width: 150px;
     background: #1AB188;
-    border: 0;
     color: #fff;
-    height: 40px;
-    display: block;
     line-height: 27px;
-    cursor: pointer;
     margin: 12px 0 10px 0;
     font-size: 16px;
 }
@@ -482,7 +473,6 @@ a.bul {
 
 #wanted-full {
     flex: 1 0 auto;
-    border: solid 1px #dedede;
     margin-top: 10px;
     display: none;
 }
@@ -548,6 +538,11 @@ img {
 .gender-group {
     margin-bottom: 15px;
 }
+
+#state {
+    height: 33px;
+}
+
 .state-info {
     display: block;
     font-size: 21px;

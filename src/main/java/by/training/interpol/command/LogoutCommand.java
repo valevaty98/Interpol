@@ -1,11 +1,11 @@
 package by.training.interpol.command;
 
 public class LogoutCommand implements Command {
+    private static final String INDEX_PAGE = "/index.jsp";
     @Override
     public ResponseType execute(SessionRequestContent content) {
-        content.putInRequestAttributes("lastUser", content.getFromSessionAttributes("user"));
+        ResponseTypeCreator builder = new ResponseTypeCreator();
         content.invalidateSession();
-        System.out.println("logout");
-        return new ResponseType("index.jsp", SendType.FORWARD);
+        return builder.buildResponseType(INDEX_PAGE, SendType.REDIRECT);
     }
 }

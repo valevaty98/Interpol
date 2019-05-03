@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface UserDao {
     Optional<User> findUserByLogin(String login) throws DaoException;
 
+    boolean updateUserEmail(User user, String email) throws DaoException;
+
     Optional<User> findUserByEmail(String email) throws DaoException;
 
     List<User> selectUsersByRole(Role role) throws DaoException;

@@ -44,10 +44,31 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
             "WHERE user_id=?";
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE user_id=? AND login=? AND password=? " +
             "AND email=? AND role=?";
+    private static final String SQL_UPDATE_USER_EMAIL = "UPDATE users SET email=? WHERE user_id=?";
 
     @Override
     public Optional<User> findUserByLogin(String login) throws DaoException {
         return findUser(login, SQL_SELECT_USER_BY_LOGIN);
+    }
+
+    @Override
+    public boolean updateUserEmail(User user, String email) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            if (pool == null) {
+                throw new DaoException("Null pointer to the pool.");
+            }
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_EMAIL);
+            preparedStatement.setString(1, email);
+            preparedStatement.setLong(2, user.getId());
+            return preparedStatement.executeUpdate() == 1;
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQL Query.", e);
+        } finally {
+            closeResources(preparedStatement, connection);
+        }
     }
 
     @Override
@@ -89,7 +110,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
     }
 
     @Override
-    protected List<User> parseResultSetForEntities(ResultSet rs) throws SQLException{
+    protected List<User> parseResultSetForEntities(ResultSet rs) throws SQLException {
         List<User> users = new ArrayList<>();
         while (rs.next()) {
             long userId = rs.getLong(1);

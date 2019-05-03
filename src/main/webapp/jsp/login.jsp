@@ -17,7 +17,7 @@
     <div class="tab-content">
         <div id="signup">
             <h1>Sign Up</h1>
-
+            <p>${error}</p>
             <form action="controller" method="post">
                 <input type="hidden" name="command" value="signup">
                 <div class="field-wrap">

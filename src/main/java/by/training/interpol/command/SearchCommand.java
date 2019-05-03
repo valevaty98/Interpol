@@ -27,9 +27,17 @@ public class SearchCommand implements Command {
         String fromAge = content.getFromRequestParameters(FROM_AGE_PARAM)[0];
         String toAge = content.getFromRequestParameters(TO_AGE_PARAM)[0];
         String nation = content.getFromRequestParameters(NATIONALITY_PARAM)[0];
+
         filteredWantedPeople = SearchLogic.searchWantedPeople(wantedPeople, name, surname, gender, fromAge, toAge,
                  nation);
         content.putInSessionAttributes("wantedPeople", filteredWantedPeople);
+        content.putInSessionAttributes("personName", name);
+        content.putInSessionAttributes("personSurname", surname);
+        content.putInSessionAttributes("personGender", gender);
+        content.putInSessionAttributes("fromAge", fromAge);
+        content.putInSessionAttributes("toAge", toAge);
+        content.putInSessionAttributes("nation", nation);
+
         return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
     }
 }
