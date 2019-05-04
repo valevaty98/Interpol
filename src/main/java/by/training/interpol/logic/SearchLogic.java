@@ -4,8 +4,14 @@ import by.training.interpol.entity.WantedPerson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static java.time.temporal.ChronoUnit.YEARS;
 
 public class SearchLogic {
     private static Logger logger = LogManager.getLogger();
@@ -15,16 +21,20 @@ public class SearchLogic {
         List<WantedPerson> filteredWantedPeople = new ArrayList<>();
 
         for (WantedPerson person : wantedPeople) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate personBirthDate = LocalDate.parse(person.getBirthDate(), formatter);
+            int personAge = (int)YEARS.between(personBirthDate, LocalDate.now());
             if (
                     (name == null || name.isEmpty() || name.equals(person.getName())) &&
                     (surname == null || surname.isEmpty() || surname.equals(person.getSurname())) &&
                     (gender.equals("Unknown") || gender.toUpperCase().equals(person.getGender().toString())) &&
-                    (fromAge == null || fromAge.isEmpty() || Integer.parseInt(fromAge) <= person.getAge()) &&
-                    (toAge == null || toAge.isEmpty() || Integer.parseInt(toAge) >= person.getAge()) &&
-                    (nationality == null || nationality.isEmpty())
+                    (fromAge == null || fromAge.isEmpty() || Integer.parseInt(fromAge) <= personAge) &&
+                    (toAge == null || toAge.isEmpty() || Integer.parseInt(toAge) >= personAge) &&
+                    (nationality == null || nationality.isEmpty() || person.getNationality().contains(nationality))
             ) {
                 filteredWantedPeople.add(person);
             }
+
         }
 
         return filteredWantedPeople;

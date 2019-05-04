@@ -20,7 +20,7 @@ public class SearchCommand implements Command {
         List<WantedPerson> wantedPeople;
         List<WantedPerson> filteredWantedPeople;
 
-        wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeople();
+        wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleFull();
         String name = content.getFromRequestParameters(NAME_PARAM)[0];
         String surname = content.getFromRequestParameters(SURNAME_PARAM)[0];
         String gender = content.getFromRequestParameters(GENDER_PARAM)[0];
@@ -37,6 +37,8 @@ public class SearchCommand implements Command {
         content.putInSessionAttributes("fromAge", fromAge);
         content.putInSessionAttributes("toAge", toAge);
         content.putInSessionAttributes("nation", nation);
+
+        System.out.println(nation);
 
         return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
     }

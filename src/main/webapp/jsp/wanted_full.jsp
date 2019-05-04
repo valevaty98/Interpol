@@ -5,7 +5,7 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title>Interpol</title>
-    <link rel="stylesheet" href="css/maipai.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/maipagst.css" type="text/css" media="all"/>
     <!--[if lte IE 6]>
     <link rel="stylesheet" href="css/ie6.css" type="text/css" media="all"/><![endif]-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -51,8 +51,13 @@
                                 <div class="person-info">
                                     <h4><c:out value="${person.name}"/> <c:out value="${person.surname}"/></h4>
                                     <div class="person-desc">
-                                        <p class="age-info"><c:out value="${person.age}"/> years old</p>
-                                        <strong class="state-info"><c:out value="${person.birthPlace}"/></strong>
+                                        <p class="birthDate-info">Date of birth: <c:out value="${person.birthDate}"/></p>
+                                        <strong class="state-info">
+                                            <c:set var="nationality_str" value="${person.nationality}" />
+                                            <c:forTokens var="national" items="${nationality_str}" delims="[]">
+                                                <c:out value="${national}"/>
+                                            </c:forTokens>
+                                        </strong>
                                     </div>
                                 </div>
                             </a>
@@ -88,7 +93,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="filter-label">Current age:</label>
+                                <label class="filter-label">Current birthDate:</label>
                                 <p>From:
                                     <input class="form-control form-control-lg" pattern="[0-9]{1,3}" size="2"
                                            type="text"
@@ -314,38 +319,6 @@
 
             </div>
             <!-- End Sidebar -->
-
-            <div class="cl">&nbsp;</div>
-            <nav aria-label="Navigation for countries">
-                <ul class="pagination">
-                    <c:if test="${currentPage != 1}">
-                        <li class="page-item"><a class="page-link"
-                                                 href="../controller?command=get_page&recordsPerPage=${recordsPerPage}&currentPage=${currentPage-1}">Previous</a>
-                        </li>
-                    </c:if>
-
-                    <c:forEach begin="1" end="${noOfPages}" var="i">
-                        <c:choose>
-                            <c:when test="${currentPage eq i}">
-                                <li class="page-item active"><a class="page-link">
-                                        ${i} <span class="sr-only">(current)</span></a>
-                                </li>
-                            </c:when>
-                            <c:otherwise>
-                                <li class="page-item"><a class="page-link"
-                                                         href="../controller?command=get_page&recordsPerPage=${recordsPerPage}&currentPage=${i}">${i}</a>
-                                </li>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
-
-                    <c:if test="${currentPage lt noOfPages}">
-                        <li class="page-item"><a class="page-link"
-                                                 href="../controller?command=get_page&recordsPerPage=${recordsPerPage}&currentPage=${currentPage+1}">Next</a>
-                        </li>
-                    </c:if>
-                </ul>
-            </nav>
         </div>
         <!-- End Main -->
         <div id="profile">
@@ -415,12 +388,21 @@
                                 <td>${wantedPerson.gender}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Age</th>
-                                <td>${wantedPerson.age}</td>
+                                <th scope="row">Birth Date</th>
+                                <td>${wantedPerson.birthDate}</td>
                             </tr>
                             <tr>
                                 <th scope="row">Birth Place</th>
                                 <td>${wantedPerson.birthPlace}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Nationality</th>
+                                <c:set var="nationality_str" value="${wantedPerson.nationality}" />
+                                <td>
+                                    <c:forTokens var="national" items="${nationality_str}" delims="[]">
+                                        <c:out value="${national}"/>
+                                    </c:forTokens>
+                                </td>
                             </tr>
                             <tr>
                                 <th scope="row">Height</th>
@@ -442,7 +424,7 @@
                             </tbody>
                         </table>
                         <div>
-                            <button type="button" class="btn send-button">Send message</button>
+                            <a class="btn send-button" href="send_message.jsp">Send message</a>
                             <button type="button" class="btn back-button" onclick="history.back()">Back</button>
                         </div>
                     </div>

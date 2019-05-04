@@ -2,23 +2,20 @@ package by.training.interpol.entity;
 
 public class Message extends Entity {
     private String message;
-    private User user;
     private String date;
     private long wantedPersonId;
     private long userId;
 
-    public Message(String message, User user, String date, long wantedPersonId, long userId) {
+    public Message(String message, String date, long wantedPersonId, long userId) {
         this.message = message;
-        this.user = user;
         this.date = date;
         this.wantedPersonId = wantedPersonId;
         this.userId = userId;
     }
 
-    public Message(long id, String message, User user, String date, long wantedPersonId, long userId) {
+    public Message(long id, String message, String date, long wantedPersonId, long userId) {
         super(id);
         this.message = message;
-        this.user = user;
         this.date = date;
         this.wantedPersonId = wantedPersonId;
         this.userId = userId;
@@ -30,14 +27,6 @@ public class Message extends Entity {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getDate() {

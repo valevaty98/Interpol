@@ -12,7 +12,6 @@ public class EditEmailLogic {
         System.out.println(user.getPassword().equals(password));
         try {
             if (user.getPassword().equals(password)) {
-                System.out.println("pass equals");
                 isSaved = dao.updateUserEmail(user, email);
                 user.setEmail(email);
             }

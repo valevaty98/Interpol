@@ -1,7 +1,6 @@
 package by.training.interpol.command;
 
 import by.training.interpol.entity.WantedPerson;
-import by.training.interpol.logic.LoginLogic;
 import by.training.interpol.logic.ReceiveWantedPersonInfoLogic;
 
 import java.util.Optional;
@@ -15,7 +14,7 @@ public class ShowFullPersonCommand implements Command {
         long personId = Long.parseLong(content.getFromRequestParameters("person_id")[0]);
         Optional<WantedPerson> wantedPerson;
 
-        wantedPerson = ReceiveWantedPersonInfoLogic.receiveInfoAboutPerson(personId);
+        wantedPerson = ReceiveWantedPersonInfoLogic.receiveFullInfoAboutPerson(personId);
 
         if (wantedPerson.isPresent()) {
             content.putInSessionAttributes("wantedPerson", wantedPerson.get());

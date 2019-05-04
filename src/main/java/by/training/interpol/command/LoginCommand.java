@@ -18,6 +18,7 @@ public class LoginCommand implements Command {
         ResponseTypeCreator builder = new ResponseTypeCreator();
         Optional<User> user;
         List<WantedPerson> wantedPeople;
+        List<String> nationalities;
         String login;
         String password;
         try {
@@ -30,9 +31,11 @@ public class LoginCommand implements Command {
         }
         user = LoginLogic.checkLogin(login, password);
         if (user.isPresent()) {
-            wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeople();
-            content.putInSessionAttributes("user", user.get());
+            wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
+            nationalities = ReceiveWantedPersonInfoLogic.receiveNationalityList();
             content.putInSessionAttributes("wantedPeople", wantedPeople);
+            content.putInSessionAttributes("nationalities", nationalities);
+            content.putInSessionAttributes("user", user.get());
             return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
         } else {
             content.putInSessionAttributes("error", "Illegal params.");

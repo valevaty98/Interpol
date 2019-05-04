@@ -4,6 +4,7 @@ import java.sql.Blob;
 
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 
 public class WantedPerson extends Entity {
@@ -14,16 +15,17 @@ public class WantedPerson extends Entity {
     private float height;
     private float weight;
     private String charges;
-    private int age;
+    private String birthDate;
     private String birthPlace;
+    private List<String> nationality;
     private String image;
 
-    public WantedPerson(long id, String name, String surname, int age, String birthPlace, Blob img) {
+    public WantedPerson(long id, String name, String surname, String birthDate, List<String> nationality, Blob img) {
         super(id);
         this.name = name;
         this.surname = surname;
-        this.age = age;
-        this.birthPlace = birthPlace;
+        this.birthDate = birthDate;
+        this.nationality = nationality;
         try {
             this.image = Base64.getEncoder().encodeToString(img.getBytes(1,(int)img.length()));
         } catch (SQLException e) {
@@ -31,8 +33,27 @@ public class WantedPerson extends Entity {
         }
     }
 
-    public WantedPerson(long id, String name, String surname, Gender gender, String characteristics, float height, 
-                        float weight, String charges, String birthPlace, int age, Blob img) {
+    public WantedPerson(String name, String surname, Gender gender, String characteristics, float height,
+                        float weight, String charges, String birthPlace, String birthDate, List<String> nationality, Blob img) {
+        this.name = name;
+        this.surname = surname;
+        this.gender = gender;
+        this.characteristics = characteristics;
+        this.height = height;
+        this.weight = weight;
+        this.charges = charges;
+        this.birthPlace = birthPlace;
+        this.birthDate = birthDate;
+        this.nationality = nationality;
+        try {
+            this.image = Base64.getEncoder().encodeToString(img.getBytes(1,(int)img.length()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public WantedPerson(long id, String name, String surname, Gender gender, String characteristics, float height,
+                        float weight, String charges, String birthPlace, String birthDate, List<String> nationality, Blob img) {
         super(id);
         this.name = name;
         this.surname = surname;
@@ -42,36 +63,13 @@ public class WantedPerson extends Entity {
         this.weight = weight;
         this.charges = charges;
         this.birthPlace = birthPlace;
-        this.age = age;
+        this.birthDate = birthDate;
+        this.nationality = nationality;
         try {
             this.image = Base64.getEncoder().encodeToString(img.getBytes(1,(int)img.length()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getBirthPlace() {
-        return birthPlace;
-    }
-
-    public void setBirthPlace(String birthPlace) {
-        this.birthPlace = birthPlace;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public String getName() {
@@ -130,12 +128,36 @@ public class WantedPerson extends Entity {
         this.charges = charges;
     }
 
-    public String getState_id() {
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getBirthPlace() {
         return birthPlace;
     }
 
-    public void setState_id(String birthPlace) {
+    public void setBirthPlace(String birthPlace) {
         this.birthPlace = birthPlace;
+    }
+
+    public List<String> getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(List<String> nationality) {
+        this.nationality = nationality;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override

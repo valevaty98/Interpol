@@ -36,7 +36,7 @@ public class SignUpCommand implements Command {
         }
         user = SignUpLogic.signUpUser(login, email, password);
         if (user.isPresent()) {
-            wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeople();
+            wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
             content.putInSessionAttributes("user", user.get());
             content.putInSessionAttributes("wantedPeople", wantedPeople);
             return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);

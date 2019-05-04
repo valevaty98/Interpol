@@ -106,7 +106,7 @@ public abstract class BaseDao<T extends Entity> {
             }
             connection = pool.getConnection();
             preparedStatement = connection.prepareStatement(insertSQLQuery());
-            this.prepareStatementForInsert(preparedStatement, entity);
+            prepareStatementForInsert(preparedStatement, entity);
             return (preparedStatement.executeUpdate() == 1);
         } catch (SQLException e) {
             throw new DaoException("Exception while executing SQLQuery.", e);

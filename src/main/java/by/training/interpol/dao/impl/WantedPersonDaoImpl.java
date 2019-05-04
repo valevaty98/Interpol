@@ -17,17 +17,33 @@ import java.util.Optional;
 public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements WantedPersonDao {
     private static Logger logger = LogManager.getLogger();
 
-    private static final String SQL_SELECT_WANTED_PEOPLE_BRIEF =
+    private static final String SQL_SELECT_WANTED_PEOPLE_FULL =
             "SELECT w.person_id, w.name, w.surname, w.gender, w.characteristics, w.height, w.weight, w.charges, " +
-                    "b.birth_place, w.age, w.image " +
+                    "b.name as birth_place, w.birth_date, w.image, n.name as nationality " +
                     "FROM wanted_people w INNER JOIN birth_places b " +
-                    "ON w.birth_place_id = b.bearth_place_id";
+                    "ON w.birth_place_id = b.birth_place_id " +
+                    "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
+                    "INNER JOIN nationality n ON np.nationality_id = n.nationality_id " +
+                    "ORDER BY w.person_id";
+    private static final String SQL_SELECT_WANTED_PEOPLE_BRIEF =
+            "SELECT w.person_id, w.name, w.surname, w.birth_date, w.image, n.name as nationality " +
+                    "FROM wanted_people w " +
+                    "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
+                    "INNER JOIN nationality n ON np.nationality_id = n.nationality_id " +
+                    "ORDER BY w.person_id";
     private static final String SQL_SELECT_PERSON_BY_ID =
             "SELECT w.person_id, w.name, w.surname, w.gender, w.characteristics, w.height, w.weight, w.charges, " +
-                    "b.birth_place, w.age, w.image " +
+                    "b.name as birth_place, w.birth_date, w.image, n.name as nationality " +
                     "FROM wanted_people w INNER JOIN birth_places b " +
-                    "ON w.birth_place_id = b.bearth_place_id " +
+                    "ON w.birth_place_id = b.birth_place_id " +
+                    "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
+                    "INNER JOIN nationality n ON np.nationality_id = n.nationality_id " +
                     "WHERE w.person_id=?";
+    private static final String SQL_SELECT_ALL_NATIONALITIES =
+            "SELECT DISTINCT n.name as nationality " +
+                    "FROM wanted_people w " +
+                    "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
+                    "INNER JOIN nationality n ON np.nationality_id = n.nationality_id";
 
 
     @Override
@@ -46,51 +62,107 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
         }
     }
 
+    @Override
+    public List<String> findNationalities() throws DaoException {
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = pool.getConnection();
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(SQL_SELECT_ALL_NATIONALITIES);
+
+            List<String> nationalities = new ArrayList<>();
+            while (rs.next()) {
+                nationalities.add(rs.getString("nationality"));
+            }
+            return nationalities;
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(statement, connection);
+        }
+    }
+
     protected List<WantedPerson> parseResultSetForEntitiesBrief(ResultSet rs) throws SQLException {
         List<WantedPerson> wantedPeople = new ArrayList<>();
+        long previousPersonId = 0;
         while (rs.next()) {
-            long wantedPersonId = rs.getLong(1);
-            String name = rs.getString(2);
-            String surname = rs.getString(3);
-            Gender gender = Gender.valueOf(rs.getString(4).toUpperCase());
-            String characteristics = rs.getString("characteristics");
-            float height = rs.getFloat("height");
-            float weight = rs.getFloat("weight");
-            String charges = rs.getString("charges");
-            String birthPlace = rs.getString("birth_place");
-            int age = rs.getInt("age");
-            Blob image = rs.getBlob("image");
-
-            WantedPerson person = new WantedPerson(wantedPersonId, name, surname, gender, characteristics,
-                    height, weight, charges, birthPlace, age, image);
-            wantedPeople.add(person);
+            long wantedPersonId = rs.getLong("person_id");
+            if (previousPersonId == wantedPersonId) {
+                wantedPeople.get(wantedPeople.size() - 1).getNationality().add(rs.getString("nationality"));
+            } else {
+                String name = rs.getString("name");
+                String surname = rs.getString("surname");
+                String birthDate = rs.getDate("birth_date").toString();
+                Blob image = rs.getBlob("image");
+                List<String> nationality = new ArrayList<>();
+                nationality.add(rs.getString("nationality"));
+                WantedPerson person = new WantedPerson(wantedPersonId, name, surname, birthDate, nationality, image);
+                wantedPeople.add(person);
+                previousPersonId = wantedPersonId;
+            }
         }
         return wantedPeople;
     }
 
     @Override
     protected List<WantedPerson> parseResultSetForEntities(ResultSet rs) throws SQLException {
-        return null;
+        List<WantedPerson> wantedPeople = new ArrayList<>();
+        long previousPersonId = 0;
+        while (rs.next()) {
+            long wantedPersonId = rs.getLong("person_id");
+            if (previousPersonId == wantedPersonId) {
+                wantedPeople.get(wantedPeople.size() - 1).getNationality().add(rs.getString("nationality"));
+            } else {
+                String name = rs.getString("name");
+                String surname = rs.getString("surname");
+                Gender gender = Gender.valueOf(rs.getString("gender").toUpperCase());
+                String characteristics = rs.getString("characteristics");
+                float height = rs.getFloat("height");
+                float weight = rs.getFloat("weight");
+                String charges = rs.getString("charges");
+                String birthPlace = rs.getString("birth_place");
+                String birthDate = rs.getDate("birth_date").toString();
+                Blob image = rs.getBlob("image");
+                List<String> nationality = new ArrayList<>();
+                nationality.add(rs.getString("nationality"));
+                WantedPerson person = new WantedPerson(wantedPersonId, name, surname, gender, characteristics, height,
+                        weight, charges, birthPlace, birthDate, nationality, image);
+                wantedPeople.add(person);
+                previousPersonId = wantedPersonId;
+            }
+        }
+        return wantedPeople;
     }
 
     @Override
     protected Optional<WantedPerson> parseResultSet(ResultSet rs) throws SQLException {
-        if (rs.next()) {
-            long wantedPersonId = rs.getLong(1);
-            String name = rs.getString(2);
-            String surname = rs.getString(3);
-            Gender gender = Gender.valueOf(rs.getString(4).toUpperCase());
-            String characteristics = rs.getString("characteristics");
-            float height = rs.getFloat("height");
-            float weight = rs.getFloat("weight");
-            String charges = rs.getString("charges");
-            String birthPlace = rs.getString("birth_place");
-            int age = rs.getInt("age");
-            Blob image = rs.getBlob("image");
-
-            return Optional.of(
-                    new WantedPerson(wantedPersonId, name, surname, gender, characteristics,
-                            height, weight, charges, birthPlace, age, image));
+        WantedPerson person = null;
+        boolean wasFirstRow = false;
+        while (rs.next()) {
+            if (!wasFirstRow) {
+                long wantedPersonId = rs.getLong("person_id");
+                String name = rs.getString("name");
+                String surname = rs.getString("surname");
+                Gender gender = Gender.valueOf(rs.getString("gender").toUpperCase());
+                String characteristics = rs.getString("characteristics");
+                float height = rs.getFloat("height");
+                float weight = rs.getFloat("weight");
+                String charges = rs.getString("charges");
+                String birthPlace = rs.getString("birth_place");
+                String birthDate = rs.getDate("birth_date").toString();
+                Blob image = rs.getBlob("image");
+                List<String> nationality = new ArrayList<>();
+                nationality.add(rs.getString("nationality"));
+                person = new WantedPerson(wantedPersonId, name, surname, gender, characteristics, height,
+                        weight, charges, birthPlace, birthDate, nationality, image);
+                wasFirstRow = true;
+            } else {
+                person.getNationality().add(rs.getString("nationality"));
+            }
+        }
+        if (wasFirstRow) {
+            return Optional.of(person);
         } else {
             logger.log(Level.WARN, "No elements in result set!");
             return Optional.empty();
@@ -114,7 +186,7 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
 
     @Override
     protected String selectAllSQLQuery() {
-        return null;
+        return SQL_SELECT_WANTED_PEOPLE_FULL;
     }
 
     @Override

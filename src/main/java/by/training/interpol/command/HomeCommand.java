@@ -12,9 +12,12 @@ public class HomeCommand implements Command {
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
         List<WantedPerson> wantedPeople;
+        List<String> nationalities;
 
-        wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeople();
+        wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
+        nationalities = ReceiveWantedPersonInfoLogic.receiveNationalityList();
         content.putInSessionAttributes("wantedPeople", wantedPeople);
+        content.putInSessionAttributes("nationalities", nationalities);
         return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
     }
 }

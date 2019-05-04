@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface WantedPersonDao {
     List<WantedPerson> findWantedPeopleBrief() throws DaoException;
+
+    List<String> findNationalities() throws DaoException;
 }
