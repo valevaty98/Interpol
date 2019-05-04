@@ -192,11 +192,11 @@ h1#logo a {
     display: none;
 }
 
-#main {
+#wanted-people-tab {
     padding: 10px;
 }
 
-#profile {
+#user-profile-tab {
     display: none;
 }
 #cart {
@@ -474,7 +474,6 @@ a.bul {
 #wanted-full {
     flex: 1 0 auto;
     margin-top: 10px;
-    display: none;
 }
 
 .wanted-persons ul {
@@ -524,7 +523,7 @@ img {
     text-transform: uppercase;
     font-weight: bold;
     color: #000;
-    padding: 5px 0 7px 0;
+    padding: 4px 0 4px 0;
     margin-bottom: 0;
 }
 .person-info .person-desc {
