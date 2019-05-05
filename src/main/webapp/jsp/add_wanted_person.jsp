@@ -66,6 +66,12 @@
             <input type="text" name="birth_place" required autocomplete="off"/>
         </div>
         <div class="field-wrap">
+            <label>
+                Nationalities<span class="req">*</span>
+            </label>
+            <input type="text" name="nationalities" required autocomplete="off"/>
+        </div>
+        <div class="field-wrap">
             <label class="active highlight">
                 Date of Birth<span class="req">*</span>
             </label>

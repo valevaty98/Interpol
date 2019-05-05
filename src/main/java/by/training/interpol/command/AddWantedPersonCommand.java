@@ -33,12 +33,13 @@ public class AddWantedPersonCommand implements Command {
         String charges = content.getFromRequestParameters("charges")[0];
         String birthPlace = content.getFromRequestParameters("birth_place")[0];
         String birthDate = content.getFromRequestParameters("birth_date")[0];
+        String nationalitiesString = content.getFromRequestParameters("nationalities")[0];
         InputStream imageIs = (InputStream)content.getFromRequestAttributes("image_is");
         long imageSize = (long)content.getFromRequestAttributes("image_size");
 
         Optional<WantedPerson> wantedPerson = AddWantedPersonLogic.addWantedPersonLogic(
                 name, surname, gender, characteristics, height, weight, charges, birthPlace,
-                birthDate, imageIs, (int)imageSize);
+                birthDate, imageIs, (int)imageSize, nationalitiesString);
 
         ResponseTypeCreator builder = new ResponseTypeCreator();
         List<WantedPerson> wantedPeople;

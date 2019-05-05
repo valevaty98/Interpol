@@ -18,6 +18,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,9 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
             "INSERT INTO wanted_people (name, surname, gender, characteristics, height," +
                     " weight, charges, birth_place_id, birth_date, image) " +
                     "VALUES (?,?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_SELECT_WANTED_PERSON_ID =
+            "SELECT person_id FROM wanted_people " +
+                    "WHERE name=? AND charges=? AND birth_date=?";
 
 
     @Override
@@ -71,6 +75,33 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
             throw new DaoException("Exception while executing SQLQuery.", e);
         } finally {
             closeResources(statement, connection);
+        }
+    }
+
+    @Override
+    public long findWantedPersonId(WantedPerson person) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_SELECT_WANTED_PERSON_ID);
+            preparedStatement.setString(1, person.getName());
+            preparedStatement.setString(2, person.getCharges());
+            preparedStatement.setString(3, person.getBirthDate());
+
+            System.out.println(person.getName());
+            System.out.println(person.getCharges());
+            System.out.println(person.getBirthDate());
+            ResultSet rs = preparedStatement.executeQuery();
+            // ResultSet rs = statement.executeQuery(SQL_INSERT_WANTED_PERSON); //todo change
+            if (rs.next()) {
+                return rs.getLong("person_id");
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(preparedStatement, connection);
         }
     }
 
@@ -209,9 +240,13 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
         preparedStatement.setString(7, entity.getCharges());
         preparedStatement.setLong(8, entity.getBirthPlace().getId());
 
+        System.out.println(entity.getBirthDate()+"ent.get bd");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate personBirthDate = LocalDate.parse(entity.getBirthDate(), formatter);
-        preparedStatement.setDate(9, Date.valueOf(personBirthDate));
+        System.out.println(Date.valueOf(personBirthDate) + "date.val of");
+        System.out.println(personBirthDate + "pers bd");
+
+        preparedStatement.setDate(9, Date.valueOf(personBirthDate), Calendar.getInstance());
 
         //File file = new File(entity.getImagePath());
             InputStream is = entity.getImageIs();
