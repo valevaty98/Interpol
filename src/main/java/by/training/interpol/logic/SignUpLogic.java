@@ -24,9 +24,9 @@ public class SignUpLogic {
         AssessmentDaoImpl assessmentDao = new AssessmentDaoImpl();
         UserDaoImpl userDao = new UserDaoImpl();
         Assessment assessment = new Assessment(INITIAL_NUMBER_OF_MESSAGES, INITIAL_ASSESSMENT_TEXT);
-        Optional<Assessment> optionalAssessment = Optional.empty();
+        Optional<Assessment> optionalAssessment;
         User user;
-        Optional<User> optionalUser = Optional.empty();
+        Optional<User> optionalUser;
 
         if (login == null || login.isEmpty() ||
                 email == null || email.isEmpty() ||

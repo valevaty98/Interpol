@@ -2,8 +2,17 @@ package by.training.interpol.entity;
 
 import java.util.Objects;
 
-public class State extends Entity {
+public class BirthPlace extends Entity {
     private String name;
+
+    public BirthPlace(String name) {
+        this.name = name;
+    }
+
+    public BirthPlace(long id, String name) {
+        super(id);
+        this.name = name;
+    }
 
     public String getName() {
         return name;
@@ -17,9 +26,9 @@ public class State extends Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        State state = (State) o;
-        return getId() == state.getId() &&
-                Objects.equals(name, state.name);
+        BirthPlace birthPlace = (BirthPlace) o;
+        return getId() == birthPlace.getId() &&
+                Objects.equals(name, birthPlace.name);
     }
 
     @Override
@@ -29,7 +38,7 @@ public class State extends Entity {
 
     @Override
     public String toString() {
-        return "State{" +
+        return "BirthPlace{" +
                 "stateId=" + getId() +
                 ", name='" + name + '\'' +
                 '}';

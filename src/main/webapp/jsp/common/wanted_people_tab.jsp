@@ -16,7 +16,7 @@
                             <h4><c:out value="${person.name}"/> <c:out value="${person.surname}"/></h4>
                             <div class="person-desc">
                                 <p>Date of birth: <c:out value="${person.birthDate}"/></p>
-                                <strong class="state-info">
+                                <strong class="birthPlace-info">
                                     <c:set var="nationality_str" value="${person.nationality}" />
                                     <c:forTokens var="nationality_token" items="${nationality_str}" delims="[]">
                                         <c:out value="${nationality_token}"/>
@@ -86,8 +86,8 @@
                         </p>
                     </div>
                     <div class="form-group">
-                        <label for="state" class="filter-label">Nationality:</label>
-                        <select class="form-control" id="state" name="nation">
+                        <label for="birthPlace" class="filter-label">Nationality:</label>
+                        <select class="form-control" id="birthPlace" name="nation">
                             <option>${nation}</option>
                             <c:if test="${not empty nation}">
                                 <option></option>

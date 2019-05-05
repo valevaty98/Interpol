@@ -55,7 +55,7 @@
                         </tr>
                         <tr>
                             <th scope="row">Birth Place</th>
-                            <td>${wantedPerson.birthPlace}</td>
+                            <td>${wantedPerson.birthPlace.name}</td>
                         </tr>
                         <tr>
                             <th scope="row">Nationality</th>

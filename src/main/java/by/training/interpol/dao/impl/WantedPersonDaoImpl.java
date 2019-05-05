@@ -3,13 +3,20 @@ package by.training.interpol.dao.impl;
 import by.training.interpol.dao.BaseDao;
 import by.training.interpol.dao.DaoException;
 import by.training.interpol.dao.WantedPersonDao;
+import by.training.interpol.entity.BirthPlace;
 import by.training.interpol.entity.Gender;
 import by.training.interpol.entity.WantedPerson;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +51,10 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
                     "FROM wanted_people w " +
                     "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
                     "INNER JOIN nationality n ON np.nationality_id = n.nationality_id";
+    private static final String SQL_INSERT_WANTED_PERSON =
+            "INSERT INTO wanted_people (name, surname, gender, characteristics, height," +
+                    " weight, charges, birth_place_id, birth_date, image) " +
+                    "VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 
     @Override
@@ -54,6 +65,7 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
             connection = pool.getConnection();
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(SQL_SELECT_WANTED_PEOPLE_BRIEF);
+           // ResultSet rs = statement.executeQuery(SQL_INSERT_WANTED_PERSON); //todo change
             return parseResultSetForEntitiesBrief(rs);
         } catch (SQLException e) {
             throw new DaoException("Exception while executing SQLQuery.", e);
@@ -127,7 +139,7 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
                 List<String> nationality = new ArrayList<>();
                 nationality.add(rs.getString("nationality"));
                 WantedPerson person = new WantedPerson(wantedPersonId, name, surname, gender, characteristics, height,
-                        weight, charges, birthPlace, birthDate, nationality, image);
+                        weight, charges, new BirthPlace(birthPlace), birthDate, nationality, image);
                 wantedPeople.add(person);
                 previousPersonId = wantedPersonId;
             }
@@ -155,7 +167,7 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
                 List<String> nationality = new ArrayList<>();
                 nationality.add(rs.getString("nationality"));
                 person = new WantedPerson(wantedPersonId, name, surname, gender, characteristics, height,
-                        weight, charges, birthPlace, birthDate, nationality, image);
+                        weight, charges, new BirthPlace(birthPlace), birthDate, nationality, image);
                 wasFirstRow = true;
             } else {
                 person.getNationality().add(rs.getString("nationality"));
@@ -171,6 +183,41 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
 
     @Override
     protected void prepareStatementForInsert(PreparedStatement preparedStatement, WantedPerson entity) throws SQLException {
+        preparedStatement.setString(1, entity.getName());
+        String surname = entity.getSurname();
+        if (surname == null || surname.isEmpty()) {
+            preparedStatement.setNull(2, Types.VARCHAR);
+        } else {
+            preparedStatement.setString(2, surname);
+        }
+        String gender = entity.getGender().toString();
+        preparedStatement.setString(3, gender);
+        String characteristics = entity.getCharacteristics();
+        preparedStatement.setString(4, characteristics);
+        Float height = entity.getHeight();
+        if (height == null) {
+            preparedStatement.setNull(5, Types.NULL);
+        } else {
+            preparedStatement.setFloat(5, height);
+        }
+        Float weight = entity.getWeight();
+        if (weight == null) {
+            preparedStatement.setNull(6, Types.NULL);
+        } else {
+            preparedStatement.setFloat(6, weight);
+        }
+        preparedStatement.setString(7, entity.getCharges());
+        preparedStatement.setLong(8, entity.getBirthPlace().getId());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate personBirthDate = LocalDate.parse(entity.getBirthDate(), formatter);
+        preparedStatement.setDate(9, Date.valueOf(personBirthDate));
+
+        //File file = new File(entity.getImagePath());
+            InputStream is = entity.getImageIs();
+            int size = entity.getSize();
+            preparedStatement.setBinaryStream(10, is, size);
+
 
     }
 
@@ -201,7 +248,7 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
 
     @Override
     protected String insertSQLQuery() {
-        return null;
+        return SQL_INSERT_WANTED_PERSON;
     }
 
     @Override

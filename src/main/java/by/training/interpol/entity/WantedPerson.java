@@ -1,5 +1,6 @@
 package by.training.interpol.entity;
 
+import java.io.InputStream;
 import java.sql.Blob;
 
 import java.sql.SQLException;
@@ -7,18 +8,40 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
+
 public class WantedPerson extends Entity {
     private String name;
     private String surname;
     private Gender gender;
     private String characteristics;
-    private float height;
-    private float weight;
+    private Float height;
+    private Float weight;
     private String charges;
     private String birthDate;
-    private String birthPlace;
+    private BirthPlace birthPlace;
     private List<String> nationality;
     private String image;
+    private InputStream imageIs;
+    private int size;
+
+    public InputStream getImageIs() {
+        return imageIs;
+    }
+
+    public void setImageIs(InputStream imageIs) {
+        this.imageIs = imageIs;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public WantedPerson() {
+    }
 
     public WantedPerson(long id, String name, String surname, String birthDate, List<String> nationality, Blob img) {
         super(id);
@@ -33,8 +56,8 @@ public class WantedPerson extends Entity {
         }
     }
 
-    public WantedPerson(String name, String surname, Gender gender, String characteristics, float height,
-                        float weight, String charges, String birthPlace, String birthDate, List<String> nationality, Blob img) {
+    public WantedPerson(String name, String surname, Gender gender, String characteristics, Float height,
+                        Float weight, String charges, BirthPlace birthPlace, String birthDate, List<String> nationality, Blob img) {
         this.name = name;
         this.surname = surname;
         this.gender = gender;
@@ -52,8 +75,8 @@ public class WantedPerson extends Entity {
         }
     }
 
-    public WantedPerson(long id, String name, String surname, Gender gender, String characteristics, float height,
-                        float weight, String charges, String birthPlace, String birthDate, List<String> nationality, Blob img) {
+    public WantedPerson(long id, String name, String surname, Gender gender, String characteristics, Float height,
+                        Float weight, String charges, BirthPlace birthPlace, String birthDate, List<String> nationality, Blob img) {
         super(id);
         this.name = name;
         this.surname = surname;
@@ -104,19 +127,19 @@ public class WantedPerson extends Entity {
         this.characteristics = characteristics;
     }
 
-    public float getHeight() {
+    public Float getHeight() {
         return height;
     }
 
-    public void setHeight(float height) {
+    public void setHeight(Float height) {
         this.height = height;
     }
 
-    public float getWeight() {
+    public Float getWeight() {
         return weight;
     }
 
-    public void setWeight(float weight) {
+    public void setWeight(Float weight) {
         this.weight = weight;
     }
 
@@ -136,11 +159,11 @@ public class WantedPerson extends Entity {
         this.birthDate = birthDate;
     }
 
-    public String getBirthPlace() {
+    public BirthPlace getBirthPlace() {
         return birthPlace;
     }
 
-    public void setBirthPlace(String birthPlace) {
+    public void setBirthPlace(BirthPlace birthPlace) {
         this.birthPlace = birthPlace;
     }
 

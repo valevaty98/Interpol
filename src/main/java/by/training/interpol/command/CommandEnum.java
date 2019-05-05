@@ -9,7 +9,8 @@ public enum CommandEnum {
     GET_PAGE(new GetPageCommand()),
     EDIT_EMAIL(new EditEmailCommand()),
     SHOW_FULL_PERSON (new ShowFullPersonCommand()),
-    SEND_MESSAGE (new SendMessageCommand());
+    SEND_MESSAGE (new SendMessageCommand()),
+    ADD_WANTED_PERSON (new AddWantedPersonCommand());
 
     private Command command;
 

@@ -16,7 +16,7 @@
 <div class="form">
     <h1>Add Wanted Person</h1>
     <p>${edit_email_error}</p>
-    <form action="<c:url value="controller"/>" method="post" enctype="multipart/form-data">
+    <form action="../upload/" method="post" enctype="multipart/form-data">
         <input type="hidden" name="command" value="add_wanted_person">
         <div class="field-wrap">
             <label>
@@ -28,7 +28,7 @@
             <label>
                 Surname
             </label>
-            <input type="text" name="person_surname" required autocomplete="off"/>
+            <input type="text" name="person_surname" autocomplete="off"/>
         </div>
         <div class="field-wrap" style="height: 45px;">
             <label class="active highlight">Gender</label>

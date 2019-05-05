@@ -17,6 +17,9 @@ public class HomeCommand implements Command {
         wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
         nationalities = ReceiveWantedPersonInfoLogic.receiveNationalityList();
         content.putInSessionAttributes("wantedPeople", wantedPeople);
+        for (WantedPerson person : wantedPeople) {
+            System.out.println(person);
+        }
         content.putInSessionAttributes("nationalities", nationalities);
         return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
     }
