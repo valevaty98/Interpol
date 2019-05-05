@@ -5,7 +5,7 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title>Interpol</title>
-    <link rel="stylesheet" href="<c:url value="/jsp/css/main_page_style.css"/>" type="text/css" media="all"/>
+    <link rel="stylesheet" href="<c:url value="/jsp/css/style.css"/>" type="text/css" media="all"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
@@ -32,6 +32,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 <script src="<c:url value="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"/>"></script>
-<script src="<c:url value="/jsp/js/loginnn.js"/>"></script>
+<script src="<c:url value="/jsp/js/index.js"/>"></script>
 </body>
 </html>

@@ -10,9 +10,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDate;
@@ -31,13 +28,13 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
                     "FROM wanted_people w INNER JOIN birth_places b " +
                     "ON w.birth_place_id = b.birth_place_id " +
                     "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
-                    "INNER JOIN nationality n ON np.nationality_id = n.nationality_id " +
+                    "INNER JOIN nationalities n ON np.nationality_id = n.nationality_id " +
                     "ORDER BY w.person_id";
     private static final String SQL_SELECT_WANTED_PEOPLE_BRIEF =
             "SELECT w.person_id, w.name, w.surname, w.birth_date, w.image, n.name as nationality " +
                     "FROM wanted_people w " +
                     "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
-                    "INNER JOIN nationality n ON np.nationality_id = n.nationality_id " +
+                    "INNER JOIN nationalities n ON np.nationality_id = n.nationality_id " +
                     "ORDER BY w.person_id";
     private static final String SQL_SELECT_PERSON_BY_ID =
             "SELECT w.person_id, w.name, w.surname, w.gender, w.characteristics, w.height, w.weight, w.charges, " +
@@ -45,13 +42,13 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
                     "FROM wanted_people w INNER JOIN birth_places b " +
                     "ON w.birth_place_id = b.birth_place_id " +
                     "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
-                    "INNER JOIN nationality n ON np.nationality_id = n.nationality_id " +
+                    "INNER JOIN nationalities n ON np.nationality_id = n.nationality_id " +
                     "WHERE w.person_id=?";
     private static final String SQL_SELECT_ALL_NATIONALITIES =
             "SELECT DISTINCT n.name as nationality " +
                     "FROM wanted_people w " +
                     "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
-                    "INNER JOIN nationality n ON np.nationality_id = n.nationality_id";
+                    "INNER JOIN nationalities n ON np.nationality_id = n.nationality_id";
     private static final String SQL_INSERT_WANTED_PERSON =
             "INSERT INTO wanted_people (name, surname, gender, characteristics, height," +
                     " weight, charges, birth_place_id, birth_date, image) " +
@@ -240,20 +237,14 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
         preparedStatement.setString(7, entity.getCharges());
         preparedStatement.setLong(8, entity.getBirthPlace().getId());
 
-        System.out.println(entity.getBirthDate()+"ent.get bd");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate personBirthDate = LocalDate.parse(entity.getBirthDate(), formatter);
-        System.out.println(Date.valueOf(personBirthDate) + "date.val of");
-        System.out.println(personBirthDate + "pers bd");
 
         preparedStatement.setDate(9, Date.valueOf(personBirthDate), Calendar.getInstance());
 
-        //File file = new File(entity.getImagePath());
-            InputStream is = entity.getImageIs();
-            int size = entity.getSize();
-            preparedStatement.setBinaryStream(10, is, size);
-
-
+        InputStream is = entity.getImageIs();
+        int size = entity.getSize();
+        preparedStatement.setBinaryStream(10, is, size);
     }
 
     @Override

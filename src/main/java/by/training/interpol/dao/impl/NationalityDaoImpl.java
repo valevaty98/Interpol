@@ -15,13 +15,13 @@ import java.util.Optional;
 
 public class NationalityDaoImpl extends BaseDao<Nationality> implements NationalityDao {
     private static final String SQL_INSERT_NATIONALITY =
-            "INSERT INTO nationality (name) VALUES (?)";
+            "INSERT INTO nationalities (name) VALUES (?)";
     private static final String SQL_INSERT_PERSON_NATION =
             "INSERT INTO nation_person (nationality_id, wanted_person_id) VALUES (?,?)";
     private static final String SQL_SELECT_ALL_NATIONALITIES =
-            "SELECT nationality_id, name FROM nationality";
+            "SELECT nationality_id, name FROM nationalities";
     private static final String SQL_SELECT_NATIONALITY_ID =
-            "SELECT nationality_id FROM nationality WHERE name=?";
+            "SELECT nationality_id FROM nationalities WHERE name=?";
     @Override
     protected List<Nationality> parseResultSetForEntities(ResultSet rs) throws SQLException {
         List<Nationality> nationalities = new ArrayList<>();

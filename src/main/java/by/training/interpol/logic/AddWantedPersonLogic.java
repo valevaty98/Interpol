@@ -10,12 +10,11 @@ import by.training.interpol.entity.Nationality;
 import by.training.interpol.entity.WantedPerson;
 
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class AddWantedPersonLogic {
-    public static Optional<WantedPerson> addWantedPersonLogic(String name, String surname, String gender, String characteristics,
+    public static void addWantedPersonLogic(String name, String surname, String gender, String characteristics,
                                                               Float height, Float weight, String charges, String birthPlaceName,
                                                               String birthDate, InputStream imageIs, int imageSize,
                                                               String nationalitiesString) {
@@ -30,54 +29,45 @@ public class AddWantedPersonLogic {
         wantedPerson.setCharacteristics(characteristics);
         wantedPerson.setHeight(height);
         wantedPerson.setWeight(weight);
-        wantedPerson.setCharges(charges);
-        BirthPlace birthPlace = new BirthPlace(birthPlaceName);
         wantedPerson.setBirthDate(birthDate);
-        System.out.println(birthDate);
+        wantedPerson.setCharges(charges);
         wantedPerson.setImageIs(imageIs);
         wantedPerson.setSize(imageSize);
 
         try {
+            BirthPlace birthPlace = new BirthPlace(birthPlaceName);
             Optional<BirthPlace> birthPlaceFromDb = birthPlaceDao.findBirthPlaceId(birthPlace);
             if (!birthPlaceFromDb.isPresent()) {
                 birthPlaceDao.insert(birthPlace);
                 birthPlaceFromDb = birthPlaceDao.findBirthPlaceId(birthPlace);
             }
-            System.out.println(birthPlaceFromDb.get().getName() + " " + birthPlaceFromDb.get().getId());
             wantedPerson.setBirthPlace(birthPlaceFromDb.get());
 
             wantedPersonDao.insert(wantedPerson);
 
-            List<String> nationalities = Arrays.asList(nationalitiesString.split(","));
-            wantedPerson.setNationality(nationalities);
-
+            String[] nationalities = nationalitiesString.split(",");
             List<Nationality> existedNationalities = nationalityDao.findAll();
+
             long wantedPersonId = wantedPersonDao.findWantedPersonId(wantedPerson);
-            System.out.println("pers_id" + wantedPersonId);
-            boolean wasNation = false;
-            for (String nation : nationalities) {
-                System.out.println(nation);
+            boolean doesDbContainNationality = false;
+            for (String nationality : nationalities) {
                 long nationalityId;
-                for (Nationality nationObject : existedNationalities) {
-                    if (nation.equals(nationObject.getName())) {
-                        wasNation = true;
+                for (Nationality nationalityObject : existedNationalities) {
+                    if (nationality.equals(nationalityObject.getName())) {
+                        doesDbContainNationality = true;
                     }
                 }
-                if (wasNation) {
-                    nationalityId = nationalityDao.findNationalityId(nation).get().getId();
-                    System.out.println(nationalityId+" was");
+                if (doesDbContainNationality) {
+                    nationalityId = nationalityDao.findNationalityId(nationality).get().getId();
                 } else {
-                    nationalityDao.insert(new Nationality(nation));
-                    nationalityId = nationalityDao.findNationalityId(nation).get().getId();
-                    System.out.println(nationalityId+"ne was");
+                    nationalityDao.insert(new Nationality(nationality));
+                    nationalityId = nationalityDao.findNationalityId(nationality).get().getId();
                 }
-                wasNation = false;
+                doesDbContainNationality = false;
                 nationalityDao.insertNationPerson(wantedPersonId, nationalityId);
             }
         } catch (DaoException e) {
-            e.printStackTrace();
+            e.printStackTrace();//todo log
         }
-
-        return Optional.of(wantedPerson);
     }
 }

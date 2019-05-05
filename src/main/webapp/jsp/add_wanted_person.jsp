@@ -57,7 +57,7 @@
             <label>
                 Charges<span class="req">*</span>
             </label>
-            <textarea name="charges" rows="2" autocomplete="off"></textarea>
+            <textarea name="charges" rows="2" required autocomplete="off"></textarea>
         </div>
         <div class="field-wrap">
             <label>
@@ -69,7 +69,8 @@
             <label>
                 Nationalities<span class="req">*</span>
             </label>
-            <input type="text" name="nationalities" required autocomplete="off"/>
+            <input type="text" name="nationalities" required autocomplete="off"
+            pattern="^[a-zA-z]+[,]?[a-zA-Z]+$"/>
         </div>
         <div class="field-wrap">
             <label class="active highlight">
@@ -91,7 +92,7 @@
     </form>
 </div>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src="<c:url value="/jsp/js/loginnn.js"/>"></script>
+<script src="<c:url value="/jsp/js/index.js"/>"></script>
 </body>
 
 </html>

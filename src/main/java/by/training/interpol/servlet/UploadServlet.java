@@ -20,41 +20,30 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @WebServlet(urlPatterns = {"/upload/*"})
-@MultipartConfig(fileSizeThreshold = 1024 * 1024,
-        maxFileSize = 1024 * 1024,
-        maxRequestSize = 1024 * 1024 * 5)
+@MultipartConfig(maxFileSize = 1024 * 1024 * 1024)
 public class UploadServlet extends HttpServlet {
     private static final String UPLOAD_DIR = "D:\\wanted\\";
     private static Logger logger = LogManager.getLogger();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        //String applicationDir = request.getServletContext().getRealPath("");
-
-        //String uploadFileDir = applicationDir + File.separator + UPLOAD_DIR + File.separator;
-
         File dirForSaveFile = new File(UPLOAD_DIR);
         if (!dirForSaveFile.exists()) {
             dirForSaveFile.mkdirs();
         }
-
         try {
             Part image = request.getPart("image");
             String fileName = image.getSubmittedFileName();
-
             InputStream is = image.getInputStream();
-            System.out.println(fileName);
             String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
-            String randFileName = UUID.randomUUID() + "." + fileExtension;
-            String absoluteFilePath = UPLOAD_DIR + randFileName;
-            System.out.println(fileExtension);
+//            String randFileName = UUID.randomUUID() + "." + fileExtension;
+//            String absoluteFilePath = UPLOAD_DIR + randFileName;
             if (!fileExtension.equalsIgnoreCase("png")) {
                 request.setAttribute("cause_of_fail", "Illegal file extension!!!");
                 request.getRequestDispatcher("/jsp/upload_failed.jsp").forward(request, response);
                 return;
             }
-            System.out.println(absoluteFilePath);
-            image.write(absoluteFilePath);
+            //image.write(absoluteFilePath);
             request.setAttribute("image_is", is);
             request.setAttribute("image_size", image.getSize());
 

@@ -5,9 +5,7 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title>Interpol</title>
-    <link rel="stylesheet" href="css/main_page_style.css" type="text/css" media="all"/>
-    <!--[if lte IE 6]>
-    <link rel="stylesheet" href="css/ie6.css" type="text/css" media="all"/><![endif]-->
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="all"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
@@ -86,7 +84,9 @@
                         </tbody>
                     </table>
                     <div>
-                        <a class="btn send-button" href="send_message.jsp">Send message</a>
+                        <c:if test="${user.role eq 'ADMIN'}">
+                            <a class="btn send-button" href="<c:url value="/controller?command=delete"/>">Delete Wanted Person</a>
+                        </c:if>
                         <a class="btn send-button" href="send_message.jsp">Send message</a>
                         <button type="button" class="btn back-button" onclick="history.back()">Back</button>
                     </div>
@@ -106,7 +106,7 @@
 <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
-<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src="${pageContext.request.contextPath}/jsp/js/loginn.js"></script>
+<script src="<c:url value="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"/>"></script>
+<script src="<c:url value="/jsp/js/index.js"/>"></script>
 </body>
 </html>

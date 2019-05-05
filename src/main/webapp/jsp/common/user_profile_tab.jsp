@@ -8,7 +8,7 @@
     <div class="container" style="width: 100%;">
         <div class="row info-table">
 
-            <div class="col-sm-8 col-md-8 center-block">
+            <div class="col-sm-9 col-md-9 center-block">
                 <table class="table table-bordered">
                     <tbody>
                     <tr>
