@@ -90,18 +90,18 @@ label .req {
 }
 
 label.active {
-  -webkit-transform: translateY(-25px);
-          transform: translateY(-25px);
+  -webkit-transform: translateY(-22px);
+          transform: translateY(-22px);
   left: 2px;
   font-size: 14px;
 }
 
-label.active-mes {
-  -webkit-transform: translateY(100px);
-          transform: translateY(100px);
-  left: 2px;
-  font-size: 14px;
-}
+/*label.active-mes {*/
+/*  -webkit-transform: translateY(100px);*/
+/*          transform: translateY(100px);*/
+/*  left: 2px;*/
+/*  font-size: 14px;*/
+/*}*/
 label.active .req {
   opacity: 0;
 }
@@ -133,7 +133,7 @@ textarea {
 
 .field-wrap {
   position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .top-row:after {
@@ -187,4 +187,16 @@ textarea {
 .forgot {
   margin-top: -20px;
   text-align: right;
+}
+
+.gender-type {
+  width: 20px;
+  display: inline;
+}
+
+.gender-label {
+  position: relative;
+  margin-right: 25px;
+  color: #fff;
+  pointer-events: all;
 }

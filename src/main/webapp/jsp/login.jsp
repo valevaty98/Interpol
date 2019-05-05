@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="<c:url value="/jsp/images/interpol-logo.png"/>" type="image/png"/>
     <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <link rel="stylesheet" href="<c:url value="/jsp/css/login.css"/>">
+    <link rel="stylesheet" href="<c:url value="/jsp/css/loginiki.css"/>">
 </head>
 
 <body>
@@ -68,6 +68,6 @@
     </div>
 </div>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src="<c:url value="/jsp/js/login.js"/>"></script>
+<script src="<c:url value="/jsp/js/loginnn.js"/>"></script>
 </body>
 </html>

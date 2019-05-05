@@ -30,6 +30,12 @@
         </ul>
     </div>
     <div id="sidebar">
+        <c:if test="${user.role eq 'ADMIN'}">
+            <div>
+                <a class="btn add-person-button" style="margin-bottom: 10px;"
+                   href="<c:url value="/jsp/add_wanted_person.jsp"/>">Add Wanted Person</a>
+            </div>
+        </c:if>
         <div class="box search">
             <h2>Filter</h2>
             <div class="box-content">

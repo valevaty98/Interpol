@@ -5,22 +5,21 @@ $('.form').find('input, textarea').on('keyup blur focus', function (e) {
 
     if (e.type === 'keyup') {
         if ($this.val() === '') {
-            label.removeClass('active highlight');
+            //label.removeClass('active highlight');
         } else {
             label.addClass('active highlight');
         }
-    } else if (e.type === 'blur') {
-        if ($this.val() === '') {
-            label.removeClass('active highlight');
-        } else {
-            label.removeClass('highlight');
-        }
+    // } else if (e.type === 'blur') {
+    //     if ($this.val() === '') {
+    //         label.removeClass('active highlight');
+    //     } else {
+    //         label.removeClass('highlight');
+    //     }
     } else if (e.type === 'focus') {
-
         if ($this.val() === '') {
-            label.removeClass('highlight');
-        } else if ($this.val() !== '') {
-            label.addClass('highlight');
+            //label.removeClass('active highlight');
+        } else {
+            label.addClass('active highlight');
         }
     }
 

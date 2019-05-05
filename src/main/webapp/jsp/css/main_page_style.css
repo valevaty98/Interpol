@@ -268,9 +268,7 @@ a.cart-link:hover {
     margin: 12px 0 10px 0;
     font-size: 16px;
 }
-.us-prof-btn {
-    margin-left: 50px;
-}
+
 .center-btn {
     display: flex;
     align-items: center;
@@ -283,6 +281,12 @@ a.cart-link:hover {
     line-height: 27px;
     margin: 12px 0 10px 0;
     font-size: 16px;
+}
+
+.add-person-button {
+    width: 100%;
+    background: #1AB188;
+    color: #fff;
 }
 
 .box h2 {
@@ -307,10 +311,6 @@ a.cart-link:hover {
 
 .box-content {
     padding: 5px;
-}
-
-.filter-label {
-
 }
 
 .male-label {

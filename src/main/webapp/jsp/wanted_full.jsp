@@ -14,11 +14,12 @@
     <link rel="shortcut icon" href="images/interpol-logo.png" type="image/png"/>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <style>
+    <!--<style>
         #wanted-people-tab {
             display: none;
         }
     </style>
+    -->
 </head>
 <body>
 <div class="shell">
@@ -86,6 +87,7 @@
                     </table>
                     <div>
                         <a class="btn send-button" href="send_message.jsp">Send message</a>
+                        <a class="btn send-button" href="send_message.jsp">Send message</a>
                         <button type="button" class="btn back-button" onclick="history.back()">Back</button>
                     </div>
                 </div>
@@ -105,6 +107,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src="${pageContext.request.contextPath}/jsp/js/login.js"></script>
+<script src="${pageContext.request.contextPath}/jsp/js/loginn.js"></script>
 </body>
 </html>
