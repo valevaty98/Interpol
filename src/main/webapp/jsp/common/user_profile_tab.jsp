@@ -1,4 +1,5 @@
 <%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>User Profile</title>
@@ -40,8 +41,8 @@
                     </tbody>
                 </table>
                 <div class="center-btn">
-                    <a class="btn send-button us-prof-btn" href="edit_email.jsp">Edit Email</a>
-                    <a class="btn back-button us-prof-btn" href="../controller?command=logout">Log out</a>
+                    <a class="btn send-button us-prof-btn" href="<c:url value="/jsp/edit_email.jsp"/>">Edit Email</a>
+                    <a class="btn back-button us-prof-btn" href="<c:url value="/controller?command=logout"/>">Log out</a>
                 </div>
             </div>
         </div>

@@ -18,10 +18,10 @@ public class ShowFullPersonCommand implements Command {
 
         if (wantedPerson.isPresent()) {
             content.putInSessionAttributes("wantedPerson", wantedPerson.get());
-            return builder.buildResponseType(WANTED_FULL_PAGE_PATH, SendType.REDIRECT);
+            return builder.buildResponseType(WANTED_FULL_PAGE_PATH, SendType.FORWARD);
         } else {
             content.putInSessionAttributes("error", "No such person!");
-            return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
+            return builder.buildResponseType(MAIN_PAGE_PATH, SendType.FORWARD);
         }
     }
 }

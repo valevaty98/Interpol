@@ -22,6 +22,9 @@ public class NationalityDaoImpl extends BaseDao<Nationality> implements National
             "SELECT nationality_id, name FROM nationalities";
     private static final String SQL_SELECT_NATIONALITY_ID =
             "SELECT nationality_id FROM nationalities WHERE name=?";
+    private static final String SQL_DELETE_FROM_NATION_PERSON =
+            "DELETE FROM nation_person WHERE wanted_person_id=?";
+
     @Override
     protected List<Nationality> parseResultSetForEntities(ResultSet rs) throws SQLException {
         List<Nationality> nationalities = new ArrayList<>();
@@ -95,6 +98,25 @@ public class NationalityDaoImpl extends BaseDao<Nationality> implements National
             preparedStatement.setLong(1, nationId);
             preparedStatement.setLong(2, personId);
             return (preparedStatement.executeUpdate() == 1);
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(preparedStatement, connection);
+        }
+    }
+
+    @Override
+    public boolean deleteFromNationPerson(long personId) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            if (pool == null) {
+                throw new DaoException("Null pointer to the pool.");
+            }
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_DELETE_FROM_NATION_PERSON);
+            preparedStatement.setLong(1, personId);
+            return (preparedStatement.executeUpdate() > 0);
         } catch (SQLException e) {
             throw new DaoException("Exception while executing SQLQuery.", e);
         } finally {

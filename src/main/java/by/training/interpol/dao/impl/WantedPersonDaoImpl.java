@@ -56,6 +56,8 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
     private static final String SQL_SELECT_WANTED_PERSON_ID =
             "SELECT person_id FROM wanted_people " +
                     "WHERE name=? AND charges=? AND birth_date=?";
+    private static final String SQL_DELETE_PERSON_BY_ID =
+            "DELETE FROM wanted_people WHERE person_id=?";
 
 
     @Override
@@ -269,7 +271,7 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
 
     @Override
     protected String deleteByIdSQLQuery() {
-        return null;
+        return SQL_DELETE_PERSON_BY_ID;
     }
 
     @Override

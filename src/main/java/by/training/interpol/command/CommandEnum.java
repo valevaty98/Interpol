@@ -10,7 +10,8 @@ public enum CommandEnum {
     EDIT_EMAIL(new EditEmailCommand()),
     SHOW_FULL_PERSON (new ShowFullPersonCommand()),
     SEND_MESSAGE (new SendMessageCommand()),
-    ADD_WANTED_PERSON (new AddWantedPersonCommand());
+    ADD_WANTED_PERSON (new AddWantedPersonCommand()),
+    DELETE_PERSON (new DeletePersonCommand());
 
     private Command command;
 

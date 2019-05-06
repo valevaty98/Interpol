@@ -54,23 +54,23 @@
                     <div class="gender-group">
                         <label class="filter-label">Gender:</label>
                         <c:choose>
-                            <c:when test="${personGender eq 'Male'}">
+                            <c:when test="${personGender eq 'male'}">
                                 <label class="radio-inline male-label"><input type="radio" name="gender"
-                                                                              value="Male" checked>Male</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="Female">Female</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="Unknown">Unknown</label>
+                                                                              value="male" checked>Male</label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="female">Female</label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="unknown">Unknown</label>
                             </c:when>
-                            <c:when test="${personGender eq 'Female'}">
+                            <c:when test="${personGender eq 'female'}">
                                 <label class="radio-inline male-label"><input type="radio" name="gender"
-                                                                              value="Male">Male</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="Female" checked>Female</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="Unknown">Unknown</label>
+                                                                              value="male">Male</label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="female" checked>Female</label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="unknown">Unknown</label>
                             </c:when>
                             <c:otherwise>
                                 <label class="radio-inline male-label"><input type="radio" name="gender"
-                                                                              value="Male">Male</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="Female">Female</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="Unknown"
+                                                                              value="male">Male</label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="female">Female</label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="unknown"
                                                                    checked>Unknown</label>
                             </c:otherwise>
                         </c:choose>

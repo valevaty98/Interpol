@@ -7,5 +7,7 @@ import java.util.Optional;
 public interface NationalityDao {
     boolean insertNationPerson(long personId, long nationId) throws DaoException;
 
+    boolean deleteFromNationPerson(long personId) throws DaoException;
+
     Optional<Nationality> findNationalityId(String nationality) throws DaoException;
 }

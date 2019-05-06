@@ -5,11 +5,11 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title>Interpol</title>
-    <link rel="stylesheet" href="css/style.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="<c:url value="/jsp/css/style.css"/>" type="text/css" media="all"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-    <link rel="shortcut icon" href="images/interpol-logo.png" type="image/png"/>
+    <link rel="shortcut icon" href="<c:url value="/jsp/images/interpol-logo.png"/>" type="image/png"/>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <!--<style>
@@ -85,7 +85,7 @@
                     </table>
                     <div>
                         <c:if test="${user.role eq 'ADMIN'}">
-                            <a class="btn send-button" href="<c:url value="/controller?command=delete"/>">Delete Wanted Person</a>
+                            <a class="btn send-button" href="<c:url value="/controller?command=delete_person&person_id=${wantedPerson.id}"/>">Delete Wanted Person</a>
                         </c:if>
                         <a class="btn send-button" href="send_message.jsp">Send message</a>
                         <button type="button" class="btn back-button" onclick="history.back()">Back</button>

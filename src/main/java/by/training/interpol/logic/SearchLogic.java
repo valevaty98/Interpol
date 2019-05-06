@@ -27,7 +27,7 @@ public class SearchLogic {
             if (
                     (name == null || name.isEmpty() || name.equals(person.getName())) &&
                     (surname == null || surname.isEmpty() || surname.equals(person.getSurname())) &&
-                    (gender.equals("Unknown") || gender.toUpperCase().equals(person.getGender().toString())) &&
+                    (gender.equals("unknown") || gender.equals(person.getGender().toString())) &&
                     (fromAge == null || fromAge.isEmpty() || Integer.parseInt(fromAge) <= personAge) &&
                     (toAge == null || toAge.isEmpty() || Integer.parseInt(toAge) >= personAge) &&
                     (nationality == null || nationality.isEmpty() || person.getNationality().contains(nationality))
