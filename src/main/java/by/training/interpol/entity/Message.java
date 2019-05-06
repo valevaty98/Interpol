@@ -6,22 +6,25 @@ public class Message extends Entity {
     private String date;
     private long wantedPersonId;
     private long userId;
+    private MessageStatus status;
 
-    public Message(String subject, String message, String date, long wantedPersonId, long userId) {
+    public Message(String subject, String message, String date, long wantedPersonId, long userId, MessageStatus status) {
         this.subject = subject;
         this.message = message;
         this.date = date;
         this.wantedPersonId = wantedPersonId;
         this.userId = userId;
+        this.status = status;
     }
 
-    public Message(long id, String subject, String message, String date, long wantedPersonId, long userId) {
+    public Message(long id, String subject, String message, String date, long wantedPersonId, long userId, MessageStatus status) {
         super(id);
         this.subject = subject;
         this.message = message;
         this.date = date;
         this.wantedPersonId = wantedPersonId;
         this.userId = userId;
+        this.status = status;
     }
 
     public String getMessage() {
@@ -62,5 +65,13 @@ public class Message extends Entity {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public MessageStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(MessageStatus status) {
+        this.status = status;
     }
 }

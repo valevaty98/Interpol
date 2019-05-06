@@ -1,6 +1,7 @@
 package by.training.interpol.command;
 
 import by.training.interpol.entity.Message;
+import by.training.interpol.entity.MessageStatus;
 import by.training.interpol.entity.User;
 import by.training.interpol.entity.WantedPerson;
 import by.training.interpol.logic.SendMessageLogic;
@@ -13,6 +14,7 @@ import java.util.Date;
 public class SendMessageCommand implements Command {
     private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
     private static final String SEND_MESSAGE_PAGE_PATH = "/jsp/send_message.jsp";
+    private static final MessageStatus DEFAULT_MESSAGE_STATUS = MessageStatus.UNCHECKED;
     @Override
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
@@ -25,7 +27,7 @@ public class SendMessageCommand implements Command {
         Date date = new Date();
         String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
 
-        Message message = new Message(subject, messageText, currentTime, wantedPersonId, userId);
+        Message message = new Message(subject, messageText, currentTime, wantedPersonId, userId, DEFAULT_MESSAGE_STATUS);
         if (SendMessageLogic.sendMessage(message)) {
             user.getAssessment().setNumberOfMessages(user.getAssessment().getNumberOfMessages() + 1);
             content.putInSessionAttributes("user", user);

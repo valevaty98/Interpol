@@ -3,22 +3,31 @@ package by.training.interpol.dao.impl;
 import by.training.interpol.dao.BaseDao;
 import by.training.interpol.dao.DaoException;
 import by.training.interpol.dao.MessageDao;
+import by.training.interpol.entity.BriefMessageInfo;
 import by.training.interpol.entity.FullMessageInfo;
 import by.training.interpol.entity.Message;
+import by.training.interpol.entity.MessageStatus;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
 public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
     private static final String SQL_INSERT_MESSAGE =
-            "INSERT INTO messages (subject, message, wanted_person_id, user_id, date) VALUES (?,?,?,?,?)";
+            "INSERT INTO messages (subject, message, wanted_person_id, user_id, date, status) VALUES (?,?,?,?,?,?)";
     private static final String SQL_SELECT_ALL_MESSAGES_BRIEF =
-            "SELECT m.message_id, m.subject, m.message, m.date, w.person_id, w.name, w.surname, " +
+            "SELECT m.message_id, m.subject, m.message, m.date, m.status, w.person_id, w.name, w.surname, " +
                     "u.user_id, u.login FROM messages m " +
                     "INNER JOIN users u ON m.user_id = u.user_id " +
                     "INNER JOIN wanted_people w ON m.wanted_person_id = w.person_id";
+    private static final String SQL_SELECT_FULL_MESSAGE_INFO =
+            "SELECT m.subject, m.message, m.date, m.status, w.person_id, w.name, w.surname, " +
+                    "w.image, u.user_id, u.login, u.email FROM messages m " +
+                    "INNER JOIN users u ON m.user_id = u.user_id " +
+                    "INNER JOIN wanted_people w ON m.wanted_person_id = w.person_id " +
+                    "WHERE m.message_id=?";
     @Override
     protected List<Message> parseResultSetForEntities(ResultSet rs) throws SQLException {
         return null;
@@ -36,6 +45,7 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
         preparedStatement.setLong(3, entity.getWantedPersonId());
         preparedStatement.setLong(4, entity.getUserId());
         preparedStatement.setString(5, entity.getDate());
+        preparedStatement.setString(6, entity.getStatus().toString());
     }
 
     @Override
@@ -79,28 +89,29 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
     }
 
     @Override
-    public List<FullMessageInfo> receiveAllMessagesBrief() throws DaoException {
+    public List<BriefMessageInfo> receiveAllMessagesBrief() throws DaoException {
         Connection connection = null;
         Statement statement = null;
         try {
             connection = pool.getConnection();
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(SQL_SELECT_ALL_MESSAGES_BRIEF);
-            List<FullMessageInfo> messageInfoList = new ArrayList<>();
+            List<BriefMessageInfo> messageInfoList = new ArrayList<>();
             while (rs.next()) {
                 long messageId = rs.getLong("message_id");
                 String subject = rs.getString("subject");
                 String message = rs.getString("message");
                 long wantedPersonId = rs.getLong("person_id");
                 long userId = rs.getLong("user_id");
+                MessageStatus status = MessageStatus.valueOf(rs.getString("status").toUpperCase());
                 String date = rs.getDate("date").toString();
                 String userLogin = rs.getString("login");
                 String wantedPersonName = rs.getString("name");
                 String wantedPersonSurname = rs.getString("surname");
 
                 messageInfoList.add(
-                        new FullMessageInfo(
-                                new Message(messageId, subject, message,date, wantedPersonId, userId),
+                        new BriefMessageInfo(
+                                new Message(messageId, subject, message,date, wantedPersonId, userId, status),
                                 userLogin, wantedPersonName, wantedPersonSurname)
                         );
             }
@@ -109,6 +120,43 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
             throw new DaoException("Exception while executing SQLQuery.", e);
         } finally {
             closeResources(statement, connection);
+        }
+    }
+
+    @Override
+    public Optional<FullMessageInfo> receiveFullMessageInfo(long messageId) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_SELECT_FULL_MESSAGE_INFO);
+            preparedStatement.setLong(1, messageId);
+            ResultSet rs = preparedStatement.executeQuery();
+            Optional<FullMessageInfo> messageInfo = Optional.empty();
+            if (rs.next()) {
+                String subject = rs.getString("subject");
+                String message = rs.getString("message");
+                long wantedPersonId = rs.getLong("person_id");
+                long userId = rs.getLong("user_id");
+                MessageStatus status = MessageStatus.valueOf(rs.getString("status").toUpperCase());
+                String date = rs.getDate("date").toString();
+                String userLogin = rs.getString("login");
+                String userEmail = rs.getString("email");
+                String wantedPersonName = rs.getString("name");
+                String wantedPersonSurname = rs.getString("surname");
+                Blob imageBlob = rs.getBlob("image");
+                String wantedPersonImage = Base64.getEncoder().encodeToString(imageBlob.getBytes(1,(int)imageBlob.length()));
+
+                messageInfo = Optional.of(new FullMessageInfo(
+                        new Message(messageId, subject, message, date, wantedPersonId, userId, status),
+                        userLogin, userEmail, wantedPersonName, wantedPersonSurname, wantedPersonImage)
+                );
+            }
+            return messageInfo;
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(preparedStatement, connection);
         }
     }
 }

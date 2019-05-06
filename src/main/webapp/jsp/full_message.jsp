@@ -12,12 +12,6 @@
     <link rel="shortcut icon" href="<c:url value="/jsp/images/interpol-logo.png"/>" type="image/png"/>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <!--<style>
-        #wanted-people-tab {
-            display: none;
-        }
-    </style>
-    -->
 </head>
 <body>
 <div class="shell">
@@ -25,39 +19,48 @@
     <c:import url="common/header.jsp" charEncoding="utf-8"/>
     <!-- End Header -->
     <div class="tab-content">
-        <div id="all-users-messages">
+        <div id="full-message">
             <div class="container" style="width: 100%;">
                 <div class="row info-table">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-sm-4 col-md-4">
+                        <img src="data:image/png;base64,<c:out value="${message.wantedPersonImage}"/>"
+                             alt="${message.wantedPersonSurname}" class="img-rounded img-responsive"/>
+                    </div>
+                    <div class="col-sm-8 col-md-8">
                         <table class="table table-bordered">
                             <tbody>
-                            <c:forEach var="message" items="${messages_info_list}">
-                                <c:if test="${message.message.status.toString() eq 'checked'}">
-                                    <tr class="message-row"
-                                        onclick="window.location='<c:url value="/controller?command=show_full_message&message_id=${message.message.id}"/>';">
-                                        <th scope="row" class="col-sm-2">${message.userLogin}</th>
-                                        <td class="col-sm-2">${message.message.date}</td>
-                                        <td class="col-sm-4">${message.wantedPersonName} ${message.wantedPersonSurname}</td>
-                                        <td class="col-sm-4">${message.message.subject}</td>
-                                    </tr>
-                                </c:if>
-                                <c:if test="${message.message.status.toString() eq 'unchecked'}">
-                                    <tr class="message-row"
-                                        onclick="window.location='<c:url value="/controller?command=show_full_message&message_id=${message.message.id}"/>';">
-                                        <th scope="row" class="col-sm-2">${message.userLogin}</th>
-                                        <td class="col-sm-2">${message.message.date}</td>
-                                        <td class="col-sm-4">${message.wantedPersonName} ${message.wantedPersonSurname}</td>
-                                        <td class="col-sm-4">${message.message.subject}</td>
-                                    </tr>
-                                </c:if>
-                            </c:forEach>
+                            <tr>
+                                <th scope="row" class="col-sm-3 col-md-3">Wanted Person</th>
+                                <td class="col-sm-9 col-md-9">${message.wantedPersonName} ${message.wantedPersonSurname} </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">User Login</th>
+                                <td>${message.userLogin}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">User Email</th>
+                                <td>${message.userEmail}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Subject</th>
+                                <td>${message.message.subject}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Date</th>
+                                <td>${message.message.date}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Message</th>
+                                <td>${message.message.message}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Message Status</th>
+                                <td>${message.message.status}</td>
+                            </tr>
                             </tbody>
                         </table>
                         <div>
-<%--                            <c:if test="${user.role eq 'ADMIN'}">--%>
-<%--                                <a class="btn send-button" href="<c:url value="/controller?command=delete_person&person_id=${wantedPerson.id}"/>">Delete Wanted Person</a>--%>
-<%--                            </c:if>--%>
-<%--                            <a class="btn send-button" href="send_message.jsp">Send message</a>--%>
+                            <a class="btn send-button" href="send_message.jsp">Send response to user</a>
                             <button type="button" class="btn back-button" onclick="history.back()">Back</button>
                         </div>
                     </div>
