@@ -1,5 +1,9 @@
 package by.training.interpol.dao;
 
-public interface MessageDao {
+import by.training.interpol.entity.FullMessageInfo;
 
+import java.util.List;
+
+public interface MessageDao {
+    List<FullMessageInfo> receiveAllMessagesBrief() throws DaoException;
 }

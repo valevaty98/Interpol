@@ -1,4 +1,4 @@
-<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
@@ -32,8 +32,12 @@
     <div id="sidebar">
         <c:if test="${user.role eq 'ADMIN'}">
             <div>
-                <a class="btn add-person-button" style="margin-bottom: 10px;"
+                <a class="btn admin-main-btn" style="margin-bottom: 10px;"
                    href="<c:url value="/jsp/add_wanted_person.jsp"/>">Add Wanted Person</a>
+            </div>
+            <div>
+                <a class="btn admin-main-btn" style="margin-bottom: 10px;"
+                   href="<c:url value="/controller?command=show_all_messages"/>">Show all messages</a>
             </div>
         </c:if>
         <div class="box search">

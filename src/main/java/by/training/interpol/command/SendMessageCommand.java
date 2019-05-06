@@ -17,6 +17,7 @@ public class SendMessageCommand implements Command {
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
         String messageText = content.getFromRequestParameters("message")[0];
+        String subject = content.getFromRequestParameters("subject")[0];
         WantedPerson wantedPerson = (WantedPerson)content.getFromSessionAttributes("wantedPerson");
         long wantedPersonId = wantedPerson.getId();
         User user = (User)content.getFromSessionAttributes("user");
@@ -24,7 +25,7 @@ public class SendMessageCommand implements Command {
         Date date = new Date();
         String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
 
-        Message message = new Message(messageText, currentTime, wantedPersonId, userId);
+        Message message = new Message(subject, messageText, currentTime, wantedPersonId, userId);
         if (SendMessageLogic.sendMessage(message)) {
             user.getAssessment().setNumberOfMessages(user.getAssessment().getNumberOfMessages() + 1);
             content.putInSessionAttributes("user", user);

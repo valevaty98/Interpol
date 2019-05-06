@@ -241,8 +241,13 @@ a.cart-link:hover {
     border: solid 1px #dedede;
 }
 
+.message-row:hover {
+    background-color: #dee2e6;
+    cursor: pointer;
+}
+
 .info-table {
-    padding: 40px;
+    padding: 10px;
 }
 
 .send-button:hover {
@@ -286,7 +291,7 @@ a.cart-link:hover {
 .nationality-info {
     font-size: 18px;
 }
-.add-person-button {
+.admin-main-btn {
     width: 100%;
     background: #1AB188;
     color: #fff;
@@ -475,6 +480,11 @@ a.bul {
 }
 
 #wanted-full {
+    flex: 1 0 auto;
+    margin-top: 10px;
+}
+
+#all-users {
     flex: 1 0 auto;
     margin-top: 10px;
 }
