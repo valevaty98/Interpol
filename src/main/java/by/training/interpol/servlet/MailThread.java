@@ -16,42 +16,33 @@ public class MailThread extends Thread {
     private String mailText;
     private Properties properties;
 
-    public MailThread(String mailSubject, String mailText, Properties properties) {
+    public MailThread(String mailSubject, String sendToMail, String mailText, Properties properties) {
         this.mailSubject = mailSubject;
+        this.sendToMail = sendToMail;
         this.mailText = mailText;
         this.properties = properties;
     }
 
-    private void init () {
+    public void run () {
         Session mailSession = new SessionCreator(properties).createSession();
         mailSession.setDebug(true);
         message = new MimeMessage(mailSession);
 
         try {
-            message.setFrom(new InternetAddress("vlad_box98@mail.ru"));
+            message.setFrom(new InternetAddress(properties.getProperty("mail.user.name")));
             message.setSubject((mailSubject));
             message.setContent(mailText, "text/html");
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress("valevaty98@gmail.com"));
+            System.out.println(sendToMail);
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(sendToMail));
 
-            Transport tr = mailSession.getTransport();
-            tr.connect(null, "boicy_ne_bolna");
-            tr.sendMessage(message, message.getAllRecipients());
-            tr.close();
+            Transport transport = mailSession.getTransport();
+            transport.connect(null, properties.getProperty("mail.user.password"));
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
         } catch (AddressException e) {
             e.printStackTrace();
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-    }
-
-    public void run () {
-        init();
-        System.out.printf("run()");
-//        try {
-//
-//            //Transport.send(message);
-//        } catch (MessagingException e) {
-//            e.printStackTrace();
-//        }
     }
 }

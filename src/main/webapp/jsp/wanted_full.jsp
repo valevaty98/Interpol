@@ -88,7 +88,7 @@
                             <a class="btn send-button" href="<c:url value="/controller?command=delete_person&person_id=${wantedPerson.id}"/>">Delete Wanted Person</a>
                         </c:if>
                         <a class="btn send-button" href="send_message.jsp">Send message</a>
-                        <button type="button" class="btn back-button" onclick="history.back()">Back</button>
+                        <a class="btn send-button" href="<c:url value="/controller?command=home"/>">Back to Wanted Persons</a>
                     </div>
                 </div>
             </div>

@@ -13,7 +13,8 @@ public enum CommandEnum {
     ADD_WANTED_PERSON (new AddWantedPersonCommand()),
     DELETE_PERSON (new DeletePersonCommand()),
     SHOW_ALL_MESSAGES (new ShowAllMessagesCommand()),
-    SHOW_FULL_MESSAGE (new ShowFullMessageCommand());
+    SHOW_FULL_MESSAGE (new ShowFullMessageCommand()),
+    SEND_RESPONSE_TO_USER(new SendResponseToUserCommand());
 
     private Command command;
 

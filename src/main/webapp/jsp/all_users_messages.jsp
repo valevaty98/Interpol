@@ -33,7 +33,7 @@
                             <tbody>
                             <c:forEach var="message" items="${messages_info_list}">
                                 <c:if test="${message.message.status.toString() eq 'checked'}">
-                                    <tr class="message-row"
+                                    <tr class="message-row" style="background-color: #a7c3d8;"
                                         onclick="window.location='<c:url value="/controller?command=show_full_message&message_id=${message.message.id}"/>';">
                                         <th scope="row" class="col-sm-2">${message.userLogin}</th>
                                         <td class="col-sm-2">${message.message.date}</td>
@@ -58,7 +58,7 @@
 <%--                                <a class="btn send-button" href="<c:url value="/controller?command=delete_person&person_id=${wantedPerson.id}"/>">Delete Wanted Person</a>--%>
 <%--                            </c:if>--%>
 <%--                            <a class="btn send-button" href="send_message.jsp">Send message</a>--%>
-                            <button type="button" class="btn back-button" onclick="history.back()">Back</button>
+                            <a class="btn send-button" href="<c:url value="/controller?command=home"/>">Back to Wanted Persons</a>
                         </div>
                     </div>
                 </div>

@@ -15,7 +15,7 @@
 <div class="form">
     <h1>Edit Email</h1>
     <p>${edit_email_error}</p>
-    <form action="../controller" method="post">
+    <form action="<c:url value="/controller"/>" method="post">
         <input type="hidden" name="command" value="edit_email">
         <div class="field-wrap">
             <label>

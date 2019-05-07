@@ -30,7 +30,6 @@ public class SessionCreator {
     }
     public Session createSession()
     {
-        System.out.printf("createSession()");
         return Session.getDefaultInstance(sessionProperties,
                 new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {

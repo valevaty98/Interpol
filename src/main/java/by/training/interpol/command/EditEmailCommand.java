@@ -24,7 +24,7 @@ public class EditEmailCommand implements Command {
 
         System.out.println(user);
         System.out.println(email);
-        System.out.println("ss" + password + "dd");
+        System.out.println(password);
         System.out.println(user.getPassword().equals(password));
         boolean isSaved = EditEmailLogic.saveEmail(user, password, email);
 

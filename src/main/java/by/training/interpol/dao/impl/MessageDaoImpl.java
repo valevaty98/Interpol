@@ -17,6 +17,8 @@ import java.util.Optional;
 public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
     private static final String SQL_INSERT_MESSAGE =
             "INSERT INTO messages (subject, message, wanted_person_id, user_id, date, status) VALUES (?,?,?,?,?,?)";
+    private static final String SQL_UPDATE_MESSAGE_STATUS =
+            "UPDATE messages SET status=? WHERE message_id=?";
     private static final String SQL_SELECT_ALL_MESSAGES_BRIEF =
             "SELECT m.message_id, m.subject, m.message, m.date, m.status, w.person_id, w.name, w.surname, " +
                     "u.user_id, u.login FROM messages m " +
@@ -153,6 +155,26 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
                 );
             }
             return messageInfo;
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(preparedStatement, connection);
+        }
+    }
+
+    @Override
+    public boolean updateMessageStatus(long messageId, MessageStatus newStatus) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            if (pool == null) {
+                throw new DaoException("Null pointer to the pool.");
+            }
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_MESSAGE_STATUS);
+            preparedStatement.setString(1, newStatus.toString());
+            preparedStatement.setLong(2, messageId);
+            return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             throw new DaoException("Exception while executing SQLQuery.", e);
         } finally {

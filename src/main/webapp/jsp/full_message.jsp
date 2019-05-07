@@ -60,8 +60,14 @@
                             </tbody>
                         </table>
                         <div>
-                            <a class="btn send-button" href="send_message.jsp">Send response to user</a>
-                            <button type="button" class="btn back-button" onclick="history.back()">Back</button>
+                            <a class="btn send-button"
+                               href="<c:url value="/jsp/send_response_to_user.jsp?message_id=${message.message.id}&user_email=${message.userEmail}"/>">
+                                Send response to user
+                            </a>
+                            <a class="btn send-button"
+                               href="<c:url value="/controller?command=show_all_messages"/>">
+                                Back
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -10,7 +10,7 @@
         <ul>
             <c:forEach var="person" items="${wantedPeople}">
                 <li>
-                    <a href="../controller?command=show_full_person&person_id=<c:out value="${person.id}"/>">
+                    <a href="<c:url value="/controller?command=show_full_person&person_id=${person.id}"/>">
                         <img src="data:image/png;base64,<c:out value="${person.image}"/>" alt="<c:out value="${person.surname}"/>"/>
                         <div class="person-info">
                             <h4><c:out value="${person.name}"/> <c:out value="${person.surname}"/></h4>
