@@ -43,7 +43,7 @@
         <div class="box search">
             <h2>Filter</h2>
             <div class="box-content">
-                <form action="../controller" method="post">
+                <form action="<c:url value="/controller"/>" method="post">
                     <input type="hidden" name="command" value="search">
                     <div class="form-group">
                         <label for="person_name" class="filter-label">Name:</label>

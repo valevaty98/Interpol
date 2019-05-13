@@ -4,19 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Wanted Person</title>
-    <link rel="shortcut icon" href="<c:url value="/jsp/images/interpol-logo.png"/>" type="image/png"/>
+    <link rel="shortcut icon" href="<c:url value="/static/images/interpol-logo.png"/>" type="image/png"/>
     <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
           type="text/css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<c:url value="/jsp/css/loginiki.css"/>" type="text/css">
+    <link rel="stylesheet" href="<c:url value="/static/css/loginiki.css"/>" type="text/css">
 </head>
 
 <body>
 <div class="form">
     <h1>Add Wanted Person</h1>
     <p>${edit_email_error}</p>
-    <form action="../upload/" method="post" enctype="multipart/form-data">
+    <form action="<c:url value="/upload/"/>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="command" value="add_wanted_person">
         <div class="field-wrap">
             <label>
@@ -92,7 +92,7 @@
     </form>
 </div>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src="<c:url value="/jsp/js/index.js"/>"></script>
+<script src="<c:url value="/static/js/index.js"/>"></script>
 </body>
 
 </html>
