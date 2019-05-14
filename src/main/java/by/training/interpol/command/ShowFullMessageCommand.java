@@ -15,16 +15,16 @@ public class ShowFullMessageCommand implements Command {
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
         Optional<FullMessageInfo> messageInfo;
-        List<WantedPerson> wantedPeople;
-        List<String> nationalities;
+        //List<WantedPerson> wantedPeople;
+        //List<String> nationalities;
         long messageId = Long.parseLong(content.getFromRequestParameters("message_id")[0]);
 
         messageInfo = MessageLogic.receiveFullMessage(messageId);
         if(messageInfo.isPresent()) {
-            wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
-            nationalities = ReceiveWantedPersonInfoLogic.receiveNationalityList();
-            content.putInSessionAttributes("wantedPeople", wantedPeople);
-            content.putInSessionAttributes("nationalities", nationalities);
+           // wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
+            //nationalities = ReceiveWantedPersonInfoLogic.receiveNationalityList();
+            //content.putInSessionAttributes("wantedPeople", wantedPeople);
+            //content.putInSessionAttributes("nationalities", nationalities);
             content.putInRequestAttributes("message", messageInfo.get());
             return builder.buildResponseType(FULL_MESSAGE_PAGE_PATH, SendType.FORWARD);
         } else {

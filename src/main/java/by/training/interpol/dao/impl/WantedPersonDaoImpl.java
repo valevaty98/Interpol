@@ -18,9 +18,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements WantedPersonDao {
     private static Logger logger = LogManager.getLogger();
+    private static WantedPersonDaoImpl instance;
+    private static ReentrantLock locker = new ReentrantLock();
+    private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
 
     private static final String SQL_SELECT_WANTED_PEOPLE_FULL =
             "SELECT w.person_id, w.name, w.surname, w.gender, w.characteristics, w.height, w.weight, w.charges, " +
@@ -44,11 +49,6 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
                     "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
                     "INNER JOIN nationalities n ON np.nationality_id = n.nationality_id " +
                     "WHERE w.person_id=?";
-    private static final String SQL_SELECT_ALL_NATIONALITIES =
-            "SELECT DISTINCT n.name as nationality " +
-                    "FROM wanted_people w " +
-                    "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
-                    "INNER JOIN nationalities n ON np.nationality_id = n.nationality_id";
     private static final String SQL_INSERT_WANTED_PERSON =
             "INSERT INTO wanted_people (name, surname, gender, characteristics, height," +
                     " weight, charges, birth_place_id, birth_date, image) " +
@@ -59,6 +59,23 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
     private static final String SQL_DELETE_PERSON_BY_ID =
             "DELETE FROM wanted_people WHERE person_id=?";
 
+    private WantedPersonDaoImpl(){
+    }
+
+    public static WantedPersonDaoImpl getInstance() {
+        if (!isInstanceCreated.get()) {
+            locker.lock();
+            try {
+                if (instance == null) {
+                    instance = new WantedPersonDaoImpl();
+                    isInstanceCreated.set(true);
+                }
+            } finally {
+                locker.unlock();
+            }
+        }
+        return instance;
+    }
 
     @Override
     public List<WantedPerson> findWantedPeopleBrief() throws DaoException {
@@ -101,27 +118,6 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
             throw new DaoException("Exception while executing SQLQuery.", e);
         } finally {
             closeResources(preparedStatement, connection);
-        }
-    }
-
-    @Override
-    public List<String> findNationalities() throws DaoException {
-        Connection connection = null;
-        Statement statement = null;
-        try {
-            connection = pool.getConnection();
-            statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(SQL_SELECT_ALL_NATIONALITIES);
-
-            List<String> nationalities = new ArrayList<>();
-            while (rs.next()) {
-                nationalities.add(rs.getString("nationality"));
-            }
-            return nationalities;
-        } catch (SQLException e) {
-            throw new DaoException("Exception while executing SQLQuery.", e);
-        } finally {
-            closeResources(statement, connection);
         }
     }
 

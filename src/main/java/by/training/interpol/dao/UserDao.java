@@ -11,7 +11,5 @@ public interface UserDao {
 
     boolean updateUserEmail(User user, String email) throws DaoException;
 
-    Optional<User> findUserByEmail(String email) throws DaoException;
-
-    List<User> selectUsersByRole(Role role) throws DaoException;
+    long findAssessmentIdByUserId(long userId) throws DaoException;
 }

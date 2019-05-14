@@ -30,16 +30,14 @@ public class SearchCommand implements Command {
 
         filteredWantedPeople = SearchLogic.searchWantedPeople(wantedPeople, name, surname, gender, fromAge, toAge,
                  nation);
-        content.putInSessionAttributes("wantedPeople", filteredWantedPeople);
-        content.putInSessionAttributes("personName", name);
-        content.putInSessionAttributes("personSurname", surname);
-        content.putInSessionAttributes("personGender", gender);
-        content.putInSessionAttributes("fromAge", fromAge);
-        content.putInSessionAttributes("toAge", toAge);
-        content.putInSessionAttributes("nation", nation);
+        content.putInRequestAttributes("wantedPeople", filteredWantedPeople);
+        content.putInRequestAttributes("personName", name);
+        content.putInRequestAttributes("personSurname", surname);
+        content.putInRequestAttributes("personGender", gender);
+        content.putInRequestAttributes("fromAge", fromAge);
+        content.putInRequestAttributes("toAge", toAge);
+        content.putInRequestAttributes("nation", nation);
 
-        System.out.println(nation);
-
-        return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
+        return builder.buildResponseType(MAIN_PAGE_PATH, SendType.FORWARD);
     }
 }

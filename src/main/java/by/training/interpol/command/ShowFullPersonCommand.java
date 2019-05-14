@@ -17,10 +17,10 @@ public class ShowFullPersonCommand implements Command {
         wantedPerson = ReceiveWantedPersonInfoLogic.receiveFullInfoAboutPerson(personId);
 
         if (wantedPerson.isPresent()) {
-            content.putInSessionAttributes("wantedPerson", wantedPerson.get());
+            content.putInRequestAttributes("wantedPerson", wantedPerson.get());
             return builder.buildResponseType(WANTED_FULL_PAGE_PATH, SendType.FORWARD);
         } else {
-            content.putInSessionAttributes("error", "No such person!");
+            content.putInRequestAttributes("error", "No such person!");
             return builder.buildResponseType(MAIN_PAGE_PATH, SendType.FORWARD);
         }
     }

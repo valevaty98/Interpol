@@ -6,27 +6,46 @@ import by.training.interpol.dao.DaoException;
 import by.training.interpol.entity.Assessment;
 import by.training.interpol.entity.Role;
 import by.training.interpol.entity.User;
+import by.training.interpol.pool.ConnectionPool;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class AssessmentDaoImpl extends BaseDao<Assessment> implements AssessmentDao {
     private static Logger logger = LogManager.getLogger();
+    private static AssessmentDaoImpl instance;
+    private static ReentrantLock locker = new ReentrantLock();
+    private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
 
     private static final String SQL_INSERT_ASSESSMENT =
             "INSERT INTO assessments (number_of_messages, assessment) VALUES (?,?)";
     private static final String SQL_SELECT_LAST_ASSESSMENT_ID =
             "SELECT MAX(assessment_id) FROM assessments WHERE number_of_messages=? AND assessment=?";
-    @Override
-    public Optional<Assessment> findAssessmentByUser(User user) {
-        return Optional.empty();
+    private static final String SQL_INCREMENT_NUMBER_OF_MESSAGES =
+            "UPDATE assessments SET number_of_messages=number_of_messages+1";
+
+    private AssessmentDaoImpl(){
+    }
+
+    public static AssessmentDaoImpl getInstance() {
+        if (!isInstanceCreated.get()) {
+            locker.lock();
+            try {
+                if (instance == null) {
+                    instance = new AssessmentDaoImpl();
+                    isInstanceCreated.set(true);
+                }
+            } finally {
+                locker.unlock();
+            }
+        }
+        return instance;
     }
 
     @Override
@@ -55,13 +74,21 @@ public class AssessmentDaoImpl extends BaseDao<Assessment> implements Assessment
     }
 
     @Override
-    public Optional<Assessment> findAssessmentByUserId(long id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean deleteAssesmentByUser(User user) {
-        return false;
+    public boolean incrementAssessmentsNumberOfMessages(long assessmentId) throws DaoException {
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            if (pool == null) {
+                throw new DaoException("Null pointer to the pool.");
+            }
+            connection = pool.getConnection();
+            statement = connection.createStatement();
+            return (statement.executeUpdate(SQL_INCREMENT_NUMBER_OF_MESSAGES) == 1);
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(statement, connection);
+        }
     }
 
     @Override

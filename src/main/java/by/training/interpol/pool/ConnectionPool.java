@@ -59,6 +59,22 @@ public class ConnectionPool {
         return instance;
     }
 
+    public void destroyConnectionPool() {
+        if (!usedConnections.isEmpty()) {
+            log.log(Level.WARN, "Some connections are being used!!");
+        }
+        try {
+            for (Connection connection : availableConnections) {
+                connection.close();
+            }
+            for (Connection connection : usedConnections) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            log.log(Level.ERROR, "Error during closing connections.", e);
+        }
+    }
+
     public Connection getConnection() {
         Connection connection = null;
         try {

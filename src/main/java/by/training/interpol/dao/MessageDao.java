@@ -13,4 +13,6 @@ public interface MessageDao {
     Optional<FullMessageInfo> receiveFullMessageInfo(long messageId) throws DaoException;
 
     boolean updateMessageStatus(long messageId, MessageStatus newStatus) throws DaoException;
+
+    void deleteMessagesAboutPerson(long personId) throws DaoException;
 }

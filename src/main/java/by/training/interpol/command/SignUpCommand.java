@@ -25,15 +25,10 @@ public class SignUpCommand implements Command {
         String email;
         String password;
 
-        try {
-            login = content.getFromRequestParameters(LOGIN_PARAM)[0];
-            email = content.getFromRequestParameters(EMAIL_PARAM)[0];
-            password = content.getFromRequestParameters(PASSWORD_PARAM)[0];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            //todo - log
-            content.putInSessionAttributes("error", "Illegal params.");
-            return builder.buildResponseType(ERROR_PAGE_PATH, SendType.REDIRECT);
-        }
+        login = content.getFromRequestParameters(LOGIN_PARAM)[0];
+        email = content.getFromRequestParameters(EMAIL_PARAM)[0];
+        password = content.getFromRequestParameters(PASSWORD_PARAM)[0];
+
         user = SignUpLogic.signUpUser(login, email, password);
         if (user.isPresent()) {
             wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
@@ -42,7 +37,7 @@ public class SignUpCommand implements Command {
             return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
         } else {
             content.invalidateSession();
-            content.putInRequestAttributes("error", "Login already Taken.");
+            content.putInRequestAttributes("signUpError", "Login already taken.");
             return builder.buildResponseType(INDEX_PAGE, SendType.FORWARD);
         }
     }

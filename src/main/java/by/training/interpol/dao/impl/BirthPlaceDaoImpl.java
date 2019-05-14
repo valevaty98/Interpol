@@ -14,13 +14,37 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class BirthPlaceDaoImpl extends BaseDao<BirthPlace> implements BirthPlaceDao {
     private static Logger logger = LogManager.getLogger();
+    private static BirthPlaceDaoImpl instance;
+    private static ReentrantLock locker = new ReentrantLock();
+    private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
+
     private static final String SQL_INSERT_BIRTH_PLACE =
             "INSERT INTO birth_places (name) VALUES (?)";
     private static final String SQL_SELECT_BIRTH_PLACE_ID =
             "SELECT birth_place_id FROM birth_places WHERE name=?";
+
+    private BirthPlaceDaoImpl(){
+    }
+
+    public static BirthPlaceDaoImpl getInstance() {
+        if (!isInstanceCreated.get()) {
+            locker.lock();
+            try {
+                if (instance == null) {
+                    instance = new BirthPlaceDaoImpl();
+                    isInstanceCreated.set(true);
+                }
+            } finally {
+                locker.unlock();
+            }
+        }
+        return instance;
+    }
 
     @Override
     protected List<BirthPlace> parseResultSetForEntities(ResultSet rs) throws SQLException {

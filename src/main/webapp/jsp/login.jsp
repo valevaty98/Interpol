@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -13,11 +13,35 @@
 <body>
 <div class="form">
     <ul class="tab-group">
-        <li class="tab active"><a href="#sign-up">Sign Up</a></li>
-        <li class="tab"><a href="#login">Log In</a></li>
+        <li class="tab"><a href="#sign-up">Sign Up</a></li>
+        <li class="tab active"><a href="#login">Log In</a></li>
     </ul>
-
+    <div>
+        <p>${wrongCommand}</p>
+        <p>${loginError}</p>
+        <p>${signUpError}</p>
+    </div>
     <div class="tab-content">
+        <div id="login">
+            <h1>Log In</h1>
+            <form action="controller" method="post">
+                <input type="hidden" name="command" value="login">
+                <div class="field-wrap">
+                    <label>
+                        Login<span class="req">*</span>
+                    </label>
+                    <input type="text" name="login" required autocomplete="off"/>
+                </div>
+                <div class="field-wrap">
+                    <label>
+                        Password<span class="req">*</span>
+                    </label>
+                    <input type="password" name="password" required autocomplete="off"/>
+                </div>
+                <p class="forgot"><a href="#">Forgot Password?</a></p>
+                <button class="button button-block">Log In</button>
+            </form>
+        </div>
         <div id="sign-up">
             <h1>Sign Up</h1>
             <p>${error}</p>
@@ -42,27 +66,6 @@
                     <input type="password" name="password" required autocomplete="off"/>
                 </div>
                 <button type="submit" class="button button-block">Sign In</button>
-            </form>
-        </div>
-
-        <div id="login">
-            <h1>Log In</h1>
-            <form action="controller" method="post">
-                <input type="hidden" name="command" value="login">
-                <div class="field-wrap">
-                    <label>
-                        Login<span class="req">*</span>
-                    </label>
-                    <input type="text" name="login" required autocomplete="off"/>
-                </div>
-                <div class="field-wrap">
-                    <label>
-                        Password<span class="req">*</span>
-                    </label>
-                    <input type="password" name="password" required autocomplete="off"/>
-                </div>
-                <p class="forgot"><a href="#">Forgot Password?</a></p>
-                <button class="button button-block">Log In</button>
             </form>
         </div>
     </div>

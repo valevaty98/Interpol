@@ -17,9 +17,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class UserDaoImpl extends BaseDao<User> implements UserDao {
     private static Logger logger = LogManager.getLogger();
+    private static UserDaoImpl instance;
+    private static ReentrantLock locker = new ReentrantLock();
+    private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
 
     private static final String SQL_SELECT_ALL_USERS =
             "SELECT u.user_id, u.login, u.password, u.email, u.role, a.assessment_id, a.number_of_messages, a.assessment " +
@@ -45,6 +50,25 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE user_id=? AND login=? AND password=? " +
             "AND email=? AND role=?";
     private static final String SQL_UPDATE_USER_EMAIL = "UPDATE users SET email=? WHERE user_id=?";
+    private static final String SQL_SELECT_ASSESSMENT_BY_ID =
+            "SELECT assessment_id FROM users WHERE user_id=?";
+    private UserDaoImpl(){
+    }
+
+    public static UserDaoImpl getInstance() {
+        if (!isInstanceCreated.get()) {
+            locker.lock();
+            try {
+                if (instance == null) {
+                    instance = new UserDaoImpl();
+                    isInstanceCreated.set(true);
+                }
+            } finally {
+                locker.unlock();
+            }
+        }
+        return instance;
+    }
 
     @Override
     public Optional<User> findUserByLogin(String login) throws DaoException {
@@ -71,11 +95,6 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         }
     }
 
-    @Override
-    public Optional<User> findUserByEmail(String email) throws DaoException {
-        return findUser(email, SQL_SELECT_USER_BY_EMAIL);
-    }
-
     private Optional<User> findUser(String field, String sqlSelectUser) throws DaoException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -85,23 +104,6 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
             preparedStatement.setString(1, field);
             ResultSet rs = preparedStatement.executeQuery();
             return parseResultSet(rs);
-        } catch (SQLException e) {
-            throw new DaoException("Exception while executing SQLQuery.", e);
-        } finally {
-            closeResources(preparedStatement, connection);
-        }
-    }
-
-    @Override
-    public List<User> selectUsersByRole(Role role) throws DaoException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = pool.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_SELECT_USER_BY_ROLE);
-            preparedStatement.setString(1, role.toString());
-            ResultSet rs = preparedStatement.executeQuery();
-            return parseResultSetForEntities(rs);
         } catch (SQLException e) {
             throw new DaoException("Exception while executing SQLQuery.", e);
         } finally {
@@ -146,6 +148,26 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         } else {
             logger.log(Level.WARN, "No elements in result set!");
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public long findAssessmentIdByUserId(long userId) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_SELECT_ASSESSMENT_BY_ID);
+            preparedStatement.setLong(1, userId);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getLong("assessment_id");
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(preparedStatement, connection);
         }
     }
 

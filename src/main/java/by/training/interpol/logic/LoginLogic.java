@@ -19,7 +19,7 @@ public class LoginLogic {
     private static Logger logger = LogManager.getLogger();
 
     public static Optional<User> checkLogin(String login, String password) {
-        UserDaoImpl dao = new UserDaoImpl();
+        UserDaoImpl dao = UserDaoImpl.getInstance();
         Optional<User> user;
         if (login == null || login.isEmpty() || password == null || password.isEmpty()) {
             logger.log(Level.WARN, "Illegal login or password!");

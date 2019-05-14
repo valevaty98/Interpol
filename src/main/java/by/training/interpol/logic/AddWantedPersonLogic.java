@@ -18,9 +18,9 @@ public class AddWantedPersonLogic {
                                                               Float height, Float weight, String charges, String birthPlaceName,
                                                               String birthDate, InputStream imageIs, int imageSize,
                                                               String nationalitiesString) {
-        BirthPlaceDaoImpl birthPlaceDao = new BirthPlaceDaoImpl();
-        WantedPersonDaoImpl wantedPersonDao = new WantedPersonDaoImpl();
-        NationalityDaoImpl nationalityDao = new NationalityDaoImpl();
+        BirthPlaceDaoImpl birthPlaceDao = BirthPlaceDaoImpl.getInstance();
+        WantedPersonDaoImpl wantedPersonDao = WantedPersonDaoImpl.getInstance();
+        NationalityDaoImpl nationalityDao = NationalityDaoImpl.getInstance();
 
         WantedPerson wantedPerson = new WantedPerson();
         wantedPerson.setName(name);

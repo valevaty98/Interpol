@@ -21,8 +21,8 @@ public class SignUpLogic {
     private static Logger logger = LogManager.getLogger();
 
     public static Optional<User> signUpUser(String login, String email, String password) {
-        AssessmentDaoImpl assessmentDao = new AssessmentDaoImpl();
-        UserDaoImpl userDao = new UserDaoImpl();
+        AssessmentDaoImpl assessmentDao = AssessmentDaoImpl.getInstance();
+        UserDaoImpl userDao = UserDaoImpl.getInstance();
         Assessment assessment = new Assessment(INITIAL_NUMBER_OF_MESSAGES, INITIAL_ASSESSMENT_TEXT);
         Optional<Assessment> optionalAssessment;
         User user;

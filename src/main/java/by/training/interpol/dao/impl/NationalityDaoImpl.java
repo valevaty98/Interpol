@@ -5,15 +5,18 @@ import by.training.interpol.dao.DaoException;
 import by.training.interpol.dao.NationalityDao;
 import by.training.interpol.entity.Nationality;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class NationalityDaoImpl extends BaseDao<Nationality> implements NationalityDao {
+    private static NationalityDaoImpl instance;
+    private static ReentrantLock locker = new ReentrantLock();
+    private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
+
     private static final String SQL_INSERT_NATIONALITY =
             "INSERT INTO nationalities (name) VALUES (?)";
     private static final String SQL_INSERT_PERSON_NATION =
@@ -24,65 +27,49 @@ public class NationalityDaoImpl extends BaseDao<Nationality> implements National
             "SELECT nationality_id FROM nationalities WHERE name=?";
     private static final String SQL_DELETE_FROM_NATION_PERSON =
             "DELETE FROM nation_person WHERE wanted_person_id=?";
+    private static final String SQL_SELECT_WANTED_PEOPLE_NATIONALITY_NAMES =
+            "SELECT DISTINCT n.name as nationality " +
+                    "FROM wanted_people w " +
+                    "INNER JOIN nation_person np ON np.wanted_person_id=w.person_id " +
+                    "INNER JOIN nationalities n ON np.nationality_id = n.nationality_id";
 
-    @Override
-    protected List<Nationality> parseResultSetForEntities(ResultSet rs) throws SQLException {
-        List<Nationality> nationalities = new ArrayList<>();
-        while (rs.next()) {
-            nationalities.add(new Nationality(
-                    rs.getLong("nationality_id"), rs.getString("name")));
+    private NationalityDaoImpl(){
+    }
+
+    public static NationalityDaoImpl getInstance() {
+        if (!isInstanceCreated.get()) {
+            locker.lock();
+            try {
+                if (instance == null) {
+                    instance = new NationalityDaoImpl();
+                    isInstanceCreated.set(true);
+                }
+            } finally {
+                locker.unlock();
+            }
         }
-        return nationalities;
+        return instance;
     }
 
     @Override
-    protected Optional<Nationality> parseResultSet(ResultSet rs) throws SQLException {
-        return Optional.empty();
-    }
+    public List<String> findPeopleNationalityNames() throws DaoException {
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = pool.getConnection();
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(SQL_SELECT_WANTED_PEOPLE_NATIONALITY_NAMES);
 
-    @Override
-    protected void prepareStatementForInsert(PreparedStatement preparedStatement, Nationality entity) throws SQLException {
-        preparedStatement.setString(1, entity.getName());
-    }
-
-    @Override
-    protected void prepareStatementForUpdate(PreparedStatement preparedStatement, Nationality entity) throws SQLException {
-
-    }
-
-    @Override
-    protected void prepareStatementForDelete(PreparedStatement preparedStatement, Nationality entity) throws SQLException {
-
-    }
-
-    @Override
-    protected String selectAllSQLQuery() {
-        return SQL_SELECT_ALL_NATIONALITIES;
-    }
-
-    @Override
-    protected String selectByIdSQLQuery() {
-        return null;
-    }
-
-    @Override
-    protected String deleteByIdSQLQuery() {
-        return null;
-    }
-
-    @Override
-    protected String insertSQLQuery() {
-        return SQL_INSERT_NATIONALITY;
-    }
-
-    @Override
-    protected String updateSQLQuery() {
-        return null;
-    }
-
-    @Override
-    protected String deleteSQLQuery() {
-        return null;
+            List<String> nationalities = new ArrayList<>();
+            while (rs.next()) {
+                nationalities.add(rs.getString("nationality"));
+            }
+            return nationalities;
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(statement, connection);
+        }
     }
 
     @Override
@@ -147,5 +134,65 @@ public class NationalityDaoImpl extends BaseDao<Nationality> implements National
         } finally {
             closeResources(preparedStatement, connection);
         }
+    }
+
+    @Override
+    protected List<Nationality> parseResultSetForEntities(ResultSet rs) throws SQLException {
+        List<Nationality> nationalities = new ArrayList<>();
+        while (rs.next()) {
+            nationalities.add(new Nationality(
+                    rs.getLong("nationality_id"), rs.getString("name")));
+        }
+        return nationalities;
+    }
+
+    @Override
+    protected Optional<Nationality> parseResultSet(ResultSet rs) throws SQLException {
+        return Optional.empty();
+    }
+
+    @Override
+    protected void prepareStatementForInsert(PreparedStatement preparedStatement, Nationality entity) throws SQLException {
+        preparedStatement.setString(1, entity.getName());
+    }
+
+    @Override
+    protected void prepareStatementForUpdate(PreparedStatement preparedStatement, Nationality entity) throws SQLException {
+
+    }
+
+    @Override
+    protected void prepareStatementForDelete(PreparedStatement preparedStatement, Nationality entity) throws SQLException {
+
+    }
+
+    @Override
+    protected String selectAllSQLQuery() {
+        return SQL_SELECT_ALL_NATIONALITIES;
+    }
+
+    @Override
+    protected String selectByIdSQLQuery() {
+        return null;
+    }
+
+    @Override
+    protected String deleteByIdSQLQuery() {
+        return null;
+    }
+
+    @Override
+    protected String insertSQLQuery() {
+        return SQL_INSERT_NATIONALITY;
+    }
+
+    @Override
+    protected String updateSQLQuery() {
+        return null;
+    }
+
+    @Override
+    protected String deleteSQLQuery() {
+        return null;
     }
 }

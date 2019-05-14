@@ -4,6 +4,11 @@ public class ResponseType {
     private String page;
     private SendType sendType;
 
+    public ResponseType(String page, SendType sendType) {
+        this.page = page;
+        this.sendType = sendType;
+    }
+
     public SendType getSendType() {
         return sendType;
     }
@@ -18,10 +23,5 @@ public class ResponseType {
 
     public void setPage(String page) {
         this.page = page;
-    }
-
-    public ResponseType(String page, SendType sendType) {
-        this.page = page;
-        this.sendType = sendType;
     }
 }

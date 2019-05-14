@@ -87,7 +87,7 @@
                         <c:if test="${user.role eq 'ADMIN'}">
                             <a class="btn send-button" href="<c:url value="/controller?command=delete_person&person_id=${wantedPerson.id}"/>">Delete Wanted Person</a>
                         </c:if>
-                        <a class="btn send-button" href="send_message.jsp">Send message</a>
+                        <a class="btn send-button" href="<c:url value="/jsp/send_message.jsp?person_id=${wantedPerson.id}"/>">Send message</a>
                         <a class="btn send-button" href="<c:url value="/controller?command=home"/>">Back to Wanted Persons</a>
                     </div>
                 </div>

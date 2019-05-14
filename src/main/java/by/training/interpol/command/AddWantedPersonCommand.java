@@ -3,12 +3,16 @@ package by.training.interpol.command;
 import by.training.interpol.entity.WantedPerson;
 import by.training.interpol.logic.AddWantedPersonLogic;
 import by.training.interpol.logic.ReceiveWantedPersonInfoLogic;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
 public class AddWantedPersonCommand implements Command {
+    private static Logger logger = LogManager.getLogger();
     @Override
     public ResponseType execute(SessionRequestContent content) {
         String name = content.getFromRequestParameters("person_name")[0];
@@ -19,12 +23,14 @@ public class AddWantedPersonCommand implements Command {
         try {
             height = Float.parseFloat(content.getFromRequestParameters("height")[0]);
         } catch (NumberFormatException e) {
+            logger.log(Level.WARN, "Exception during parsing height from parameters", e);
             height = null;
         }
         Float weight;
         try {
              weight = Float.parseFloat(content.getFromRequestParameters("weight")[0]);
         } catch (NumberFormatException e) {
+            logger.log(Level.WARN, "Exception during parsing weight from parameters", e);
             weight = null;
         }
         String charges = content.getFromRequestParameters("charges")[0];
