@@ -17,7 +17,7 @@
     <p>${edit_email_error}</p>
     <form action="<c:url value="/controller"/>" method="post">
         <input type="hidden" name="command" value="send_message"/>
-        <input type="hidden" name="person_id" value="<c:out value="${person_id}"/>"/>
+        <input type="hidden" name="person_id" value="<c:out value="${param.person_id}"/>"/>
         <div class="field-wrap">
             <label>
                 Subject<span class="req">*</span>

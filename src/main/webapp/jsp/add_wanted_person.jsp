@@ -45,13 +45,13 @@
             <label>
                 Height
             </label>
-            <input type="text" name="height" autocomplete="off" pattern="^[\d]+[.]?\d]{1,3}$"/>
+            <input type="text" name="height" autocomplete="off" pattern="[\d]+[.]?[\d]{1,3}$"/>
         </div>
         <div class="field-wrap">
             <label>
                 Weight
             </label>
-            <input type="text" name="weight" autocomplete="off" pattern="^[\d]+[.]?\d]{1,3}$"/>
+            <input type="text" name="weight" autocomplete="off" pattern="^[\d]+[.]?[\d]{1,3}$"/>
         </div>
         <div class="field-wrap">
             <label>
