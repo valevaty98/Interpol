@@ -16,6 +16,9 @@
 </head>
 <body>
 <div class="shell">
+    <div class="error">
+        <p>${uploadError}</p>
+    </div>
     <!-- Header -->
     <c:import url="common/header.jsp" charEncoding="utf-8"/>
     <!-- End Header -->

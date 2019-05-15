@@ -1,4 +1,4 @@
-package by.training.interpol.servlet;
+package by.training.interpol.mail;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;

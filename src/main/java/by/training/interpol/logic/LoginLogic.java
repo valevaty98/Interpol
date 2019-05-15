@@ -1,40 +1,38 @@
 package by.training.interpol.logic;
 
-import by.training.interpol.dao.BaseDao;
+import by.training.interpol.command.UserAndResultMessageWrapper;
 import by.training.interpol.dao.DaoException;
-import by.training.interpol.dao.UserDao;
 import by.training.interpol.dao.impl.UserDaoImpl;
-import by.training.interpol.dao.impl.WantedPersonDaoImpl;
 import by.training.interpol.entity.User;
-import by.training.interpol.entity.WantedPerson;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class LoginLogic {
     private static Logger logger = LogManager.getLogger();
+    private static final String ILLEGAL_LOGIN_MESSAGE = "Illegal login or password!";
+    private static final String CANT_FIND_USER_MESSAGE = "Can't find appropriate user";
+    private static final String OK_MESSAGE = "User found";
 
-    public static Optional<User> checkLogin(String login, String password) {
+    public static UserAndResultMessageWrapper checkLogin(String login, String password) {
         UserDaoImpl dao = UserDaoImpl.getInstance();
         Optional<User> user;
         if (login == null || login.isEmpty() || password == null || password.isEmpty()) {
-            logger.log(Level.WARN, "Illegal login or password!");
-            return Optional.empty();
+            logger.log(Level.WARN, ILLEGAL_LOGIN_MESSAGE);
+            return new UserAndResultMessageWrapper(Optional.empty(), ILLEGAL_LOGIN_MESSAGE);
         }
         try {
             user = dao.findUserByLogin(login);
         } catch (DaoException e) {
             logger.log(Level.ERROR, "DAO exception during finding user by login", e);
-            return Optional.empty();
+            return new UserAndResultMessageWrapper(Optional.empty(), CANT_FIND_USER_MESSAGE);
         }
         if (user.isPresent() && user.get().getPassword().equals(password)){
-            return user;
+            return new UserAndResultMessageWrapper(user, OK_MESSAGE);
         } else {
-            return Optional.empty();
+            return new UserAndResultMessageWrapper(Optional.empty(), CANT_FIND_USER_MESSAGE);
         }
     }
 }

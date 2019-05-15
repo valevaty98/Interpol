@@ -16,16 +16,17 @@
         <li class="tab"><a href="#sign-up">Sign Up</a></li>
         <li class="tab active"><a href="#login">Log In</a></li>
     </ul>
-    <div>
+    <div class="error">
         <p>${wrongCommand}</p>
         <p>${loginError}</p>
         <p>${signUpError}</p>
+        <p>${illegalActionError}</p>
     </div>
     <div class="tab-content">
         <div id="login">
-            <h1>Log In</h1>
-            <form action="controller" method="post">
+            <form action="<c:url value="/controller"/>" method="post">
                 <input type="hidden" name="command" value="login">
+                <h1>Log In</h1>
                 <div class="field-wrap">
                     <label>
                         Login<span class="req">*</span>
@@ -38,14 +39,12 @@
                     </label>
                     <input type="password" name="password" required autocomplete="off"/>
                 </div>
-                <p class="forgot"><a href="#">Forgot Password?</a></p>
                 <button class="button button-block">Log In</button>
             </form>
         </div>
         <div id="sign-up">
-            <h1>Sign Up</h1>
-            <p>${error}</p>
-            <form action="controller" method="post">
+            <form action="<c:url value="/controller"/>" method="post">
+                <h1>Sign Up</h1>
                 <input type="hidden" name="command" value="sign_up">
                 <div class="field-wrap">
                     <label>

@@ -242,8 +242,12 @@ a.cart-link:hover {
 }
 
 .message-row:hover {
-    background-color: #dee2e6;
+    filter: brightness(85%);
     cursor: pointer;
+}
+
+.error p {
+    color: #1ab188;
 }
 
 .info-table {

@@ -13,8 +13,15 @@ import java.util.Optional;
 
 public class AddWantedPersonCommand implements Command {
     private static Logger logger = LogManager.getLogger();
+    private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
     @Override
     public ResponseType execute(SessionRequestContent content) {
+        if (content.getFromRequestAttributes("uploadError") != null ) {
+            return new HomeCommand().execute(content);
+        }
+        ResponseTypeCreator builder = new ResponseTypeCreator();
+        List<WantedPerson> wantedPeople;
+        List<String> nationalities;
         String name = content.getFromRequestParameters("person_name")[0];
         String surname = content.getFromRequestParameters("person_surname")[0];
         String gender = content.getFromRequestParameters("gender")[0];
@@ -43,6 +50,11 @@ public class AddWantedPersonCommand implements Command {
         AddWantedPersonLogic.addWantedPersonLogic(
             name, surname, gender, characteristics, height, weight, charges, birthPlace,
             birthDate, imageInputStream, (int)imageSize, nationalitiesString);
-        return new HomeCommand().execute(content);
+
+        wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
+        nationalities = ReceiveWantedPersonInfoLogic.receiveNationalityList();
+        content.putInSessionAttributes("wantedPeople", wantedPeople);
+        content.putInSessionAttributes("nationalities", nationalities);
+        return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
     }
 }

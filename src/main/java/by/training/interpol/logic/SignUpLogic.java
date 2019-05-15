@@ -1,5 +1,6 @@
 package by.training.interpol.logic;
 
+import by.training.interpol.command.UserAndResultMessageWrapper;
 import by.training.interpol.dao.BaseDao;
 import by.training.interpol.dao.DaoException;
 import by.training.interpol.dao.UserDao;
@@ -16,41 +17,46 @@ import java.util.Optional;
 import java.util.Spliterator;
 
 public class SignUpLogic {
+    private static final String ILLEGAL_PARAMS_MESSAGE = "Illegal parameters for singing up.";
+    private static final String LOGIN_ALREADY_TAKEN_MESSAGE = "Login already taken.";
+    private static final String CANT_CREATE_USER_MESSAGE = "Can't create user.";
+    private static final String OK_MESSAGE = "User created";
     private static final int INITIAL_NUMBER_OF_MESSAGES = 0;
     private static final String INITIAL_ASSESSMENT_TEXT = "There was no help yet, but still ahead.";
     private static Logger logger = LogManager.getLogger();
 
-    public static Optional<User> signUpUser(String login, String email, String password) {
+    public static UserAndResultMessageWrapper signUpUser(String login, String email, String password) {
         AssessmentDaoImpl assessmentDao = AssessmentDaoImpl.getInstance();
         UserDaoImpl userDao = UserDaoImpl.getInstance();
         Assessment assessment = new Assessment(INITIAL_NUMBER_OF_MESSAGES, INITIAL_ASSESSMENT_TEXT);
         Optional<Assessment> optionalAssessment;
         User user;
-        Optional<User> optionalUser;
 
         if (login == null || login.isEmpty() ||
                 email == null || email.isEmpty() ||
                 password == null || password.isEmpty()
         ) {
-            logger.log(Level.WARN, "Illegal parameters for singing up!");
-            return Optional.empty();
+            logger.log(Level.WARN, ILLEGAL_PARAMS_MESSAGE);
+            return new UserAndResultMessageWrapper(Optional.empty(), ILLEGAL_PARAMS_MESSAGE);
         }
 
         try {
             if (userDao.findUserByLogin(login).isPresent()) {
-                logger.log(Level.WARN, "Login already taken!");
-                return Optional.empty();
+                logger.log(Level.WARN, LOGIN_ALREADY_TAKEN_MESSAGE);
+                return new UserAndResultMessageWrapper(Optional.empty(), LOGIN_ALREADY_TAKEN_MESSAGE);
             }
-            assessmentDao.insert(assessment);
-            optionalAssessment = assessmentDao.findAssessmentIdByAssessment(assessment); //todo think
-            user = new User(login, password, email, Role.GUEST, optionalAssessment.get());
-            userDao.insert(user);
-            optionalUser = userDao.findUserByLogin(user.getLogin());
+            if (assessmentDao.insert(assessment)) {
+                optionalAssessment = assessmentDao.findAssessmentIdByAssessment(assessment); //todo think
+                user = new User(login, password, email, Role.GUEST, optionalAssessment.get());
+                userDao.insert(user);
+                return new UserAndResultMessageWrapper(userDao.findUserByLogin(user.getLogin()), OK_MESSAGE);
+            } else {
+                logger.log(Level.ERROR, "Error inserting default assessment");
+                return new UserAndResultMessageWrapper(Optional.empty(), CANT_CREATE_USER_MESSAGE);
+            }
         } catch (DaoException ex) {
             logger.log(Level.ERROR, "DAO exception during inserting user to database", ex);
-            return Optional.empty();
+            return new UserAndResultMessageWrapper(Optional.empty(), CANT_CREATE_USER_MESSAGE);
         }
-
-        return optionalUser;
     }
 }

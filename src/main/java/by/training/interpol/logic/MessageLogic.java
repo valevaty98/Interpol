@@ -1,6 +1,5 @@
 package by.training.interpol.logic;
 
-import by.training.interpol.dao.BaseDao;
 import by.training.interpol.dao.DaoException;
 import by.training.interpol.dao.impl.AssessmentDaoImpl;
 import by.training.interpol.dao.impl.MessageDaoImpl;

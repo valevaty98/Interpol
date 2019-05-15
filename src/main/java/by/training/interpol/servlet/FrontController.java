@@ -1,6 +1,9 @@
 package by.training.interpol.servlet;
 
 import by.training.interpol.command.*;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +14,8 @@ import java.io.IOException;
 
 @WebServlet("/controller")
 public class FrontController extends HttpServlet {
+    private static Logger logger = LogManager.getLogger();
+    private static final String INDEX_PAGE_PATH = "/index.jsp";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -26,13 +31,10 @@ public class FrontController extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
-
         SessionRequestContent content = new SessionRequestContent(request);
         CommandFactory commandFactory = new CommandFactory();
         Command command = commandFactory.defineCommand(content);
-
         ResponseType responseType = command.execute(content);
-
         content.insertValues(request);
 
         switch (responseType.getSendType()) {
@@ -40,12 +42,11 @@ public class FrontController extends HttpServlet {
                 request.getRequestDispatcher(responseType.getPage()).forward(request, response);
                 break;
             case REDIRECT:
-                System.out.println(request.getContextPath() + " - context path");
                 response.sendRedirect(request.getContextPath() + responseType.getPage());
                 break;
             default:
-                System.out.println("illegal redirect type");
-                //todo - log
+                logger.log(Level.ERROR, "Illegal type of send.");
+                request.getRequestDispatcher(INDEX_PAGE_PATH).forward(request, response);
         }
     }
 }

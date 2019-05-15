@@ -29,7 +29,8 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
             "SELECT m.message_id, m.subject, m.message, m.date, m.status, w.person_id, w.name, w.surname, " +
                     "u.user_id, u.login FROM messages m " +
                     "INNER JOIN users u ON m.user_id = u.user_id " +
-                    "INNER JOIN wanted_people w ON m.wanted_person_id = w.person_id";
+                    "INNER JOIN wanted_people w ON m.wanted_person_id = w.person_id " +
+                    "ORDER BY m.date DESC";
     private static final String SQL_SELECT_FULL_MESSAGE_INFO =
             "SELECT m.subject, m.message, m.date, m.status, w.person_id, w.name, w.surname, " +
                     "w.image, u.user_id, u.login, u.email FROM messages m " +

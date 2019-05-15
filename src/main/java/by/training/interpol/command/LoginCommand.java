@@ -30,7 +30,8 @@ public class LoginCommand implements Command {
 
         login = content.getFromRequestParameters(LOGIN_PARAM)[0];
         password = content.getFromRequestParameters(PASSWORD_PARAM)[0];
-        user = LoginLogic.checkLogin(login, password);
+        UserAndResultMessageWrapper  wrapper = LoginLogic.checkLogin(login, password);
+        user = wrapper.getUser();
         if (user.isPresent()) {
             wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
             nationalities = ReceiveWantedPersonInfoLogic.receiveNationalityList();
@@ -39,7 +40,7 @@ public class LoginCommand implements Command {
             content.putInSessionAttributes("user", user.get());
             return builder.buildResponseType(MAIN_PAGE_PATH, SendType.FORWARD);
         } else {
-            content.putInRequestAttributes("loginError", "Illegal params.");
+            content.putInRequestAttributes("loginError", wrapper.getResultMessage());
             return new DefaultCommand().execute(content);
         }
     }
