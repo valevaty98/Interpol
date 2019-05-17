@@ -11,7 +11,6 @@ import java.io.IOException;
         @WebInitParam(name = "encoding", value = "UTF-8", description = "Encoding Param")})
 public class EncodingFilter implements Filter {
     private static final String ENCODING_PARAM = "encoding";
-
     private String code;
 
     @Override
@@ -23,8 +22,11 @@ public class EncodingFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        request.setCharacterEncoding(code);
-        response.setCharacterEncoding(code);
+        String codeRequest = request.getCharacterEncoding();
+        if (code != null && !code.equalsIgnoreCase(codeRequest)) {
+            request.setCharacterEncoding(code);
+            response.setCharacterEncoding(code);
+        }
         filterChain.doFilter(request, response);
     }
 

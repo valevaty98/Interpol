@@ -7,6 +7,6 @@ public class DefaultCommand implements Command {
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
         content.invalidateSession();
-        return builder.buildResponseType(INDEX_PAGE, SendType.FORWARD);
+        return builder.buildResponseType(INDEX_PAGE, SendType.REDIRECT);
     }
 }

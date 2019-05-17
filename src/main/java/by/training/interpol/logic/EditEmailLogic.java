@@ -9,8 +9,6 @@ public class EditEmailLogic {
     public static boolean saveEmail(User user, String password, String email) {
         UserDaoImpl dao = UserDaoImpl.getInstance();
         boolean isSaved = false;
-        System.out.println(user);
-        System.out.println(user.getPassword().equals(password));
         try {
             if (user.getPassword().equals(password)) {
                 isSaved = dao.updateUserEmail(user, email);

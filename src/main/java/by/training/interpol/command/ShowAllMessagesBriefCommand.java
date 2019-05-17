@@ -14,16 +14,8 @@ public class ShowAllMessagesBriefCommand implements Command {
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
         List<BriefMessageInfo> messageInfoList;
-//        List<WantedPerson> wantedPeople;
-//        List<String> nationalities;
-//
         messageInfoList = MessageLogic.receiveAllMessagesBrief();
-//        wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
-//        nationalities = ReceiveWantedPersonInfoLogic.receiveNationalityList();
-//        content.putInSessionAttributes("wantedPeople", wantedPeople);
-//        content.putInSessionAttributes("nationalities", nationalities);
         content.putInRequestAttributes("messages_info_list", messageInfoList);
-
         return builder.buildResponseType(ALL_MESSAGES_PAGE_PATH, SendType.FORWARD);
     }
 }

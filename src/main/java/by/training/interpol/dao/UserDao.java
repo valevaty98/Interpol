@@ -12,4 +12,7 @@ public interface UserDao {
     boolean updateUserEmail(User user, String email) throws DaoException;
 
     long findAssessmentIdByUserId(long userId) throws DaoException;
+
+    List<Long> findUserIdsByEmail(String email) throws DaoException;
+
 }

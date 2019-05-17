@@ -12,12 +12,6 @@
     <link rel="shortcut icon" href="<c:url value="/static/images/interpol-logo.png"/>" type="image/png"/>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <!--<style>
-        #wanted-people-tab {
-            display: none;
-        }
-    </style>
-    -->
 </head>
 <body>
 <div class="shell">

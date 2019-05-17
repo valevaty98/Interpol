@@ -8,7 +8,6 @@ import java.util.List;
 
 public class EditEmailCommand implements Command {
     private static final String EDIT_EMAIL_PAGE_PATH = "/jsp/edit_email.jsp";
-
     private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
 
     @Override
@@ -21,13 +20,7 @@ public class EditEmailCommand implements Command {
         user = (User)content.getFromSessionAttributes("user");
         email = content.getFromRequestParameters("email")[0];
         password = content.getFromRequestParameters("password")[0];
-
-        System.out.println(user);
-        System.out.println(email);
-        System.out.println(password);
-        System.out.println(user.getPassword().equals(password));
         boolean isSaved = EditEmailLogic.saveEmail(user, password, email);
-
         if (isSaved) {
             content.putInSessionAttributes("user", user);
             return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
@@ -35,6 +28,5 @@ public class EditEmailCommand implements Command {
             content.putInRequestAttributes("edit_email_error", "Invalid password!");
             return builder.buildResponseType(EDIT_EMAIL_PAGE_PATH, SendType.FORWARD);
          }
-
     }
 }
