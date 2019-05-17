@@ -1,6 +1,7 @@
 package by.training.interpol.command;
 
 public enum CommandEnum {
+    DEFAULT (new DefaultCommand()),
     LOGIN (new LoginCommand()),
     SIGN_UP (new SignUpCommand()),
     HOME (new HomeCommand()),

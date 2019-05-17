@@ -1,8 +1,5 @@
 package by.training.interpol.filter;
 
-import by.training.interpol.entity.Role;
-import by.training.interpol.entity.User;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
@@ -10,10 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter( urlPatterns = {"/jsp/all_users_messages.jsp"},
+@WebFilter( urlPatterns = {"/jsp/full_wanted_person.jsp"},
         initParams = {@WebInitParam(name = "INDEX_PAGE_PATH", value = "/index.jsp"),
                 @WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
-public class AllUsersMessagesPageFilter implements Filter {
+public class FullWantedPersonPageFilter implements Filter {
     private String indexPagePath;
     private String mainPagePath;
 
@@ -33,14 +30,8 @@ public class AllUsersMessagesPageFilter implements Filter {
             System.out.println("user object null, filter redirect index");
             httpRequest.getSession().invalidate();
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
-            return;
-        }
-        User user = (User)userObject;
-        if (user.getRole() != Role.ADMIN) {
-            System.out.println("user not admin, filter redirect index");
-            httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
-        }else if (httpRequest.getAttribute("messages_info_list") == null) {
-            System.out.println("no mess attrib, filter redirect index");
+        } else if (httpRequest.getAttribute("wantedPerson") == null) {
+            System.out.println("no wanted person attrib, filter redirect index");
             httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
         } else {
             filterChain.doFilter(httpRequest, httpResponse);

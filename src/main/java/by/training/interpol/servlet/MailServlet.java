@@ -30,24 +30,25 @@ public class MailServlet extends HttpServlet {
         properties.load(servletContext.getResourceAsStream(fileName));
         MailThread mailOperator = new MailThread(request.getParameter("subject"), request.getParameter("email"), request.getParameter("message"), properties);
         mailOperator.start();
+        request.getRequestDispatcher("/controller").forward(request, response);
 
-        SessionRequestContent content = new SessionRequestContent(request);
-        CommandFactory commandFactory = new CommandFactory();
-        Command command = commandFactory.defineCommand(content);
-        ResponseType responseType = command.execute(content);
-        content.insertValues(request);
-
-        switch (responseType.getSendType()) {
-            case FORWARD:
-                request.getRequestDispatcher(responseType.getPage()).forward(request, response);
-                break;
-            case REDIRECT:
-                System.out.println(request.getContextPath() + " - context path");
-                response.sendRedirect(request.getContextPath() + responseType.getPage());
-                break;
-            default:
-                logger.log(Level.ERROR, "Illegal type of send.");
-                request.getRequestDispatcher(INDEX_PAGE_PATH).forward(request, response);
-        }
+//        SessionRequestContent content = new SessionRequestContent(request);
+//        CommandFactory commandFactory = new CommandFactory();
+//        Command command = commandFactory.defineCommand(content);
+//        ResponseType responseType = command.execute(content);
+//        content.insertValues(request);
+//
+//        switch (responseType.getSendType()) {
+//            case FORWARD:
+//                request.getRequestDispatcher(responseType.getPage()).forward(request, response);
+//                break;
+//            case REDIRECT:
+//                System.out.println(request.getContextPath() + " - context path");
+//                response.sendRedirect(request.getContextPath() + responseType.getPage());
+//                break;
+//            default:
+//                logger.log(Level.ERROR, "Illegal type of send.");
+//
+//        }
     }
 }

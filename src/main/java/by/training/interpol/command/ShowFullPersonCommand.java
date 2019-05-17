@@ -6,7 +6,7 @@ import by.training.interpol.logic.ReceiveWantedPersonInfoLogic;
 import java.util.Optional;
 
 public class ShowFullPersonCommand implements Command {
-    private static final String WANTED_FULL_PAGE_PATH = "/jsp/wanted_full.jsp";
+    private static final String WANTED_FULL_PAGE_PATH = "/jsp/full_wanted_person.jsp";
     private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
     @Override
     public ResponseType execute(SessionRequestContent content) {

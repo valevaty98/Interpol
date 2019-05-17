@@ -44,22 +44,23 @@ public class UploadServlet extends HttpServlet {
             request.setAttribute("image_is", is);
             request.setAttribute("image_size", image.getSize());
 
-            SessionRequestContent content = new SessionRequestContent(request);
-            CommandFactory commandFactory = new CommandFactory();
-            Command command = commandFactory.defineCommand(content);
-            ResponseType responseType = command.execute(content);
-            content.insertValues(request);
-            switch (responseType.getSendType()) {
-                case FORWARD:
-                    request.getRequestDispatcher(responseType.getPage()).forward(request, response);
-                    break;
-                case REDIRECT:
-                    response.sendRedirect(request.getContextPath() + responseType.getPage());
-                    break;
-                default:
-                    logger.log(Level.ERROR, "Illegal type of send.");
-                    request.getRequestDispatcher(INDEX_PAGE_PATH).forward(request, response);
-            }
+            request.getRequestDispatcher("/controller").forward(request, response);
+//            SessionRequestContent content = new SessionRequestContent(request);
+//            CommandFactory commandFactory = new CommandFactory();
+//            Command command = commandFactory.defineCommand(content);
+//            ResponseType responseType = command.execute(content);
+//            content.insertValues(request);
+//            switch (responseType.getSendType()) {
+//                case FORWARD:
+//                    request.getRequestDispatcher(responseType.getPage()).forward(request, response);
+//                    break;
+//                case REDIRECT:
+//                    response.sendRedirect(request.getContextPath() + responseType.getPage());
+//                    break;
+//                default:
+//                    logger.log(Level.ERROR, "Illegal type of send.");
+//                    request.getRequestDispatcher(INDEX_PAGE_PATH).forward(request, response);
+            //}
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ServletException e) {

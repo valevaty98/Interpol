@@ -15,8 +15,6 @@ public class LoginCommand implements Command {
     private static Logger logger = LogManager.getLogger();
     private static final String LOGIN_PARAM = "login";
     private static final String PASSWORD_PARAM = "password";
-    private static final String ERROR_PAGE_PATH = "/jsp/error.jsp";
-    private static final String LOGIN_PAGE_PATH = "/jsp/login.jsp";
     private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
 
     @Override

@@ -7,10 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter( urlPatterns = {"/jsp/wanted_full.jsp"},
+@WebFilter( urlPatterns = {"/uploadServlet", "/mailServlet"},
         initParams = {@WebInitParam(name = "INDEX_PAGE_PATH", value = "/index.jsp"),
-                @WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
-public class WantedFullFilter implements Filter {
+                      @WebInitParam(name = "MAIN_PAGE_PATH", value = "/main_page.jsp")})
+public class SpecialServletsFilter implements Filter {
     private String indexPagePath;
     private String mainPagePath;
 
@@ -30,16 +30,15 @@ public class WantedFullFilter implements Filter {
             System.out.println("user object null, filter redirect index");
             httpRequest.getSession().invalidate();
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
-        } else if (httpRequest.getAttribute("wantedPerson") == null) {
-            System.out.println("no wanted person attrib, filter redirect index");
-            httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
         } else {
-            filterChain.doFilter(httpRequest, httpResponse);
+            System.out.println("spec servlet, filter redirect main");
+            httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
         }
     }
 
     @Override
     public void destroy() {
         indexPagePath = null;
+        mainPagePath = null;
     }
 }
