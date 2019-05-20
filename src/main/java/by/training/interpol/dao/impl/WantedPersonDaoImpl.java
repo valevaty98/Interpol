@@ -184,8 +184,14 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
                 String surname = rs.getString("surname");
                 Gender gender = Gender.valueOf(rs.getString("gender").toUpperCase());
                 String characteristics = rs.getString("characteristics");
-                float height = rs.getFloat("height");
-                float weight = rs.getFloat("weight");
+                Float height = rs.getFloat("height");
+                if (height == 0) {
+                    height = null;
+                }
+                Float weight = rs.getFloat("weight");
+                if (weight == 0) {
+                    weight = null;
+                }
                 String charges = rs.getString("charges");
                 String birthPlace = rs.getString("birth_place");
                 String birthDate = rs.getDate("birth_date").toString();

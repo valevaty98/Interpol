@@ -33,10 +33,12 @@
                             <th scope="row">Name</th>
                             <td>${wantedPerson.name}</td>
                         </tr>
-                        <tr>
-                            <th scope="row">Surname</th>
-                            <td>${wantedPerson.surname}</td>
-                        </tr>
+                        <c:if test="${wantedPerson.surname != null}">
+                            <tr>
+                                <th scope="row">Surname</th>
+                                <td>${wantedPerson.surname}</td>
+                            </tr>
+                        </c:if>
                         <tr>
                             <th scope="row">Gender</th>
                             <td>${wantedPerson.gender}</td>
@@ -58,23 +60,29 @@
                                 </c:forTokens>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row">Height</th>
-                            <td>${wantedPerson.height} m</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Weight</th>
-                            <td>${wantedPerson.weight} kg</td>
-                        </tr>
+                        <c:if test="${wantedPerson.height != null}">
+                            <tr>
+                                <th scope="row">Height</th>
+                                <td>${wantedPerson.height} m</td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${wantedPerson.weight != null}">
+                            <tr>
+                                <th scope="row">Weight</th>
+                                <td>${wantedPerson.weight} kg</td>
+                            </tr>
+                        </c:if>
                         <tr>
                             <th scope="row">Charges</th>
                             <td>${wantedPerson.charges}</td>
                         </tr>
-                        <tr>
-                            <th scope="row" class="col-sm-3">Description</th>
-                            <td>${wantedPerson.characteristics}
-                            </td>
-                        </tr>
+                        <c:if test="${wantedPerson.characteristics != null}">
+                            <tr>
+                                <th scope="row" class="col-sm-3">Description</th>
+                                <td>${wantedPerson.characteristics}
+                                </td>
+                            </tr>
+                        </c:if>
                         </tbody>
                     </table>
                     <div>

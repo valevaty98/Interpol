@@ -7,15 +7,11 @@ import org.apache.logging.log4j.Logger;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.YEARS;
 
 public class SearchLogic {
-    private static Logger logger = LogManager.getLogger();
-
     public static List<WantedPerson> searchWantedPeople(List<WantedPerson> wantedPeople, String name, String surname,
                                                         String gender, String fromAge, String toAge, String nationality) {
         List<WantedPerson> filteredWantedPeople = new ArrayList<>();
@@ -24,19 +20,26 @@ public class SearchLogic {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate personBirthDate = LocalDate.parse(person.getBirthDate(), formatter);
             int personAge = (int)YEARS.between(personBirthDate, LocalDate.now());
+            boolean isPersonNameCorrespondSearchName = (name == null || name.isEmpty());
+            if (!isPersonNameCorrespondSearchName) {
+                String[] personNameParts = person.getName().split(" ");
+                for (String namePart : personNameParts) {
+                    if (namePart.equalsIgnoreCase(name)) {
+                        isPersonNameCorrespondSearchName = true;
+                    }
+                }
+            }
             if (
-                    (name == null || name.isEmpty() || name.equals(person.getName())) &&
-                    (surname == null || surname.isEmpty() || surname.equals(person.getSurname())) &&
-                    (gender.equals("unknown") || gender.equals(person.getGender().toString())) &&
+                    isPersonNameCorrespondSearchName &&
+                    (surname == null || surname.isEmpty() || surname.equalsIgnoreCase(person.getSurname())) &&
+                    (gender == null || gender.equals("unknown") || gender.equalsIgnoreCase(person.getGender().toString())) &&
                     (fromAge == null || fromAge.isEmpty() || Integer.parseInt(fromAge) <= personAge) &&
                     (toAge == null || toAge.isEmpty() || Integer.parseInt(toAge) >= personAge) &&
                     (nationality == null || nationality.isEmpty() || person.getNationality().contains(nationality))
             ) {
                 filteredWantedPeople.add(person);
             }
-
         }
-
         return filteredWantedPeople;
     }
 }

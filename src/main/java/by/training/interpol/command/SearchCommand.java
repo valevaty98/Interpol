@@ -14,6 +14,7 @@ public class SearchCommand implements Command {
     private static final String TO_AGE_PARAM = "toAge";
     private static final String NATIONALITY_PARAM = "nation";
     private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
+
     @Override
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
