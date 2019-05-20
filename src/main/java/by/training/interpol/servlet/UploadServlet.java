@@ -23,16 +23,11 @@ import java.util.UUID;
 @WebServlet(urlPatterns = {"/uploadServlet"})
 @MultipartConfig(maxFileSize = 1024 * 1024 * 1024)
 public class UploadServlet extends HttpServlet {
-    private static final String UPLOAD_DIR = "D:\\wanted\\";
-    private static final String INDEX_PAGE_PATH = "/index.jsp";
+    private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
     private static Logger logger = LogManager.getLogger();
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        File dirForSaveFile = new File(UPLOAD_DIR);
-        if (!dirForSaveFile.exists()) {
-            dirForSaveFile.mkdirs();
-        }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
         try {
             Part image = request.getPart("image");
             String fileName = image.getSubmittedFileName();
@@ -45,26 +40,10 @@ public class UploadServlet extends HttpServlet {
             request.setAttribute("image_size", image.getSize());
 
             request.getRequestDispatcher("/controller").forward(request, response);
-//            SessionRequestContent content = new SessionRequestContent(request);
-//            CommandFactory commandFactory = new CommandFactory();
-//            Command command = commandFactory.defineCommand(content);
-//            ResponseType responseType = command.execute(content);
-//            content.insertValues(request);
-//            switch (responseType.getSendType()) {
-//                case FORWARD:
-//                    request.getRequestDispatcher(responseType.getPage()).forward(request, response);
-//                    break;
-//                case REDIRECT:
-//                    response.sendRedirect(request.getContextPath() + responseType.getPage());
-//                    break;
-//                default:
-//                    logger.log(Level.ERROR, "Illegal type of send.");
-//                    request.getRequestDispatcher(INDEX_PAGE_PATH).forward(request, response);
-            //}
         } catch (IOException e) {
-            e.printStackTrace();
+            response.sendRedirect(MAIN_PAGE_PATH);
         } catch (ServletException e) {
-            e.printStackTrace();
+            response.sendRedirect(MAIN_PAGE_PATH);
         }
 
     }

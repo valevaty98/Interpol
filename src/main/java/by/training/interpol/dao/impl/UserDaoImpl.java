@@ -89,7 +89,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_EMAIL);
             preparedStatement.setString(1, email);
             preparedStatement.setLong(2, user.getId());
-            return preparedStatement.executeUpdate() == 1;
+            return (preparedStatement.executeUpdate() == 1);
         } catch (SQLException e) {
             throw new DaoException("Exception while executing SQL Query.", e);
         } finally {

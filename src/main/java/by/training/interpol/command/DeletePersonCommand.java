@@ -12,10 +12,18 @@ public class DeletePersonCommand implements Command {
     @Override
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
-        long personId = Long.parseLong(content.getFromRequestParameters("person_id")[0]);
-        DeletePersonLogic.deletePersonById(personId);
         List<WantedPerson> wantedPeople;
         List<String> nationalities;
+        String[] personIdParams = content.getFromRequestParameters("person_id");
+        Long personId;
+        try {
+            personId = (personIdParams != null) ? Long.parseLong(personIdParams[0]) : null;
+        } catch (NumberFormatException e) {
+            return builder.buildResponseType(MAIN_PAGE_PATH, SendType.FORWARD);
+        }
+        if (personId != null) {
+            DeletePersonLogic.deletePersonById(personId);
+        }
         wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
         nationalities = ReceiveWantedPersonInfoLogic.receiveNationalityList();
         content.putInSessionAttributes("wantedPeople", wantedPeople);

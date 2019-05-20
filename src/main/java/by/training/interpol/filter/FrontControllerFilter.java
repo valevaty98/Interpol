@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @WebFilter( urlPatterns = {"/controller"},
         initParams = {@WebInitParam(name = "INDEX_PAGE_PATH", value = "/index.jsp"),
-                @WebInitParam(name = "MAIN_PAGE_PATH", value = "/main_page.jsp")})
+                @WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
 public class FrontControllerFilter implements Filter {
     private String indexPagePath;
     private String mainPagePath;
@@ -51,21 +51,55 @@ public class FrontControllerFilter implements Filter {
         if (userObject == null) {
             switch (command) {
                 case LOGIN:
+                    if (httpRequest.getParameter("login") == null ||
+                            httpRequest.getParameter("password") == null) {
+                        httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
+                    } else {
+                        filterChain.doFilter(httpRequest, httpResponse);
+                    }
+                    break;
                 case SIGN_UP:
-                    filterChain.doFilter(httpRequest, httpResponse);
+                    if (httpRequest.getParameter("login") == null ||
+                            httpRequest.getParameter("password") == null ||
+                            httpRequest.getParameter("email") == null  ) {
+                        httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
+                    } else {
+                        filterChain.doFilter(httpRequest, httpResponse);
+                    }
                     break;
                 default:
                     System.out.println("user object null, filter redirect index");
                     httpRequest.getSession().invalidate();
                     httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
             }
-        } else if (command == CommandEnum.HOME ||
-                    command == CommandEnum.LOGOUT ||
-                (command == CommandEnum.SHOW_ALL_MESSAGES && ((User)userObject).getRole() == Role.ADMIN)) {
-            filterChain.doFilter(httpRequest, httpResponse);
         } else {
-            System.out.println("unsuppoted direct command, filter redirect index");
-            httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
+            switch (command) {
+                case LOGIN:
+                case SIGN_UP:
+                    httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
+                    break;
+                case HOME:
+                case LOGOUT:
+                case DEFAULT:
+                case SEARCH:
+                case EDIT_EMAIL:
+                case SHOW_FULL_PERSON:
+                case SEND_MESSAGE:
+                    filterChain.doFilter(httpRequest, httpResponse);
+                    break;
+                case DELETE_PERSON:
+                case SHOW_FULL_MESSAGE:
+                case SHOW_ALL_MESSAGES:
+                    if (((User) userObject).getRole() == Role.ADMIN) {
+                        filterChain.doFilter(httpRequest, httpResponse);
+                    } else {
+                        httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
+                    }
+                    break;
+                default:
+                    System.out.println("unsupported direct command, filter redirect main");
+                    httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
+            }
         }
     }
 

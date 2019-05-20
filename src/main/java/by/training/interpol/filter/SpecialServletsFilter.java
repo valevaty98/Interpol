@@ -1,5 +1,8 @@
 package by.training.interpol.filter;
 
+import by.training.interpol.entity.Role;
+import by.training.interpol.entity.User;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
@@ -9,7 +12,7 @@ import java.io.IOException;
 
 @WebFilter( urlPatterns = {"/uploadServlet", "/mailServlet"},
         initParams = {@WebInitParam(name = "INDEX_PAGE_PATH", value = "/index.jsp"),
-                      @WebInitParam(name = "MAIN_PAGE_PATH", value = "/main_page.jsp")})
+                      @WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
 public class SpecialServletsFilter implements Filter {
     private String indexPagePath;
     private String mainPagePath;
@@ -30,8 +33,9 @@ public class SpecialServletsFilter implements Filter {
             System.out.println("user object null, filter redirect index");
             httpRequest.getSession().invalidate();
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
+        } else if (((User)userObject).getRole() == Role.ADMIN) {
+            filterChain.doFilter(httpRequest, httpResponse);
         } else {
-            System.out.println("spec servlet, filter redirect main");
             httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
         }
     }

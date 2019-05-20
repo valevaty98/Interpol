@@ -17,9 +17,18 @@ public class SendMessageCommand implements Command {
     @Override
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
-        String messageText = content.getFromRequestParameters("message")[0];
-        String subject = content.getFromRequestParameters("subject")[0];
-        Long wantedPersonId = Long.parseLong(content.getFromRequestParameters("person_id")[0]);
+        String[] messageTextParams = content.getFromRequestParameters("message");
+        String[] subjectParams = content.getFromRequestParameters("subject");
+        String[] wantedPersonIdParams = content.getFromRequestParameters("person_id");
+        String messageText = (messageTextParams != null) ? messageTextParams[0] : null;
+        String subject = (subjectParams != null) ? subjectParams[0] : null;
+        Long wantedPersonId;
+        try {
+            wantedPersonId = (wantedPersonIdParams != null) ? Long.parseLong(wantedPersonIdParams[0]) : null;
+        } catch (NumberFormatException e) {
+            content.putInRequestAttributes("send_message_error", "Invalid wanted person id!");
+            return builder.buildResponseType(SEND_MESSAGE_PAGE_PATH, SendType.FORWARD);
+        }
         User user = (User)content.getFromSessionAttributes("user");
         long userId = user.getId();
         Date date = new Date();

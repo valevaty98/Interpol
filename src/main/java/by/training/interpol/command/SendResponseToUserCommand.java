@@ -9,7 +9,13 @@ public class SendResponseToUserCommand implements Command {
     @Override
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
-        long messageId = Long.parseLong(content.getFromRequestParameters("message_id")[0]);
+        String[] messageIdParams = content.getFromRequestParameters("message_id");
+        Long messageId;
+        try {
+            messageId = (messageIdParams != null) ? Long.parseLong(messageIdParams[0]) : null;
+        } catch (NumberFormatException e) {
+            return new HomeCommand().execute(content);
+        }
         User user = (User)content.getFromSessionAttributes("user");
         long userId = user.getId();
         MessageLogic.updateMessageStatusToChecked(messageId);

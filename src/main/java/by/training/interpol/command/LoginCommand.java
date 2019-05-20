@@ -36,7 +36,7 @@ public class LoginCommand implements Command {
             content.putInSessionAttributes("wantedPeople", wantedPeople);
             content.putInSessionAttributes("nationalities", nationalities);
             content.putInSessionAttributes("user", user.get());
-            return builder.buildResponseType(MAIN_PAGE_PATH, SendType.FORWARD);
+            return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
         } else {
             content.putInRequestAttributes("loginError", wrapper.getResultMessage());
             return new DefaultCommand().execute(content);

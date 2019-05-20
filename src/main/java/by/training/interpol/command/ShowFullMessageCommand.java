@@ -15,8 +15,13 @@ public class ShowFullMessageCommand implements Command {
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
         Optional<FullMessageInfo> messageInfo;
-        long messageId = Long.parseLong(content.getFromRequestParameters("message_id")[0]);
-
+        String[] messageIdParams = content.getFromRequestParameters("message_id");
+        Long messageId;
+        try {
+            messageId = (messageIdParams != null) ? Long.parseLong(messageIdParams[0]) : null;
+        } catch (NumberFormatException e) {
+            return new HomeCommand().execute(content);
+        }
         messageInfo = MessageLogic.receiveFullMessage(messageId);
         if(messageInfo.isPresent()) {
             content.putInRequestAttributes("message", messageInfo.get());

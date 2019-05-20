@@ -1,9 +1,6 @@
 package by.training.interpol.servlet;
 
-import by.training.interpol.command.Command;
-import by.training.interpol.command.CommandFactory;
-import by.training.interpol.command.ResponseType;
-import by.training.interpol.command.SessionRequestContent;
+import by.training.interpol.command.*;
 import by.training.interpol.mail.MailThread;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -17,38 +14,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 @WebServlet("/mailServlet")
 public class MailServlet extends HttpServlet {
     private static Logger logger = LogManager.getLogger();
-    private static final String INDEX_PAGE_PATH = "/index.jsp";
+    private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Properties properties = new Properties();
         ServletContext servletContext = getServletContext();
         String fileName = servletContext.getInitParameter("mail");
         properties.load(servletContext.getResourceAsStream(fileName));
+        String subject = request.getParameter("subject");
+        String email = request.getParameter("email");
+        String message = request.getParameter("message");
+        Pattern emailPattern = Pattern.compile("^([a-zA-Z0-9_\\-.]+)@([a-zA-Z0-9_\\-.]+)\\.([a-zA-Z]{2,5})$");
+        if (subject == null || (email == null || emailPattern.matcher(email).matches()) || message == null) {
+            response.sendRedirect(MAIN_PAGE_PATH);
+            return;
+        }
         MailThread mailOperator = new MailThread(request.getParameter("subject"), request.getParameter("email"), request.getParameter("message"), properties);
         mailOperator.start();
         request.getRequestDispatcher("/controller").forward(request, response);
-
-//        SessionRequestContent content = new SessionRequestContent(request);
-//        CommandFactory commandFactory = new CommandFactory();
-//        Command command = commandFactory.defineCommand(content);
-//        ResponseType responseType = command.execute(content);
-//        content.insertValues(request);
-//
-//        switch (responseType.getSendType()) {
-//            case FORWARD:
-//                request.getRequestDispatcher(responseType.getPage()).forward(request, response);
-//                break;
-//            case REDIRECT:
-//                System.out.println(request.getContextPath() + " - context path");
-//                response.sendRedirect(request.getContextPath() + responseType.getPage());
-//                break;
-//            default:
-//                logger.log(Level.ERROR, "Illegal type of send.");
-//
-//        }
     }
 }

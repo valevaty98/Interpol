@@ -11,16 +11,23 @@ public class ShowFullPersonCommand implements Command {
     @Override
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
-        long personId = Long.parseLong(content.getFromRequestParameters("person_id")[0]);
+        String[] personIdParams = content.getFromRequestParameters("person_id");
+        Long personId;
+        try {
+            personId = (personIdParams != null) ? Long.parseLong(personIdParams[0]) : null;
+        } catch (NumberFormatException e) {
+            return builder.buildResponseType(MAIN_PAGE_PATH, SendType.FORWARD);
+        }
         Optional<WantedPerson> wantedPerson;
-
-        wantedPerson = ReceiveWantedPersonInfoLogic.receiveFullInfoAboutPerson(personId);
-
+        if (personId != null) {
+            wantedPerson = ReceiveWantedPersonInfoLogic.receiveFullInfoAboutPerson(personId);
+        } else {
+            return builder.buildResponseType(MAIN_PAGE_PATH, SendType.FORWARD);
+        }
         if (wantedPerson.isPresent()) {
             content.putInRequestAttributes("wantedPerson", wantedPerson.get());
             return builder.buildResponseType(WANTED_FULL_PAGE_PATH, SendType.FORWARD);
         } else {
-            content.putInRequestAttributes("error", "No such person!");
             return builder.buildResponseType(MAIN_PAGE_PATH, SendType.FORWARD);
         }
     }

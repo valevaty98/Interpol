@@ -19,15 +19,19 @@ public class SearchCommand implements Command {
         ResponseTypeCreator builder = new ResponseTypeCreator();
         List<WantedPerson> wantedPeople;
         List<WantedPerson> filteredWantedPeople;
-
+        String[] nameParams = content.getFromRequestParameters(NAME_PARAM);
+        String[] surnameParams = content.getFromRequestParameters(SURNAME_PARAM);
+        String[] genderParams = content.getFromRequestParameters(GENDER_PARAM);
+        String[] fromAgeParams = content.getFromRequestParameters(FROM_AGE_PARAM);
+        String[] toAgeParams = content.getFromRequestParameters(TO_AGE_PARAM);
+        String[] nationParams = content.getFromRequestParameters(NATIONALITY_PARAM);
+        String name = (nameParams != null) ? nameParams[0] : null;
+        String surname = (surnameParams != null) ? surnameParams[0] : null;
+        String gender = (genderParams != null) ? genderParams[0] : null;
+        String fromAge = (fromAgeParams != null) ? fromAgeParams[0] : null;
+        String toAge = (toAgeParams != null) ? toAgeParams[0] : null;
+        String nation = (nationParams != null) ? nationParams[0] : null;
         wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleFull();
-        String name = content.getFromRequestParameters(NAME_PARAM)[0];
-        String surname = content.getFromRequestParameters(SURNAME_PARAM)[0];
-        String gender = content.getFromRequestParameters(GENDER_PARAM)[0];
-        String fromAge = content.getFromRequestParameters(FROM_AGE_PARAM)[0];
-        String toAge = content.getFromRequestParameters(TO_AGE_PARAM)[0];
-        String nation = content.getFromRequestParameters(NATIONALITY_PARAM)[0];
-
         filteredWantedPeople = SearchLogic.searchWantedPeople(wantedPeople, name, surname, gender, fromAge, toAge,
                  nation);
         content.putInRequestAttributes("wantedPeople", filteredWantedPeople);
