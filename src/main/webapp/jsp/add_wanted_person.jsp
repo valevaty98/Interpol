@@ -37,7 +37,7 @@
             <input type="text" name="person_surname" autocomplete="off"/>
         </div>
         <div class="field-wrap" style="height: 45px;">
-            <label class="active highlight">Gender</label>
+            <label class="active highlight"><fmt:message key="add-person.label.gender"/></label>
             <label class="gender-label" for="male"><input type="radio" id="male" class="gender-type" name="gender" value="Male" checked><fmt:message key="add-person.label.gender.male"/></label>
             <label class="gender-label" for="female"><input type="radio" id="female" class="gender-type" name="gender" value="Female"><fmt:message key="add-person.label.gender.female"/></label>
         </div>

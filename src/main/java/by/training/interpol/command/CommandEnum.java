@@ -15,7 +15,8 @@ public enum CommandEnum {
     DELETE_PERSON (new DeletePersonCommand()),
     SHOW_ALL_MESSAGES (new ShowAllMessagesBriefCommand()),
     SHOW_FULL_MESSAGE (new ShowFullMessageCommand()),
-    SEND_RESPONSE_TO_USER(new SendResponseToUserCommand());
+    SEND_RESPONSE_TO_USER(new SendResponseToUserCommand()),
+    CHANGE_LANG(new ChangeLanguageCommand());
 
     private Command command;
 

@@ -85,6 +85,7 @@ public class FrontControllerFilter implements Filter {
                 case EDIT_EMAIL:
                 case SHOW_FULL_PERSON:
                 case SEND_MESSAGE:
+                case CHANGE_LANG:
                     filterChain.doFilter(httpRequest, httpResponse);
                     break;
                 case DELETE_PERSON:

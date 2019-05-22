@@ -51,6 +51,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE user_id=? AND login=? AND password=? " +
             "AND email=? AND role=?";
     private static final String SQL_UPDATE_USER_EMAIL = "UPDATE users SET email=? WHERE user_id=?";
+    private static final String SQL_UPDATE_USER_LANGUAGE = "UPDATE users SET lang=? WHERE user_id=?";
     private static final String SQL_SELECT_ASSESSMENT_BY_ID =
             "SELECT assessment_id FROM users WHERE user_id=?";
     private static final String SQL_SELECT_USERS_BY_EMAIL = "SELECT user_id FROM users WHERE email=?";
@@ -102,6 +103,26 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_EMAIL);
             preparedStatement.setString(1, email);
             preparedStatement.setLong(2, user.getId());
+            return (preparedStatement.executeUpdate() == 1);
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQL Query.", e);
+        } finally {
+            closeResources(preparedStatement, connection);
+        }
+    }
+
+    @Override
+    public boolean updateUserLanguageById(long userId, Language lang) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            if (pool == null) {
+                throw new DaoException("Null pointer to the pool.");
+            }
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_LANGUAGE);
+            preparedStatement.setString(1, lang.toString());
+            preparedStatement.setLong(2, userId);
             return (preparedStatement.executeUpdate() == 1);
         } catch (SQLException e) {
             throw new DaoException("Exception while executing SQL Query.", e);

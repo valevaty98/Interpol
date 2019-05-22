@@ -242,7 +242,7 @@ a.cart-link:hover {
 }
 
 .message-row:hover {
-    background-color: #bfbfbf;
+    background-color: #ebebeb;
     filter: brightness(85%);
     cursor: pointer;
 }
@@ -270,12 +270,12 @@ a.cart-link:hover {
 }
 
 .back-button {
-    width: 150px;
+    min-width: 180px;
     background: #1AB188;
     border: 0;
     color: #fff;
     line-height: 27px;
-    margin: 12px 0 10px 0;
+    margin: 12px 0 10px 15px;
     font-size: 16px;
 }
 
@@ -285,12 +285,12 @@ a.cart-link:hover {
     justify-content: center;
 }
 .send-button {
-    width: 180px;
+    min-width: 180px;
     background: #1AB188;
     color: #fff;
     line-height: 27px;
     font-size: 16px;
-    margin: 12px 15px 10px 0;
+    margin: 12px 0px 10px 0;
 }
 
 .nationality-info {

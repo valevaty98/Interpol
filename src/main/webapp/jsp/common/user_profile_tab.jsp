@@ -50,6 +50,12 @@
                 <div class="center-btn">
                     <a class="btn send-button us-prof-btn" href="<c:url value="/jsp/edit_email.jsp"/>"><fmt:message key="profile.button.edit-email"/></a>
                     <a class="btn back-button us-prof-btn" href="<c:url value="/controller?command=logout"/>"><fmt:message key="profile.button.logout"/></a>
+                    <c:if test="${user.lang.toString() != 'rus'}">
+                        <a class="btn back-button us-prof-btn" href="<c:url value="/controller?command=change_lang&lang=rus"/>"><fmt:message key="profile.button.en-rus"/></a>
+                    </c:if>
+                    <c:if test="${user.lang.toString() eq 'rus'}">
+                        <a class="btn back-button us-prof-btn" href="<c:url value="/controller?command=change_lang&lang=eng"/>"><fmt:message key="profile.button.en-eng"/></a>
+                    </c:if>
                 </div>
             </div>
         </div>
