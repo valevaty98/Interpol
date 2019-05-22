@@ -4,6 +4,8 @@ import by.training.interpol.command.UserAndResultMessageWrapper;
 import by.training.interpol.dao.DaoException;
 import by.training.interpol.dao.impl.UserDaoImpl;
 import by.training.interpol.entity.User;
+import by.training.interpol.hash.EncodePasswordException;
+import by.training.interpol.hash.HashGenerator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Optional;
 
 public class LoginLogic {
+    private static final String CANT_ENCODE_PASSWORD_MESSAGE = "Can't encode password to verify!";
     private static Logger logger = LogManager.getLogger();
     private static final String ILLEGAL_LOGIN_MESSAGE = "Illegal login or password!";
     private static final String CANT_FIND_USER_MESSAGE = "Can't find appropriate user";
@@ -26,13 +29,19 @@ public class LoginLogic {
         try {
             user = dao.findUserByLogin(login);
         } catch (DaoException e) {
-            logger.log(Level.ERROR, "DAO exception during finding user by login", e);
+            logger.log(Level.ERROR, "DAO exception during finding user by login.", e);
             return new UserAndResultMessageWrapper(Optional.empty(), CANT_FIND_USER_MESSAGE);
         }
-        if (user.isPresent() && user.get().getPassword().equals(password)){
-            return new UserAndResultMessageWrapper(user, OK_MESSAGE);
-        } else {
-            return new UserAndResultMessageWrapper(Optional.empty(), CANT_FIND_USER_MESSAGE);
+        try {
+            String encodedPassword = HashGenerator.encodePassword(password);
+            if (user.isPresent() && user.get().getPassword().equals(encodedPassword)){
+                return new UserAndResultMessageWrapper(user, OK_MESSAGE);
+            } else {
+                return new UserAndResultMessageWrapper(Optional.empty(), CANT_FIND_USER_MESSAGE);
+            }
+        } catch (EncodePasswordException e) {
+            logger.log(Level.ERROR, "Can't encode password to verify user.", e);
+            return new UserAndResultMessageWrapper(Optional.empty(), CANT_ENCODE_PASSWORD_MESSAGE);
         }
     }
 }

@@ -27,7 +27,11 @@ public class SessionRequestContent {
         enumeration = request.getParameterNames();
         while (enumeration.hasMoreElements()) {
             String paramName = enumeration.nextElement();
-            requestParameters.put(paramName, request.getParameterValues(paramName));
+            String[] paramValues = request.getParameterValues(paramName);
+            for (int i = 0; i < paramValues.length; i++) {
+                paramValues[i] = paramValues[i].replaceAll("<","&lt").replaceAll(">", "&gt");
+            }
+            requestParameters.put(paramName, paramValues);
         }
 
         enumeration = request.getSession().getAttributeNames();

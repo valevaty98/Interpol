@@ -10,6 +10,8 @@ import by.training.interpol.entity.Assessment;
 import by.training.interpol.entity.Language;
 import by.training.interpol.entity.Role;
 import by.training.interpol.entity.User;
+import by.training.interpol.hash.EncodePasswordException;
+import by.training.interpol.hash.HashGenerator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +26,7 @@ public class SignUpLogic {
     private static final String OK_MESSAGE = "User created";
     private static final int INITIAL_NUMBER_OF_MESSAGES = 0;
     private static final String INITIAL_ASSESSMENT_TEXT = "There was no help yet, but still ahead.";
+    private static final String CANT_ENCODE_PASSWORD_MESSAGE = "Can't encode password.";
     private static Logger logger = LogManager.getLogger();
 
     public static UserAndResultMessageWrapper signUpUser(String login, String email, String password) {
@@ -48,7 +51,8 @@ public class SignUpLogic {
             }
             if (assessmentDao.insert(assessment)) {
                 optionalAssessment = assessmentDao.findAssessmentIdByAssessment(assessment); //todo think
-                user = new User(login, password, email, Role.GUEST, optionalAssessment.get(), Language.ENG);
+                String encodedPassword = HashGenerator.encodePassword(password);
+                user = new User(login, encodedPassword, email, Role.GUEST, optionalAssessment.get(), Language.ENG);
                 userDao.insert(user);
                 return new UserAndResultMessageWrapper(userDao.findUserByLogin(user.getLogin()), OK_MESSAGE);
             } else {
@@ -58,6 +62,9 @@ public class SignUpLogic {
         } catch (DaoException ex) {
             logger.log(Level.ERROR, "DAO exception during inserting user to database", ex);
             return new UserAndResultMessageWrapper(Optional.empty(), CANT_CREATE_USER_MESSAGE);
+        } catch (EncodePasswordException e) {
+            logger.log(Level.ERROR, "Can't encode password during signing up!", e);
+            return new UserAndResultMessageWrapper(Optional.empty(), CANT_ENCODE_PASSWORD_MESSAGE);
         }
     }
 }

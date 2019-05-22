@@ -74,6 +74,10 @@
                                href="<c:url value="/controller?command=show_all_messages"/>">
                                 <fmt:message key="full-message.button.back"/>
                             </a>
+                            <a class="btn send-button"
+                               href="<c:url value="/controller?command=show_all_messages"/>">
+                                <fmt:message key="full-message.button.back"/>
+                            </a>
                         </div>
                     </div>
                 </div>
