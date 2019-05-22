@@ -28,11 +28,11 @@ class CheckingPoolTimerTask extends TimerTask {
             while (actualSize > (availableConnections.size() + usedConnections.size())) {
                     availableConnections.put(DbConnector.createConnection());
             }
+            latch.countDown();
         } catch (InterruptedException e) {
             log.log(Level.ERROR, "Error during putting new connection to the available connections", e);
         } catch (SQLException e) {
             log.log(Level.ERROR, "Error during creating connection.", e);
         }
-        //latch.countDown();
     }
 }

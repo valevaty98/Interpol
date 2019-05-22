@@ -1,4 +1,4 @@
-<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <c:if test="${user.lang.toString() eq 'rus'}">

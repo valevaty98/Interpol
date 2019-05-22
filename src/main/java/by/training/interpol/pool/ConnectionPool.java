@@ -24,7 +24,7 @@ public class ConnectionPool {
     private BlockingQueue<Connection> availableConnections;
     private BlockingQueue<Connection> usedConnections;
     private int actualPoolSize;
-    private final static int DEFAULT_DELAY_FOR_SCHEDULE_CHECKING_TASK = 50;
+    private final static int DEFAULT_DELAY_FOR_SCHEDULE_CHECKING_TASK = 10;
 
     private ConnectionPool() {
 
@@ -41,7 +41,6 @@ public class ConnectionPool {
         } catch (SQLException e) {
             log.log(Level.ERROR, "Error during creating connections.", e);
         }
-        checkConnectionPool();
     }
 
     public static ConnectionPool getInstance() {
@@ -51,6 +50,7 @@ public class ConnectionPool {
                 if (instance == null) {
                     instance = new ConnectionPool();
                     isInstanceCreated.set(true);
+                    instance.checkConnectionPool();
                 }
             } finally {
                 locker.unlock();
@@ -105,14 +105,14 @@ public class ConnectionPool {
         CountDownLatch latch = new CountDownLatch(1);
         Timer timer = new Timer();
         timer.schedule(new CheckingPoolTimerTask(latch), DEFAULT_DELAY_FOR_SCHEDULE_CHECKING_TASK);
-//        try {
-//            //TimeUnit.MILLISECONDS.sleep(1500);
-//            //latch.await();
-//        } catch (InterruptedException e) {
-//            log.log(Level.ERROR, "Error during waiting for connection pool to be checked.");
-//        }
+        try {
+            TimeUnit.MILLISECONDS.sleep(100);
+            latch.await();
+        } catch (InterruptedException e) {
+            log.log(Level.ERROR, "Error during waiting for connection pool to be checked.");
+        }
     }
-    
+
     int getSize() {
         return actualPoolSize;
     }

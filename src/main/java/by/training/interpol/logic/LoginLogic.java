@@ -22,6 +22,7 @@ public class LoginLogic {
     public static UserAndResultMessageWrapper checkLogin(String login, String password) {
         UserDaoImpl dao = UserDaoImpl.getInstance();
         Optional<User> user;
+
         if (login == null || login.isEmpty() || password == null || password.isEmpty()) {
             logger.log(Level.WARN, ILLEGAL_LOGIN_MESSAGE);
             return new UserAndResultMessageWrapper(Optional.empty(), ILLEGAL_LOGIN_MESSAGE);
