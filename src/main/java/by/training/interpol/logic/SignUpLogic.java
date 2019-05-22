@@ -7,6 +7,7 @@ import by.training.interpol.dao.UserDao;
 import by.training.interpol.dao.impl.AssessmentDaoImpl;
 import by.training.interpol.dao.impl.UserDaoImpl;
 import by.training.interpol.entity.Assessment;
+import by.training.interpol.entity.Language;
 import by.training.interpol.entity.Role;
 import by.training.interpol.entity.User;
 import org.apache.logging.log4j.Level;
@@ -47,7 +48,7 @@ public class SignUpLogic {
             }
             if (assessmentDao.insert(assessment)) {
                 optionalAssessment = assessmentDao.findAssessmentIdByAssessment(assessment); //todo think
-                user = new User(login, password, email, Role.GUEST, optionalAssessment.get());
+                user = new User(login, password, email, Role.GUEST, optionalAssessment.get(), Language.ENG);
                 userDao.insert(user);
                 return new UserAndResultMessageWrapper(userDao.findUserByLogin(user.getLogin()), OK_MESSAGE);
             } else {

@@ -8,22 +8,25 @@ public class User extends Entity {
     private String email;
     private Role role;
     private Assessment assessment;
+    private Language lang;
 
-    public User(long userId, String login, String password, String email, Role role, Assessment assessment) {
+    public User(long userId, String login, String password, String email, Role role, Assessment assessment, Language lang) {
         super(userId);
         this.login = login;
         this.password = password;
         this.email = email;
         this.role = role;
         this.assessment = assessment;
+        this.lang = lang;
     }
 
-    public User(String login, String password, String email, Role role, Assessment assessment) {
+    public User(String login, String password, String email, Role role, Assessment assessment, Language lang) {
         this.login = login;
         this.password = password;
         this.email = email;
         this.role = role;
         this.assessment = assessment;
+        this.lang = lang;
     }
 
     public String getLogin() {
@@ -66,6 +69,14 @@ public class User extends Entity {
         this.assessment = assessment;
     }
 
+    public Language getLang() {
+        return lang;
+    }
+
+    public void setLang(Language lang) {
+        this.lang = lang;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -75,6 +86,7 @@ public class User extends Entity {
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", assessmentId=" + assessment.getId() +
+                ", lang=" + lang +
                 '}';
     }
 
@@ -88,12 +100,13 @@ public class User extends Entity {
                 Objects.equals(password, user.password) &&
                 Objects.equals(email, user.email) &&
                 role == user.role &&
-                assessment == user.assessment;
+                assessment == user.assessment &&
+                lang == user.lang;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), login, password, email, role, assessment);
+        return Objects.hash(getId(), login, password, email, role, assessment, lang);
     }
 }
 

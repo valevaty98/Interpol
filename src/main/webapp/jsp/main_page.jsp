@@ -1,5 +1,8 @@
 <%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ctl" uri="/WEB-INF/tld/custom.tld" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<fmt:setBundle basename="props.pagescontent"/>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -27,7 +30,8 @@
         <c:import url="common/user_profile_tab.jsp" charEncoding="utf-8"/>
     </div>
     <!-- Footer -->
-    <c:import url="common/footer.jsp" charEncoding="utf-8"/>
+    <ctl:custom-footer/>
+<%--    <c:import url="common/footer.jsp" charEncoding="utf-8"/>--%>
     <!-- End Footer -->
 </div>
 

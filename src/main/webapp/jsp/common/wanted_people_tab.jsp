@@ -1,5 +1,11 @@
 <%@ page isELIgnored="false" contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<c:if test="${user.lang.toString() eq 'rus'}">
+    <fmt:setLocale value="ru_RU"/>
+</c:if>
+<fmt:setBundle basename="props.pagescontent"/>
+
 <html>
 <head>
     <title>Wanted People</title>
@@ -33,64 +39,64 @@
         <c:if test="${user.role eq 'ADMIN'}">
             <div>
                 <a class="btn admin-main-btn" style="margin-bottom: 10px;"
-                   href="<c:url value="/jsp/add_wanted_person.jsp"/>">Add Wanted Person</a>
+                   href="<c:url value="/jsp/add_wanted_person.jsp"/>"><fmt:message key="wanted-people.button.add-person"/></a>
             </div>
             <div>
                 <a class="btn admin-main-btn" style="margin-bottom: 10px;"
-                   href="<c:url value="/controller?command=show_all_messages"/>">Show all messages</a>
+                   href="<c:url value="/controller?command=show_all_messages"/>"><fmt:message key="wanted-people.button.show-messages"/></a>
             </div>
         </c:if>
         <div class="box search">
-            <h2>Filter</h2>
+            <h2><fmt:message key="wanted-people.label.filter"/></h2>
             <div class="box-content">
                 <form action="<c:url value="/controller"/>" method="post">
                     <input type="hidden" name="command" value="search">
                     <div class="form-group">
-                        <label for="person_name" class="filter-label">Name:</label>
+                        <label for="person_name" class="filter-label"><fmt:message key="wanted-people.label.name"/>:</label>
                         <input type="text" class="form-control form-control-sm" id="person_name"
                                name="wanted_person_name" value="<c:out value="${personName}"/>">
                     </div>
                     <div class="form-group">
-                        <label for="person_surname" class="filter-label">Surname:</label>
+                        <label for="person_surname" class="filter-label"><fmt:message key="wanted-people.label.surname"/>:</label>
                         <input type="text" class="form-control form-control-sm" id="person_surname"
                                name="wanted_person_surname" value="${personSurname}">
                     </div>
                     <div class="gender-group">
-                        <label class="filter-label">Gender:</label>
+                        <label class="filter-label"><fmt:message key="wanted-people.label.gender"/>:</label>
                         <c:choose>
                             <c:when test="${personGender eq 'male'}">
                                 <label class="radio-inline male-label"><input type="radio" name="gender"
-                                                                              value="male" checked>Male</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="female">Female</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="unknown">Unknown</label>
+                                                                              value="male" checked><fmt:message key="wanted-people.label.gender.male"/></label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="female"><fmt:message key="wanted-people.label.gender.female"/></label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="unknown"><fmt:message key="wanted-people.label.gender.unknown"/></label>
                             </c:when>
                             <c:when test="${personGender eq 'female'}">
                                 <label class="radio-inline male-label"><input type="radio" name="gender"
-                                                                              value="male">Male</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="female" checked>Female</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="unknown">Unknown</label>
+                                                                              value="male"><fmt:message key="wanted-people.label.gender.male"/></label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="female" checked><fmt:message key="wanted-people.label.gender.female"/></label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="unknown"><fmt:message key="wanted-people.label.gender.unknown"/></label>
                             </c:when>
                             <c:otherwise>
                                 <label class="radio-inline male-label"><input type="radio" name="gender"
-                                                                              value="male">Male</label>
-                                <label class="radio-inline"><input type="radio" name="gender" value="female">Female</label>
+                                                                              value="male"><fmt:message key="wanted-people.label.gender.male"/></label>
+                                <label class="radio-inline"><input type="radio" name="gender" value="female"><fmt:message key="wanted-people.label.gender.female"/></label>
                                 <label class="radio-inline"><input type="radio" name="gender" value="unknown"
-                                                                   checked>Unknown</label>
+                                                                   checked><fmt:message key="wanted-people.label.gender.unknown"/></label>
                             </c:otherwise>
                         </c:choose>
                     </div>
                     <div class="form-group">
-                        <label class="filter-label">Age:</label>
-                        <p>From:
+                        <label class="filter-label"><fmt:message key="wanted-people.label.age"/>:</label>
+                        <p><fmt:message key="wanted-people.label.from-age"/>:
                             <input class="form-control form-control-lg" pattern="^[1-9]\d{0,2}$"
                                    type="text" name="fromAge" value="${fromAge}" maxlength="3"/>
-                            To:
+                            <fmt:message key="wanted-people.label.to-age"/>:
                             <input class="form-control form-control-sm" pattern="^[1-9]\d{0,2}$"
                                    type="text" name="toAge" value="${toAge}" maxlength="3"/>
                         </p>
                     </div>
                     <div class="form-group">
-                        <label for="nationality-select" class="filter-label">Nationality:</label>
+                        <label for="nationality-select" class="filter-label"><fmt:message key="wanted-people.label.nationality"/>:</label>
                         <select class="form-control" id="nationality-select" name="nation">
                             <option>${nation}</option>
                             <c:if test="${not empty nation}">
@@ -101,7 +107,7 @@
                             </c:forEach>
                         </select>
                     </div>
-                    <button type="submit" class="search-submit">Search</button>
+                    <button type="submit" class="search-submit"><fmt:message key="wanted-people.button.search"/></button>
                 </form>
             </div>
         </div>

@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 class DbPropertyReader {
     private static Logger log = LogManager.getLogger();
     private final static int DEFAULT_POOL_SIZE = 10;
-    private final static String DEFAULT_PROPERTY_FILE_PATH = "database";
+    private final static String DEFAULT_PROPERTY_FILE_PATH = "props.database";
     private final static String POOL_SIZE_PROPERTY_NAME = "poolSize";
     private final static String USER_PROPERTY_NAME = "user";
     private final static String PASSWORD_PROPERTY_NAME = "password";

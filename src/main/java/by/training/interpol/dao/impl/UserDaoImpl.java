@@ -4,6 +4,7 @@ import by.training.interpol.dao.BaseDao;
 import by.training.interpol.dao.DaoException;
 import by.training.interpol.dao.UserDao;
 import by.training.interpol.entity.Assessment;
+import by.training.interpol.entity.Language;
 import by.training.interpol.entity.Role;
 import by.training.interpol.entity.User;
 import org.apache.logging.log4j.Level;
@@ -27,24 +28,24 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
     private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
 
     private static final String SQL_SELECT_ALL_USERS =
-            "SELECT u.user_id, u.login, u.password, u.email, u.role, a.assessment_id, a.number_of_messages, a.assessment " +
+            "SELECT u.user_id, u.login, u.password, u.email, u.role, a.assessment_id, a.number_of_messages, a.assessment, u.lang " +
                     "FROM users u INNER JOIN assessments a " +
                     "ON u.assessment_id = a.assessment_id";
     private static final String SQL_SELECT_USER_BY_ID =
-            "SELECT user_id, login, password, email, role, assessment_id FROM users WHERE user_id=?";
+            "SELECT user_id, login, password, email, role, assessment_id, lang FROM users WHERE user_id=?";
     private static final String SQL_SELECT_USER_BY_LOGIN =
-            "SELECT u.user_id, u.login, u.password, u.email, u.role, a.assessment_id, a.number_of_messages, a.assessment " +
+            "SELECT u.user_id, u.login, u.password, u.email, u.role, a.assessment_id, a.number_of_messages, a.assessment, u.lang " +
                     "FROM users u INNER JOIN assessments a " +
                     "ON u.assessment_id = a.assessment_id WHERE u.login=?";
     private static final String SQL_SELECT_USER_BY_EMAIL =
-            "SELECT user_id, login, password, email, role, assessment_id FROM users WHERE email=?";
+            "SELECT user_id, login, password, email, role, assessment_id, lang FROM users WHERE email=?";
     private static final String SQL_SELECT_USER_BY_ROLE =
-            "SELECT u.user_id, u.login, u.password, u.email, u.role, a.assessment_id, a.number_of_messages, a.assessment " +
+            "SELECT u.user_id, u.login, u.password, u.email, u.role, a.assessment_id, a.number_of_messages, a.assessment, lang " +
                     "FROM users u INNER JOIN assessments a " +
                     "ON u.assessment_id = a.assessment_id WHERE u.role=?";
     private static final String SQL_DELETE_USER_BY_ID = "DELETE FROM users WHERE user_id=?";
     private static final String SQL_INSERT_USER =
-            "INSERT INTO users (login, password, email, role, assessment_id) VALUES (?,?,?,?,?)";
+            "INSERT INTO users (login, password, email, role, assessment_id, lang) VALUES (?,?,?,?,?,?)";
     private static final String SQL_UPDATE_USER = "UPDATE users SET login=?, password=?, email=?, role=? " +
             "WHERE user_id=?";
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE user_id=? AND login=? AND password=? " +
@@ -74,7 +75,19 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
 
     @Override
     public Optional<User> findUserByLogin(String login) throws DaoException {
-        return findUser(login, SQL_SELECT_USER_BY_LOGIN);
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_SELECT_USER_BY_LOGIN);
+            preparedStatement.setString(1, login);
+            ResultSet rs = preparedStatement.executeQuery();
+            return parseResultSet(rs);
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(preparedStatement, connection);
+        }
     }
 
     @Override
@@ -97,22 +110,6 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         }
     }
 
-    private Optional<User> findUser(String field, String sqlSelectUser) throws DaoException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = pool.getConnection();
-            preparedStatement = connection.prepareStatement(sqlSelectUser);
-            preparedStatement.setString(1, field);
-            ResultSet rs = preparedStatement.executeQuery();
-            return parseResultSet(rs);
-        } catch (SQLException e) {
-            throw new DaoException("Exception while executing SQLQuery.", e);
-        } finally {
-            closeResources(preparedStatement, connection);
-        }
-    }
-
     @Override
     protected List<User> parseResultSetForEntities(ResultSet rs) throws SQLException {
         List<User> users = new ArrayList<>();
@@ -125,9 +122,10 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
             long assessmentId = rs.getLong(6);
             int numberOfMessages = rs.getInt(7);
             String assessmentText = rs.getString(8);
+            Language lang = Language.valueOf(rs.getString(9).toUpperCase());
 
             User user = new User(userId, login, password, email, role,
-                    new Assessment(assessmentId, numberOfMessages, assessmentText));
+                    new Assessment(assessmentId, numberOfMessages, assessmentText), lang);
             users.add(user);
         }
         return users;
@@ -144,9 +142,10 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
             long assessmentId = rs.getLong(6);
             int numberOfMessages = rs.getInt(7);
             String assessment = rs.getString(8);
-
+            Language lang = Language.valueOf(rs.getString(9).toUpperCase());
+            System.out.println(lang);
             Assessment userAssessment = new Assessment(assessmentId, numberOfMessages, assessment);
-            return Optional.of(new User(userId, login, password, email, role, userAssessment));
+            return Optional.of(new User(userId, login, password, email, role, userAssessment, lang));
         } else {
             logger.log(Level.WARN, "No elements in result set!");
             return Optional.empty();
@@ -202,6 +201,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         preparedStatement.setString(3, user.getEmail());
         preparedStatement.setString(4, user.getRole().toString());
         preparedStatement.setLong(5, user.getAssessment().getId());
+        preparedStatement.setString(6, user.getLang().toString());
     }
 
     @Override
