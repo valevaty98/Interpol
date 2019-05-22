@@ -54,6 +54,8 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
     private static final String SQL_UPDATE_USER_LANGUAGE = "UPDATE users SET lang=? WHERE user_id=?";
     private static final String SQL_SELECT_ASSESSMENT_BY_ID =
             "SELECT assessment_id FROM users WHERE user_id=?";
+    private static final String SQL_SELECT_ASSESSMENT_BY_LOGIN =
+            "SELECT assessment_id FROM users WHERE login=?";
     private static final String SQL_SELECT_USERS_BY_EMAIL = "SELECT user_id FROM users WHERE email=?";
 
     private UserDaoImpl(){
@@ -181,6 +183,26 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
             connection = pool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_SELECT_ASSESSMENT_BY_ID);
             preparedStatement.setLong(1, userId);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getLong("assessment_id");
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(preparedStatement, connection);
+        }
+    }
+
+    @Override
+    public long findAssessmentIdByUserLogin(String userLogin) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_SELECT_ASSESSMENT_BY_LOGIN);
+            preparedStatement.setString(1, userLogin);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 return rs.getLong("assessment_id");

@@ -75,8 +75,8 @@
                                 <fmt:message key="full-message.button.back"/>
                             </a>
                             <a class="btn send-button"
-                               href="<c:url value="/controller?command=show_all_messages"/>">
-                                <fmt:message key="full-message.button.back"/>
+                               href="<c:url value="/jsp/set_assessment.jsp?user_login=${message.userLogin}&message_id=${message.message.id}"/>">
+                                <fmt:message key="full-message.button.set-assessment"/>
                             </a>
                         </div>
                     </div>

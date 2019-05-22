@@ -16,6 +16,8 @@ public interface UserDao {
 
     long findAssessmentIdByUserId(long userId) throws DaoException;
 
+    long findAssessmentIdByUserLogin(String userLogin) throws DaoException;
+
     List<Long> findUserIdsByEmail(String email) throws DaoException;
 
 }

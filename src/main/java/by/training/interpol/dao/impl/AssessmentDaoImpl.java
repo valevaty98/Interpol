@@ -29,6 +29,9 @@ public class AssessmentDaoImpl extends BaseDao<Assessment> implements Assessment
             "SELECT MAX(assessment_id) FROM assessments WHERE number_of_messages=? AND assessment=?";
     private static final String SQL_INCREMENT_NUMBER_OF_MESSAGES =
             "UPDATE assessments SET number_of_messages=number_of_messages+1";
+    private static final String SQL_UPDATE_MESSAGE_BY_ID =
+            "UPDATE assessments SET assessment=? WHERE assessment_id=?";
+
 
     private AssessmentDaoImpl(){
     }
@@ -88,6 +91,26 @@ public class AssessmentDaoImpl extends BaseDao<Assessment> implements Assessment
             throw new DaoException("Exception while executing SQLQuery.", e);
         } finally {
             closeResources(statement, connection);
+        }
+    }
+
+    @Override
+    public boolean updateAssessmentMessage(long id, String assessmentMessage) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            if (pool == null) {
+                throw new DaoException("Null pointer to the pool.");
+            }
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_MESSAGE_BY_ID);
+            preparedStatement.setString(1, assessmentMessage);
+            preparedStatement.setLong(2, id);
+            return (preparedStatement.executeUpdate() == 1);
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(preparedStatement, connection);
         }
     }
 

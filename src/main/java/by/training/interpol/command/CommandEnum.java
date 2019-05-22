@@ -16,7 +16,8 @@ public enum CommandEnum {
     SHOW_ALL_MESSAGES (new ShowAllMessagesBriefCommand()),
     SHOW_FULL_MESSAGE (new ShowFullMessageCommand()),
     SEND_RESPONSE_TO_USER(new SendResponseToUserCommand()),
-    CHANGE_LANG(new ChangeLanguageCommand());
+    CHANGE_LANG(new ChangeLanguageCommand()),
+    SET_ASSESSMENT(new SetAssessmentCommand());
 
     private Command command;
 

@@ -18,6 +18,6 @@ public class HomeCommand implements Command {
         nationalities = ReceiveWantedPersonInfoLogic.receiveNationalityList();
         content.putInSessionAttributes("wantedPeople", wantedPeople);
         content.putInSessionAttributes("nationalities", nationalities);
-        return builder.buildResponseType(MAIN_PAGE_PATH, SendType.FORWARD);
+        return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
     }
 }

@@ -91,6 +91,7 @@ public class FrontControllerFilter implements Filter {
                 case DELETE_PERSON:
                 case SHOW_FULL_MESSAGE:
                 case SHOW_ALL_MESSAGES:
+                case SET_ASSESSMENT:
                     if (((User) userObject).getRole() == Role.ADMIN) {
                         filterChain.doFilter(httpRequest, httpResponse);
                     } else {
