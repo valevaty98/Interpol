@@ -1,9 +1,15 @@
-<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<c:if test="${user.lang.toString() eq 'rus'}">
+    <fmt:setLocale value="ru_RU"/>
+</c:if>
+<fmt:setBundle basename="props.pagescontent"/>
+
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Add Wanted Person</title>
+    <title><fmt:message key="add-person.title"/></title>
     <link rel="shortcut icon" href="<c:url value="/static/images/interpol-logo.png"/>" type="image/png"/>
     <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
@@ -14,80 +20,80 @@
 
 <body>
 <div class="form">
-    <h1>Add Wanted Person</h1>
+    <h1><fmt:message key="add-person.label.head"/></h1>
     <p>${edit_email_error}</p>
     <form action="<c:url value="/uploadServlet"/>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="command" value="add_wanted_person">
         <div class="field-wrap">
             <label>
-                Name<span class="req">*</span>
+                <fmt:message key="add-person.label.name"/><span class="req">*</span>
             </label>
             <input type="text" name="person_name" required autocomplete="off"/>
         </div>
         <div class="field-wrap">
             <label>
-                Surname
+                <fmt:message key="add-person.label.surname"/>
             </label>
             <input type="text" name="person_surname" autocomplete="off"/>
         </div>
         <div class="field-wrap" style="height: 45px;">
             <label class="active highlight">Gender</label>
-            <label class="gender-label" for="male"><input type="radio" id="male" class="gender-type" name="gender" value="Male" checked>Male</label>
-            <label class="gender-label" for="female"><input type="radio" id="female" class="gender-type" name="gender" value="Female">Female</label>
+            <label class="gender-label" for="male"><input type="radio" id="male" class="gender-type" name="gender" value="Male" checked><fmt:message key="add-person.label.gender.male"/></label>
+            <label class="gender-label" for="female"><input type="radio" id="female" class="gender-type" name="gender" value="Female"><fmt:message key="add-person.label.gender.female"/></label>
         </div>
         <div class="field-wrap">
             <label>
-                Characteristics
+                <fmt:message key="add-person.label.characteristics"/>
             </label>
             <textarea name="characteristics" rows="3" autocomplete="off"></textarea>
         </div>
         <div class="field-wrap">
             <label>
-                Height
+                <fmt:message key="add-person.label.height"/>
             </label>
             <input type="text" name="height" autocomplete="off" pattern="[\d]+[.]?[\d]{0,3}$"/>
         </div>
         <div class="field-wrap">
             <label>
-                Weight
+                <fmt:message key="add-person.label.weight"/>
             </label>
             <input type="text" name="weight" autocomplete="off" pattern="^[\d]+[.]?[\d]{0,3}$"/>
         </div>
         <div class="field-wrap">
             <label>
-                Charges<span class="req">*</span>
+                <fmt:message key="add-person.label.charges"/><span class="req">*</span>
             </label>
             <textarea name="charges" rows="2" required autocomplete="off"></textarea>
         </div>
         <div class="field-wrap">
             <label>
-                Place Of Birth<span class="req">*</span>
+                <fmt:message key="add-person.label.birth-place"/><span class="req">*</span>
             </label>
             <input type="text" name="birth_place" required autocomplete="off"/>
         </div>
         <div class="field-wrap">
             <label>
-                Nationalities<span class="req">*</span>
+                <fmt:message key="add-person.label.nationalities"/><span class="req">*</span>
             </label>
             <input type="text" name="nationalities" required autocomplete="off"
             pattern="^[a-zA-z]+[,]?[a-zA-Z]+$"/>
         </div>
         <div class="field-wrap">
             <label class="active highlight">
-                Date of Birth<span class="req">*</span>
+                <fmt:message key="add-person.label.birth-date"/><span class="req">*</span>
             </label>
             <input type="date" name="birth_date"
                    min="1900-01-01" max="2018-12-31" required autocomplete="off"/>
         </div>
         <div class="field-wrap">
             <label class="active highlight">
-                Photo<span class="req">*</span>
+                <fmt:message key="add-person.label.photo"/><span class="req">*</span>
             </label>
             <input type="file" name="image" required autocomplete="off" accept="image/png"/>
         </div>
         <div>
-            <button type="submit" class="button button-block send-button">Save</button>
-            <button type="button" class="button button-block back-button" onclick="history.back()">Back</button>
+            <button type="submit" class="button button-block send-button"><fmt:message key="add-person.button.add"/></button>
+            <button type="button" class="button button-block back-button" onclick="history.back()"><fmt:message key="add-person.button.back"/></button>
         </div>
     </form>
 </div>

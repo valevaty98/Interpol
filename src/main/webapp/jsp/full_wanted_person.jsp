@@ -1,6 +1,11 @@
-<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ctl" uri="/WEB-INF/tld/custom.tld" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<c:if test="${user.lang.toString() eq 'rus'}">
+    <fmt:setLocale value="ru_RU"/>
+</c:if>
+<fmt:setBundle basename="props.pagescontent"/>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -31,29 +36,29 @@
                     <table class="table table-bordered">
                         <tbody>
                         <tr>
-                            <th scope="row">Name</th>
+                            <th scope="row"><fmt:message key="full-wanted.label.name"/></th>
                             <td>${wantedPerson.name}</td>
                         </tr>
                         <c:if test="${wantedPerson.surname != null}">
                             <tr>
-                                <th scope="row">Surname</th>
+                                <th scope="row"><fmt:message key="full-wanted.label.surname"/></th>
                                 <td>${wantedPerson.surname}</td>
                             </tr>
                         </c:if>
                         <tr>
-                            <th scope="row">Gender</th>
+                            <th scope="row"><fmt:message key="full-wanted.label.gender"/></th>
                             <td>${wantedPerson.gender}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Birth Date</th>
+                            <th scope="row"><fmt:message key="full-wanted.label.birth-date"/></th>
                             <td>${wantedPerson.birthDate}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Birth Place</th>
+                            <th scope="row"><fmt:message key="full-wanted.label.birth-place"/></th>
                             <td>${wantedPerson.birthPlace.name}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Nationality</th>
+                            <th scope="row"><fmt:message key="full-wanted.label.nationalities"/></th>
                             <c:set var="nationality_str" value="${wantedPerson.nationality}" />
                             <td>
                                 <c:forTokens var="national" items="${nationality_str}" delims="[]">
@@ -63,23 +68,23 @@
                         </tr>
                         <c:if test="${wantedPerson.height != null}">
                             <tr>
-                                <th scope="row">Height</th>
-                                <td>${wantedPerson.height} m</td>
+                                <th scope="row"><fmt:message key="full-wanted.label.height"/></th>
+                                <td>${wantedPerson.height} <fmt:message key="full-wanted.text.m"/></td>
                             </tr>
                         </c:if>
                         <c:if test="${wantedPerson.weight != null}">
                             <tr>
-                                <th scope="row">Weight</th>
-                                <td>${wantedPerson.weight} kg</td>
+                                <th scope="row"><fmt:message key="full-wanted.label.weight"/></th>
+                                <td>${wantedPerson.weight} <fmt:message key="full-wanted.text.kg"/></td>
                             </tr>
                         </c:if>
                         <tr>
-                            <th scope="row">Charges</th>
+                            <th scope="row"><fmt:message key="full-wanted.label.charges"/></th>
                             <td>${wantedPerson.charges}</td>
                         </tr>
                         <c:if test="${wantedPerson.characteristics != null}">
                             <tr>
-                                <th scope="row" class="col-sm-3">Description</th>
+                                <th scope="row" class="col-sm-3"><fmt:message key="full-wanted.label.description"/></th>
                                 <td>${wantedPerson.characteristics}
                                 </td>
                             </tr>
@@ -88,10 +93,10 @@
                     </table>
                     <div>
                         <c:if test="${user.role eq 'ADMIN'}">
-                            <a class="btn send-button" href="<c:url value="/controller?command=delete_person&person_id=${wantedPerson.id}"/>">Delete Wanted Person</a>
+                            <a class="btn send-button" href="<c:url value="/controller?command=delete_person&person_id=${wantedPerson.id}"/>"><fmt:message key="full-wanted.button.delete"/></a>
                         </c:if>
-                        <a class="btn send-button" href="<c:url value="/jsp/send_message.jsp?person_id=${wantedPerson.id}"/>">Send message</a>
-                        <a class="btn send-button" href="<c:url value="/controller?command=home"/>">Back to Wanted Persons</a>
+                        <a class="btn send-button" href="<c:url value="/jsp/send_message.jsp?person_id=${wantedPerson.id}"/>"><fmt:message key="full-wanted.button.send-message"/></a>
+                        <a class="btn send-button" href="<c:url value="/controller?command=home"/>"><fmt:message key="full-wanted.button.back"/></a>
                     </div>
                 </div>
             </div>

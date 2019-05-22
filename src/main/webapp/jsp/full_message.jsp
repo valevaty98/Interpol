@@ -1,6 +1,11 @@
 <%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ctl" uri="/WEB-INF/tld/custom.tld" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<c:if test="${user.lang.toString() eq 'rus'}">
+    <fmt:setLocale value="ru_RU"/>
+</c:if>
+<fmt:setBundle basename="props.pagescontent"/>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -31,31 +36,31 @@
                         <table class="table table-bordered">
                             <tbody>
                             <tr>
-                                <th scope="row" class="col-sm-3 col-md-3">Wanted Person</th>
+                                <th scope="row" class="col-sm-3 col-md-3"><fmt:message key="full-message.label.wanted-person"/></th>
                                 <td class="col-sm-9 col-md-9">${message.wantedPersonName} ${message.wantedPersonSurname} </td>
                             </tr>
                             <tr>
-                                <th scope="row">User Login</th>
+                                <th scope="row"><fmt:message key="full-message.label.login"/></th>
                                 <td>${message.userLogin}</td>
                             </tr>
                             <tr>
-                                <th scope="row">User Email</th>
+                                <th scope="row"><fmt:message key="full-message.label.email"/></th>
                                 <td>${message.userEmail}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Subject</th>
+                                <th scope="row"><fmt:message key="full-message.label.subject"/></th>
                                 <td>${message.message.subject}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Date</th>
+                                <th scope="row"><fmt:message key="full-message.label.date"/></th>
                                 <td>${message.message.date}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Message</th>
+                                <th scope="row"><fmt:message key="full-message.label.message"/></th>
                                 <td>${message.message.message}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Message Status</th>
+                                <th scope="row"><fmt:message key="full-message.label.message.status"/></th>
                                 <td>${message.message.status}</td>
                             </tr>
                             </tbody>
@@ -63,11 +68,11 @@
                         <div>
                             <a class="btn send-button"
                                href="<c:url value="/jsp/send_response_to_user.jsp?message_id=${message.message.id}&user_email=${message.userEmail}"/>">
-                                Send response to user
+                                <fmt:message key="full-message.button.response-to-user"/>
                             </a>
                             <a class="btn send-button"
                                href="<c:url value="/controller?command=show_all_messages"/>">
-                                Back
+                                <fmt:message key="full-message.button.back"/>
                             </a>
                         </div>
                     </div>

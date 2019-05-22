@@ -242,6 +242,7 @@ a.cart-link:hover {
 }
 
 .message-row:hover {
+    background-color: #bfbfbf;
     filter: brightness(85%);
     cursor: pointer;
 }

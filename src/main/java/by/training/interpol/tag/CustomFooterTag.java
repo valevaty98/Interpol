@@ -15,7 +15,6 @@ import java.util.ResourceBundle;
 public class CustomFooterTag extends TagSupport {
     @Override
     public int doStartTag() {
-
         HttpServletRequest httpRequest = (HttpServletRequest) pageContext.getRequest();
         HttpSession httpSession = httpRequest.getSession();
         User user = (User)httpSession.getAttribute("user");

@@ -1,6 +1,11 @@
 <%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ctl" uri="/WEB-INF/tld/custom.tld" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<c:if test="${user.lang.toString() eq 'rus'}">
+    <fmt:setLocale value="ru_RU"/>
+</c:if>
+<fmt:setBundle basename="props.pagescontent"/>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -59,7 +64,7 @@
 <%--                                <a class="btn send-button" href="<c:url value="/controller?command=delete_person&person_id=${wantedPerson.id}"/>">Delete Wanted Person</a>--%>
 <%--                            </c:if>--%>
 <%--                            <a class="btn send-button" href="send_message.jsp">Send message</a>--%>
-                            <a class="btn send-button" href="<c:url value="/controller?command=home"/>">Back to Wanted Persons</a>
+                            <a class="btn send-button" href="<c:url value="/controller?command=home"/>"><fmt:message key="all-messages.button.back"/></a>
                         </div>
                     </div>
                 </div>

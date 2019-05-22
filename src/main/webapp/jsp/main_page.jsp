@@ -1,8 +1,6 @@
-<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ctl" uri="/WEB-INF/tld/custom.tld" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-<fmt:setBundle basename="props.pagescontent"/>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
