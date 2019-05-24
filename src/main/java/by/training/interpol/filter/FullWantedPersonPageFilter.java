@@ -1,5 +1,7 @@
 package by.training.interpol.filter;
 
+import by.training.interpol.util.AttributeParameterName;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
@@ -8,15 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter( urlPatterns = {"/jsp/full_wanted_person.jsp"},
-        initParams = {@WebInitParam(name = "INDEX_PAGE", value = "/index.jsp"),
-                @WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
+        initParams = {@WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
 public class FullWantedPersonPageFilter implements Filter {
-    private String indexPagePath;
     private String mainPagePath;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        indexPagePath = filterConfig.getInitParameter("INDEX_PAGE");
         mainPagePath = filterConfig.getInitParameter("MAIN_PAGE_PATH");
     }
 
@@ -24,12 +23,7 @@ public class FullWantedPersonPageFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-        Object userObject = httpRequest.getSession().getAttribute("user");
-
-        if (userObject == null) {
-            httpRequest.getSession().invalidate();
-            httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
-        } else if (httpRequest.getAttribute("wantedPerson") == null) {
+        if (httpRequest.getAttribute(AttributeParameterName.WANTED_PERSON_ATTR) == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
         } else {
             filterChain.doFilter(httpRequest, httpResponse);
@@ -38,6 +32,6 @@ public class FullWantedPersonPageFilter implements Filter {
 
     @Override
     public void destroy() {
-        indexPagePath = null;
+        mainPagePath = null;
     }
 }

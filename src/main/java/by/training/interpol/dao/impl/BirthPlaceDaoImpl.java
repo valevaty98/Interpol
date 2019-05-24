@@ -32,6 +32,34 @@ public class BirthPlaceDaoImpl extends BaseDao<BirthPlace> implements BirthPlace
     }
 
     @Override
+    public Optional<BirthPlace> findBirthPlaceId(BirthPlace birthPlace) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
+            preparedStatement = connection.prepareStatement(SQL_SELECT_BIRTH_PLACE_ID);
+            preparedStatement.setString(1, birthPlace.getName());
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                long birthPlaceId = rs.getLong(1);
+                return Optional.of(
+                        new BirthPlace(birthPlaceId, birthPlace.getName()));
+            } else {
+                logger.log(Level.WARN, "No elements in result set!");
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing SQLQuery.", e);
+        } finally {
+            closeResources(preparedStatement, connection);
+        }
+    }
+
+    @Override
     protected List<BirthPlace> parseResultSetForEntities(ResultSet rs) throws SQLException {
         return null;
     }
@@ -84,31 +112,5 @@ public class BirthPlaceDaoImpl extends BaseDao<BirthPlace> implements BirthPlace
     @Override
     protected String deleteSQLQuery() {
         return null;
-    }
-
-    @Override
-    public Optional<BirthPlace> findBirthPlaceId(BirthPlace birthPlace) throws DaoException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = pool.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_SELECT_BIRTH_PLACE_ID);
-            preparedStatement.setString(1, birthPlace.getName());
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if (rs.next()) {
-                long birthPlaceId = rs.getLong(1);
-                return Optional.of(
-                        new BirthPlace(birthPlaceId, birthPlace.getName()));
-            } else {
-
-                logger.log(Level.WARN, "No elements in result set!");
-                return Optional.empty();
-            }
-        } catch (SQLException e) {
-            throw new DaoException("Exception while executing SQLQuery.", e);
-        } finally {
-            closeResources(preparedStatement, connection);
-        }
     }
 }

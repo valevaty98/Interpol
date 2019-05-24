@@ -42,6 +42,9 @@ public class NationalityDaoImpl extends BaseDao<Nationality> implements National
         Statement statement = null;
         try {
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(SQL_SELECT_WANTED_PEOPLE_NATIONALITY_NAMES);
 
@@ -62,10 +65,10 @@ public class NationalityDaoImpl extends BaseDao<Nationality> implements National
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_INSERT_PERSON_NATION);
             preparedStatement.setLong(1, nationId);
             preparedStatement.setLong(2, personId);
@@ -82,10 +85,10 @@ public class NationalityDaoImpl extends BaseDao<Nationality> implements National
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_DELETE_FROM_NATION_PERSON);
             preparedStatement.setLong(1, personId);
             return (preparedStatement.executeUpdate() > 0);
@@ -101,10 +104,10 @@ public class NationalityDaoImpl extends BaseDao<Nationality> implements National
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_SELECT_NATIONALITY_ID);
             preparedStatement.setString(1, nationality);
             ResultSet rs = preparedStatement.executeQuery();

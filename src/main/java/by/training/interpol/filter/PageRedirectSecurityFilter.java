@@ -1,7 +1,6 @@
 package by.training.interpol.filter;
 
-import by.training.interpol.command.ResponseTypeCreator;
-import by.training.interpol.entity.User;
+import by.training.interpol.util.AttributeParameterName;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -24,8 +23,7 @@ public class PageRedirectSecurityFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-        Object userObject = httpRequest.getSession().getAttribute("user");
-
+        Object userObject = httpRequest.getSession().getAttribute(AttributeParameterName.USER_ATTR);
         if (userObject == null) {
             httpRequest.getSession().invalidate();
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);

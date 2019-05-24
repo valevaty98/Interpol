@@ -66,6 +66,9 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
         Statement statement = null;
         try {
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(SQL_SELECT_WANTED_PEOPLE_BRIEF);
             return parseResultSetForEntitiesBrief(rs);
@@ -82,6 +85,9 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
         PreparedStatement preparedStatement = null;
         try {
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_SELECT_WANTED_PERSON_ID);
             preparedStatement.setString(1, person.getName());
             preparedStatement.setString(2, person.getCharges());
@@ -91,7 +97,6 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
             System.out.println(person.getCharges());
             System.out.println(person.getBirthDate());
             ResultSet rs = preparedStatement.executeQuery();
-            // ResultSet rs = statement.executeQuery(SQL_INSERT_WANTED_PERSON); //todo change
             if (rs.next()) {
                 return rs.getLong("person_id");
             }

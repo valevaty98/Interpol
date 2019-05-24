@@ -67,6 +67,9 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         PreparedStatement preparedStatement = null;
         try {
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_SELECT_USER_BY_LOGIN);
             preparedStatement.setString(1, login);
             ResultSet rs = preparedStatement.executeQuery();
@@ -83,10 +86,10 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_EMAIL);
             preparedStatement.setString(1, email);
             preparedStatement.setLong(2, user.getId());
@@ -103,10 +106,10 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_LANGUAGE);
             preparedStatement.setString(1, lang.toString());
             preparedStatement.setLong(2, userId);
@@ -166,6 +169,9 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         PreparedStatement preparedStatement = null;
         try {
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_SELECT_ASSESSMENT_BY_ID);
             preparedStatement.setLong(1, userId);
             ResultSet rs = preparedStatement.executeQuery();
@@ -186,6 +192,9 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         PreparedStatement preparedStatement = null;
         try {
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_SELECT_ASSESSMENT_BY_LOGIN);
             preparedStatement.setString(1, userLogin);
             ResultSet rs = preparedStatement.executeQuery();
@@ -206,6 +215,9 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
         PreparedStatement preparedStatement = null;
         try {
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_EMAIL);
             preparedStatement.setString(1, searchEmail);
             ResultSet rs = preparedStatement.executeQuery();

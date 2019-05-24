@@ -2,6 +2,7 @@ package by.training.interpol.filter;
 
 import by.training.interpol.entity.Role;
 import by.training.interpol.entity.User;
+import by.training.interpol.util.AttributeParameterName;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -11,15 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter( urlPatterns = {"/jsp/full_message.jsp"},
-        initParams = {@WebInitParam(name = "INDEX_PAGE", value = "/index.jsp"),
-                @WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
+        initParams = {@WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
 public class FullMessagePageFilter implements Filter {
-    private String indexPagePath;
     private String mainPagePath;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        indexPagePath = filterConfig.getInitParameter("INDEX_PAGE");
         mainPagePath = filterConfig.getInitParameter("MAIN_PAGE_PATH");
     }
 
@@ -27,18 +25,11 @@ public class FullMessagePageFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-        Object userObject = httpRequest.getSession().getAttribute("user");
-
-        if (userObject == null) {
-            System.out.println("user object null, filter redirect index");
-            httpRequest.getSession().invalidate();
-            httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
-            return;
-        }
+        Object userObject = httpRequest.getSession().getAttribute(AttributeParameterName.USER_ATTR);
         User user = (User)userObject;
         if (user.getRole() != Role.ADMIN) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
-        } else if (httpRequest.getAttribute("message") == null) {
+        } else if (httpRequest.getAttribute(AttributeParameterName.MESSAGE_ATTR) == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
         } else {
             filterChain.doFilter(httpRequest, httpResponse);
@@ -47,6 +38,6 @@ public class FullMessagePageFilter implements Filter {
 
     @Override
     public void destroy() {
-        indexPagePath = null;
+        mainPagePath = null;
     }
 }

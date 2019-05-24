@@ -32,6 +32,9 @@ public abstract class BaseDao<T extends Entity> {
         Statement statement = null;
         try {
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(selectAllSQLQuery());
             return parseResultSetForEntities(rs);
@@ -46,9 +49,6 @@ public abstract class BaseDao<T extends Entity> {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
             preparedStatement = connection.prepareStatement(selectByIdSQLQuery());
             preparedStatement.setLong(1, id);
@@ -65,9 +65,6 @@ public abstract class BaseDao<T extends Entity> {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
             preparedStatement = connection.prepareStatement(deleteByIdSQLQuery());
             preparedStatement.setLong(1, id);
@@ -83,9 +80,6 @@ public abstract class BaseDao<T extends Entity> {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
             preparedStatement = connection.prepareStatement(deleteSQLQuery());
             prepareStatementForDelete(preparedStatement, entity);
@@ -101,10 +95,10 @@ public abstract class BaseDao<T extends Entity> {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(insertSQLQuery());
             prepareStatementForInsert(preparedStatement, entity);
             return (preparedStatement.executeUpdate() == 1);
@@ -120,10 +114,10 @@ public abstract class BaseDao<T extends Entity> {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(updateSQLQuery());
             prepareStatementForUpdate(preparedStatement, entity);
             preparedStatement.executeUpdate();

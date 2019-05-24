@@ -31,6 +31,7 @@ class CheckingPoolTimerTask extends TimerTask {
             latch.countDown();
         } catch (InterruptedException e) {
             log.log(Level.ERROR, "Error during putting new connection to the available connections", e);
+            Thread.currentThread().interrupt();
             throw new RuntimeException(e);
         } catch (SQLException e) {
             log.log(Level.ERROR, "Error during creating connection.", e);

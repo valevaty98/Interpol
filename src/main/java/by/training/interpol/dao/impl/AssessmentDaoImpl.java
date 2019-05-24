@@ -39,6 +39,9 @@ public class AssessmentDaoImpl extends BaseDao<Assessment> implements Assessment
         PreparedStatement preparedStatement = null;
         try {
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_SELECT_LAST_ASSESSMENT_ID);
             preparedStatement.setInt(1, assessment.getNumberOfMessages());
             preparedStatement.setString(2, assessment.getAssessmentText());
@@ -63,10 +66,10 @@ public class AssessmentDaoImpl extends BaseDao<Assessment> implements Assessment
         Connection connection = null;
         Statement statement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             statement = connection.createStatement();
             return (statement.executeUpdate(SQL_INCREMENT_NUMBER_OF_MESSAGES) == 1);
         } catch (SQLException e) {
@@ -81,10 +84,10 @@ public class AssessmentDaoImpl extends BaseDao<Assessment> implements Assessment
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            if (pool == null) {
-                throw new DaoException("Null pointer to the pool.");
-            }
             connection = pool.getConnection();
+            if (connection == null) {
+                throw new DaoException("Null pointer to the connection.");
+            }
             preparedStatement = connection.prepareStatement(SQL_UPDATE_MESSAGE_BY_ID);
             preparedStatement.setString(1, assessmentMessage);
             preparedStatement.setLong(2, id);

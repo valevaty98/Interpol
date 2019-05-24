@@ -6,6 +6,7 @@ import by.training.interpol.dao.impl.MessageDaoImpl;
 import by.training.interpol.dao.impl.UserDaoImpl;
 import by.training.interpol.entity.Role;
 import by.training.interpol.entity.User;
+import by.training.interpol.util.AttributeParameterName;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,12 +23,10 @@ import java.io.IOException;
                 @WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
 public class SendResponseToUserPageFilter implements Filter {
     private static Logger logger = LogManager.getLogger();
-    private String indexPagePath;
     private String mainPagePath;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        indexPagePath = filterConfig.getInitParameter("INDEX_PAGE");
         mainPagePath = filterConfig.getInitParameter("MAIN_PAGE_PATH");
     }
 
@@ -36,12 +35,6 @@ public class SendResponseToUserPageFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         Object userObject = httpRequest.getSession().getAttribute("user");
-
-        if (userObject == null) {
-            httpRequest.getSession().invalidate();
-            httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
-            return;
-        }
         User user = (User)userObject;
         if (user.getRole() != Role.ADMIN) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
@@ -49,11 +42,11 @@ public class SendResponseToUserPageFilter implements Filter {
             long messageId;
             String userEmail;
             try {
-                messageId = Long.parseLong(httpRequest.getParameter("message_id"));
-                userEmail = httpRequest.getParameter("user_email");
+                messageId = Long.parseLong(httpRequest.getParameter(AttributeParameterName.MESSAGE_ID_PARAM));
+                userEmail = httpRequest.getParameter(AttributeParameterName.USER_EMAIL_PARAM);
                 System.out.println(userEmail);
                 if (!MessageDaoImpl.getInstance().findById(messageId).isPresent() || userEmail == null ||
-                        !UserDaoImpl.getInstance().findUserIdsByEmail(userEmail).isEmpty()) {
+                        UserDaoImpl.getInstance().findUserIdsByEmail(userEmail).isEmpty()) {
                     logger.log(Level.ERROR, "Illegal params for sending response.");
                     httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
                 } else {
@@ -71,6 +64,6 @@ public class SendResponseToUserPageFilter implements Filter {
 
     @Override
     public void destroy() {
-        indexPagePath = null;
+        mainPagePath = null;
     }
 }

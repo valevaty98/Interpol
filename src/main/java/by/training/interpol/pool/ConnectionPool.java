@@ -13,7 +13,6 @@ import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -74,6 +73,7 @@ public class ConnectionPool {
             log.log(Level.ERROR, "Error during closing connections.", e);
         } catch (InterruptedException e) {
             log.log(Level.ERROR, "Error during taking connection from the available connection pool.", e);
+            Thread.currentThread().interrupt();
         }
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         while (drivers.hasMoreElements()) {
@@ -93,6 +93,7 @@ public class ConnectionPool {
             usedConnections.add(connection);
         } catch (InterruptedException e) {
             log.log(Level.ERROR, "Error during taking from the connection pool", e);
+            Thread.currentThread().interrupt();
         }
         return connection;
     }
@@ -104,6 +105,7 @@ public class ConnectionPool {
                 availableConnections.put(connection);
             } catch (InterruptedException e) {
                 log.log(Level.ERROR, "Error during restoring connection to the connection pool", e);
+                Thread.currentThread().interrupt();
             }
             return isQueueChanged;
         } else {
@@ -120,6 +122,7 @@ public class ConnectionPool {
             latch.await();
         } catch (InterruptedException e) {
             log.log(Level.ERROR, "Error during waiting for connection pool to be checked.");
+            Thread.currentThread().interrupt();
         }
     }
 
