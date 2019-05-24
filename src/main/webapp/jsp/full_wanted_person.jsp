@@ -11,11 +11,11 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title>Interpol</title>
-    <link rel="stylesheet" href="<c:url value="/static/css/stylec.css"/>" type="text/css" media="all"/>
+    <link rel="stylesheet" href="<c:url value="/static/css/main-style.css"/>" type="text/css" media="all"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-    <link rel="shortcut icon" href="<c:url value="/static/images/interpol-logo.png"/>" type="image/png"/>
+    <link rel="shortcut icon" href="<c:url value="/static/images/interpol-logo.png"/>" type="imageEncoded/png"/>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
@@ -29,7 +29,7 @@
         <div class="container" style="width: 100%;">
             <div class="row info-table">
                 <div class="col-sm-4 col-md-4">
-                    <img src="data:image/png;base64,<c:out value="${wantedPerson.image}"/>"
+                    <img src="data:imageEncoded/png;base64,<c:out value="${wantedPerson.imageEncoded}"/>"
                          alt="${wantedPerson.surname}" class="img-rounded img-responsive"/>
                 </div>
                 <div class="col-sm-8 col-md-8">
@@ -115,6 +115,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 <script src="<c:url value="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"/>"></script>
-<script src="<c:url value="/static/js/main-ind.js"/>"></script>
+<script src="<c:url value="/static/js/main-page-index.js"/>"></script>
 </body>
 </html>

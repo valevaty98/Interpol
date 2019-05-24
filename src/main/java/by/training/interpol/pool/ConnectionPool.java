@@ -5,8 +5,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
@@ -27,12 +29,12 @@ public class ConnectionPool {
     private final static int DEFAULT_DELAY_FOR_SCHEDULE_CHECKING_TASK = 10;
 
     private ConnectionPool() {
-
         actualPoolSize = DbPropertyReader.readPoolSize();
         try {
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
         } catch (SQLException e) {
-            log.log(Level.ERROR, "Error during driver registration.", e);
+            log.log(Level.FATAL, "Error during driver registration.", e);
+            throw new RuntimeException(e);
         }
         availableConnections = new LinkedBlockingQueue<>(actualPoolSize);
         usedConnections = new LinkedBlockingQueue<>(actualPoolSize);
@@ -64,14 +66,23 @@ public class ConnectionPool {
             log.log(Level.WARN, "Some connections are being used!!");
         }
         try {
-            for (Connection connection : availableConnections) {
-                connection.close();
-            }
-            for (Connection connection : usedConnections) {
+            for (int i = 0; i < actualPoolSize; i++) {
+                Connection connection = availableConnections.take();
                 connection.close();
             }
         } catch (SQLException e) {
             log.log(Level.ERROR, "Error during closing connections.", e);
+        } catch (InterruptedException e) {
+            log.log(Level.ERROR, "Error during taking connection from the available connection pool.", e);
+        }
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            Driver driver = drivers.nextElement();
+            try {
+                DriverManager.deregisterDriver(driver);
+            } catch (SQLException e) {
+                log.log(Level.ERROR, "Error during driver deregistration!", e);
+            }
         }
     }
 
@@ -81,7 +92,7 @@ public class ConnectionPool {
             connection = availableConnections.take();
             usedConnections.add(connection);
         } catch (InterruptedException e) {
-            log.log(Level.ERROR, "Error during taking from the connection pool or putting connection to the used connections", e);
+            log.log(Level.ERROR, "Error during taking from the connection pool", e);
         }
         return connection;
     }
@@ -106,7 +117,6 @@ public class ConnectionPool {
         Timer timer = new Timer();
         timer.schedule(new CheckingPoolTimerTask(latch), DEFAULT_DELAY_FOR_SCHEDULE_CHECKING_TASK);
         try {
-            TimeUnit.MILLISECONDS.sleep(100);
             latch.await();
         } catch (InterruptedException e) {
             log.log(Level.ERROR, "Error during waiting for connection pool to be checked.");

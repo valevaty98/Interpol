@@ -10,22 +10,21 @@
 <head>
     <meta charset="UTF-8">
     <title><fmt:message key="set-assessment.title"/></title>
-    <link rel="shortcut icon" href="<c:url value="/static/images/interpol-logo.png"/>" type="image/png"/>
+    <link rel="shortcut icon" href="<c:url value="/static/images/interpol-logo.png"/>" type="imageEncoded/png"/>
     <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
           type="text/css">
-    <link rel="stylesheet" href="<c:url value="/static/css/loginiki.css"/>" type="text/css">
+    <link rel="stylesheet" href="<c:url value="/static/css/input-pages-style.css"/>" type="text/css">
 </head>
 
 <body>
 <div class="form">
+    <p>${setAssessmentError}</p>
     <h1><fmt:message key="set-assessment.label.head"/></h1>
-    <p>${set_assessment_error}</p>
-    <br/>
     <form action="<c:url value="/controller"/>" method="post">
         <input type="hidden" name="command" value="set_assessment">
         <input type="hidden" name="message_id" value="<c:out value="${param.message_id}"/>">
-        <input type="hidden" name="user_login" value="<c:out value="${param.user_login}"/>">
+        <input type="hidden" name="login" value="<c:out value="${param.user_login}"/>">
         <div class="field-wrap">
             <label class="active highlight">
                 <fmt:message key="set-assessment.label.login"/>
@@ -45,7 +44,7 @@
     </form>
 </div>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src="<c:url value="/static/js/index.js"/>"></script>
+<script src="<c:url value="/static/js/input-page-index.js"/>"></script>
 </body>
 
 </html>
