@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter( urlPatterns = {"/controller"},
-        initParams = {@WebInitParam(name = "INDEX_PAGE_PATH", value = "/index.jsp"),
+        initParams = {@WebInitParam(name = "INDEX_PAGE", value = "/index.jsp"),
                 @WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
 public class FrontControllerFilter implements Filter {
     private String indexPagePath;
@@ -23,7 +23,7 @@ public class FrontControllerFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        indexPagePath = filterConfig.getInitParameter("INDEX_PAGE_PATH");
+        indexPagePath = filterConfig.getInitParameter("INDEX_PAGE");
         mainPagePath = filterConfig.getInitParameter("MAIN_PAGE_PATH");
     }
 
@@ -36,15 +36,12 @@ public class FrontControllerFilter implements Filter {
         String stringCommand = httpRequest.getParameter("command");
 
         if (stringCommand == null) {
-            //logger.log(Level.ERROR, "No command parameter");
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
             return;
         }
         try {
             command = CommandEnum.valueOf(stringCommand.toUpperCase());
         } catch (IllegalArgumentException e) {
-            //logger.log(Level.ERROR, "No such command in the command enum!", e);
-            //content.putInRequestAttributes("wrongCommand", stringCommand);
             command = CommandEnum.DEFAULT;
         }
 
@@ -68,7 +65,6 @@ public class FrontControllerFilter implements Filter {
                     }
                     break;
                 default:
-                    System.out.println("user object null, filter redirect index");
                     httpRequest.getSession().invalidate();
                     httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
             }
@@ -99,7 +95,6 @@ public class FrontControllerFilter implements Filter {
                     }
                     break;
                 default:
-                    System.out.println("unsupported direct command, filter redirect main");
                     httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
             }
         }

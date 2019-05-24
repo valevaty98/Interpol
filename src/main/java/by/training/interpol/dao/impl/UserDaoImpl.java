@@ -18,14 +18,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class UserDaoImpl extends BaseDao<User> implements UserDao {
     private static Logger logger = LogManager.getLogger();
-    private static UserDaoImpl instance;
-    private static ReentrantLock locker = new ReentrantLock();
-    private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
+    private final static UserDaoImpl INSTANCE = new UserDaoImpl();
 
     private static final String SQL_SELECT_ALL_USERS =
             "SELECT u.user_id, u.login, u.password, u.email, u.role, a.assessment_id, a.number_of_messages, a.assessment, u.lang " +
@@ -62,18 +58,7 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
     }
 
     public static UserDaoImpl getInstance() {
-        if (!isInstanceCreated.get()) {
-            locker.lock();
-            try {
-                if (instance == null) {
-                    instance = new UserDaoImpl();
-                    isInstanceCreated.set(true);
-                }
-            } finally {
-                locker.unlock();
-            }
-        }
-        return instance;
+        return INSTANCE;
     }
 
     @Override

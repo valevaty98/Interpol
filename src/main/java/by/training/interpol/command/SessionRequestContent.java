@@ -1,7 +1,6 @@
 package by.training.interpol.command;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;

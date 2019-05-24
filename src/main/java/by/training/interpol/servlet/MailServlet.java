@@ -1,7 +1,8 @@
 package by.training.interpol.servlet;
 
-import by.training.interpol.command.*;
 import by.training.interpol.mail.MailThread;
+import by.training.interpol.util.AttributeParameterName;
+import by.training.interpol.util.PageServletPath;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,23 +20,26 @@ import java.util.regex.Pattern;
 @WebServlet("/mailServlet")
 public class MailServlet extends HttpServlet {
     private static Logger logger = LogManager.getLogger();
-    private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
+    private final static String MAIL_INIT_PARAMETER = "mail";
+    private final static String EMAIL_PATTERN = "^([a-zA-Z0-9_\\-.]+)@([a-zA-Z0-9_\\-.]+)\\.([a-zA-Z]{2,5})$";
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Properties properties = new Properties();
         ServletContext servletContext = getServletContext();
-        String fileName = servletContext.getInitParameter("mail");
+        String fileName = servletContext.getInitParameter(MAIL_INIT_PARAMETER);
         properties.load(servletContext.getResourceAsStream(fileName));
-        String subject = request.getParameter("subject");
-        String email = request.getParameter("email");
-        String message = request.getParameter("message");
-        Pattern emailPattern = Pattern.compile("^([a-zA-Z0-9_\\-.]+)@([a-zA-Z0-9_\\-.]+)\\.([a-zA-Z]{2,5})$");
+        String subject = request.getParameter(AttributeParameterName.SUBJECT_PARAM);
+        String email = request.getParameter(AttributeParameterName.EMAIL_PARAM);
+        String message = request.getParameter(AttributeParameterName.MESSAGE_PARAM);
+        Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
         if (subject == null || (email == null || emailPattern.matcher(email).matches()) || message == null) {
-            response.sendRedirect(MAIN_PAGE_PATH);
-            return;
+            logger.log(Level.ERROR, "Illegal params for sending response to user.");
+            response.sendRedirect(PageServletPath.MAIN_PAGE);
+        } else {
+            MailThread mailOperator = new MailThread(subject, email, message, properties);
+            mailOperator.start();
+            request.getRequestDispatcher(PageServletPath.FRONT_CONTROLLER).forward(request, response);
         }
-        MailThread mailOperator = new MailThread(request.getParameter("subject"), request.getParameter("email"), request.getParameter("message"), properties);
-        mailOperator.start();
-        request.getRequestDispatcher("/controller").forward(request, response);
     }
 }

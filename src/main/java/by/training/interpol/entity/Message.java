@@ -4,11 +4,15 @@ public class Message extends Entity {
     private String subject;
     private String message;
     private String date;
-    private long wantedPersonId;
-    private long userId;
+    private Long wantedPersonId;
+    private Long userId;
     private MessageStatus status;
 
-    public Message(String subject, String message, String date, long wantedPersonId, long userId, MessageStatus status) {
+    public Message(String messageText) {
+        this.message = messageText;
+    }
+
+    public Message(String subject, String message, String date, Long wantedPersonId, Long userId, MessageStatus status) {
         this.subject = subject;
         this.message = message;
         this.date = date;
@@ -17,7 +21,7 @@ public class Message extends Entity {
         this.status = status;
     }
 
-    public Message(long id, String subject, String message, String date, long wantedPersonId, long userId, MessageStatus status) {
+    public Message(Long id, String subject, String message, String date, Long wantedPersonId, Long userId, MessageStatus status) {
         super(id);
         this.subject = subject;
         this.message = message;
@@ -43,19 +47,19 @@ public class Message extends Entity {
         this.date = date;
     }
 
-    public long getWantedPersonId() {
+    public Long getWantedPersonId() {
         return wantedPersonId;
     }
 
-    public void setWantedPersonId(long wantedPersonId) {
+    public void setWantedPersonId(Long wantedPersonId) {
         this.wantedPersonId = wantedPersonId;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

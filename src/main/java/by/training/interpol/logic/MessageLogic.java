@@ -1,13 +1,12 @@
 package by.training.interpol.logic;
 
 import by.training.interpol.dao.DaoException;
+import by.training.interpol.dao.WantedPersonDao;
 import by.training.interpol.dao.impl.AssessmentDaoImpl;
 import by.training.interpol.dao.impl.MessageDaoImpl;
 import by.training.interpol.dao.impl.UserDaoImpl;
-import by.training.interpol.entity.BriefMessageInfo;
-import by.training.interpol.entity.FullMessageInfo;
-import by.training.interpol.entity.Message;
-import by.training.interpol.entity.MessageStatus;
+import by.training.interpol.dao.impl.WantedPersonDaoImpl;
+import by.training.interpol.entity.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,8 +29,12 @@ public class MessageLogic {
         return new ArrayList<>();
     }
 
-    public static Optional<FullMessageInfo> receiveFullMessage(long messageId) {
+    public static Optional<FullMessageInfo> receiveFullMessage(Long messageId) {
         MessageDaoImpl dao = MessageDaoImpl.getInstance();
+        if (messageId == null) {
+            logger.log(Level.ERROR, "There is no message id param");
+            return Optional.empty();
+        }
         try {
             return dao.receiveFullMessageInfo(messageId);
         } catch (DaoException e) {
@@ -40,8 +43,12 @@ public class MessageLogic {
         return Optional.empty();
     }
 
-    public static boolean updateMessageStatusToChecked(long messageId) {
+    public static boolean updateMessageStatusToChecked(Long messageId) {
         MessageDaoImpl dao = MessageDaoImpl.getInstance();
+        if (messageId == null) {
+            logger.log(Level.ERROR, "There is no message id param");
+            return false;
+        }
         try {
             return dao.updateMessageStatus(messageId, CHECKED_MESSAGE_STATUS);
         } catch (DaoException e) {
@@ -50,9 +57,19 @@ public class MessageLogic {
         return false;
     }
     public static boolean sendMessage(Message message) {
-        MessageDaoImpl dao = MessageDaoImpl.getInstance();
+        MessageDaoImpl messageDao = MessageDaoImpl.getInstance();
+        WantedPersonDaoImpl wantedPersonDao = WantedPersonDaoImpl.getInstance();
         try {
-            return dao.insert(message);
+            if (message.getSubject() == null || message.getMessage() == null ||
+                !wantedPersonDao.findById(message.getWantedPersonId()).isPresent()) {
+                logger.log(Level.ERROR, "Illegal params for sending message");
+                return false;
+            }
+        } catch (DaoException e) {
+            logger.log(Level.ERROR, "DAO exception during finding appropriate person", e);
+        }
+        try {
+            return messageDao.insert(message);
         } catch (DaoException e) {
             logger.log(Level.ERROR, "DAO exception during sending message", e);
         }

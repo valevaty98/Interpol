@@ -14,14 +14,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class BirthPlaceDaoImpl extends BaseDao<BirthPlace> implements BirthPlaceDao {
     private static Logger logger = LogManager.getLogger();
-    private static BirthPlaceDaoImpl instance;
-    private static ReentrantLock locker = new ReentrantLock();
-    private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
+    private final static BirthPlaceDaoImpl INSTANCE = new BirthPlaceDaoImpl();
 
     private static final String SQL_INSERT_BIRTH_PLACE =
             "INSERT INTO birth_places (name) VALUES (?)";
@@ -32,18 +28,7 @@ public class BirthPlaceDaoImpl extends BaseDao<BirthPlace> implements BirthPlace
     }
 
     public static BirthPlaceDaoImpl getInstance() {
-        if (!isInstanceCreated.get()) {
-            locker.lock();
-            try {
-                if (instance == null) {
-                    instance = new BirthPlaceDaoImpl();
-                    isInstanceCreated.set(true);
-                }
-            } finally {
-                locker.unlock();
-            }
-        }
-        return instance;
+        return INSTANCE;
     }
 
     @Override

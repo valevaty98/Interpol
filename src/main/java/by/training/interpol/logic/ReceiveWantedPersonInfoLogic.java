@@ -1,8 +1,6 @@
 package by.training.interpol.logic;
 
-import by.training.interpol.dao.BaseDao;
 import by.training.interpol.dao.DaoException;
-import by.training.interpol.dao.WantedPersonDao;
 import by.training.interpol.dao.impl.NationalityDaoImpl;
 import by.training.interpol.dao.impl.WantedPersonDaoImpl;
 import by.training.interpol.entity.WantedPerson;

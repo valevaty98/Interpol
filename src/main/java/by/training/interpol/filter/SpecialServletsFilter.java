@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter( urlPatterns = {"/uploadServlet", "/mailServlet"},
-        initParams = {@WebInitParam(name = "INDEX_PAGE_PATH", value = "/index.jsp"),
+        initParams = {@WebInitParam(name = "INDEX_PAGE", value = "/index.jsp"),
                       @WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
 public class SpecialServletsFilter implements Filter {
     private String indexPagePath;
@@ -19,7 +19,7 @@ public class SpecialServletsFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        indexPagePath = filterConfig.getInitParameter("INDEX_PAGE_PATH");
+        indexPagePath = filterConfig.getInitParameter("INDEX_PAGE");
         mainPagePath = filterConfig.getInitParameter("MAIN_PAGE_PATH");
     }
 
@@ -30,7 +30,6 @@ public class SpecialServletsFilter implements Filter {
         Object userObject = httpRequest.getSession().getAttribute("user");
 
         if (userObject == null) {
-            System.out.println("user object null, filter redirect index");
             httpRequest.getSession().invalidate();
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
         } else if (((User)userObject).getRole() == Role.ADMIN) {

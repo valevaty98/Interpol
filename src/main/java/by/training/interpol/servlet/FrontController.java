@@ -1,6 +1,7 @@
 package by.training.interpol.servlet;
 
 import by.training.interpol.command.*;
+import by.training.interpol.util.PageServletPath;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +16,6 @@ import java.io.IOException;
 @WebServlet("/controller")
 public class FrontController extends HttpServlet {
     private static Logger logger = LogManager.getLogger();
-    private static final String INDEX_PAGE_PATH = "/index.jsp";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,7 +46,7 @@ public class FrontController extends HttpServlet {
                 break;
             default:
                 logger.log(Level.ERROR, "Illegal type of send.");
-                request.getRequestDispatcher(INDEX_PAGE_PATH).forward(request, response);
+                response.sendRedirect(request.getContextPath() + PageServletPath.INDEX_PAGE);
         }
     }
 }

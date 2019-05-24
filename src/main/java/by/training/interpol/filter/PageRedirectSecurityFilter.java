@@ -11,13 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter( urlPatterns = {"/jsp/*"},
-                initParams = {@WebInitParam(name = "INDEX_PAGE_PATH", value = "/index.jsp")})
+                initParams = {@WebInitParam(name = "INDEX_PAGE", value = "/index.jsp")})
 public class PageRedirectSecurityFilter implements Filter {
     private String indexPagePath;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        indexPagePath = filterConfig.getInitParameter("INDEX_PAGE_PATH");
+        indexPagePath = filterConfig.getInitParameter("INDEX_PAGE");
     }
 
     @Override
@@ -27,7 +27,6 @@ public class PageRedirectSecurityFilter implements Filter {
         Object userObject = httpRequest.getSession().getAttribute("user");
 
         if (userObject == null) {
-            System.out.println("user object null, filter redirect index");
             httpRequest.getSession().invalidate();
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
         } else {

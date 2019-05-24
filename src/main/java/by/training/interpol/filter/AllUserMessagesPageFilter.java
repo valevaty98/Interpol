@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter( urlPatterns = {"/jsp/all_users_messages.jsp"},
-        initParams = {@WebInitParam(name = "INDEX_PAGE_PATH", value = "/index.jsp"),
+        initParams = {@WebInitParam(name = "INDEX_PAGE", value = "/index.jsp"),
                 @WebInitParam(name = "MAIN_PAGE_PATH", value = "/jsp/main_page.jsp")})
 public class AllUserMessagesPageFilter implements Filter {
     private String indexPagePath;
@@ -19,7 +19,7 @@ public class AllUserMessagesPageFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        indexPagePath = filterConfig.getInitParameter("INDEX_PAGE_PATH");
+        indexPagePath = filterConfig.getInitParameter("INDEX_PAGE");
         mainPagePath = filterConfig.getInitParameter("MAIN_PAGE_PATH");
     }
 
@@ -37,10 +37,8 @@ public class AllUserMessagesPageFilter implements Filter {
         }
         User user = (User)userObject;
         if (user.getRole() != Role.ADMIN) {
-            System.out.println("user not admin, filter redirect index");
             httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
         }else if (httpRequest.getAttribute("messages_info_list") == null) {
-            System.out.println("no mess attrib, filter redirect index");
             httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
         } else {
             filterChain.doFilter(httpRequest, httpResponse);

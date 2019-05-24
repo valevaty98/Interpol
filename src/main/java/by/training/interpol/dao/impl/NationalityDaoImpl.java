@@ -9,13 +9,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class NationalityDaoImpl extends BaseDao<Nationality> implements NationalityDao {
-    private static NationalityDaoImpl instance;
-    private static ReentrantLock locker = new ReentrantLock();
-    private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
+    private final static NationalityDaoImpl INSTANCE = new NationalityDaoImpl();
 
     private static final String SQL_INSERT_NATIONALITY =
             "INSERT INTO nationalities (name) VALUES (?)";
@@ -37,18 +33,7 @@ public class NationalityDaoImpl extends BaseDao<Nationality> implements National
     }
 
     public static NationalityDaoImpl getInstance() {
-        if (!isInstanceCreated.get()) {
-            locker.lock();
-            try {
-                if (instance == null) {
-                    instance = new NationalityDaoImpl();
-                    isInstanceCreated.set(true);
-                }
-            } finally {
-                locker.unlock();
-            }
-        }
-        return instance;
+        return INSTANCE;
     }
 
     @Override

@@ -1,11 +1,12 @@
 package by.training.interpol.command;
 
+import by.training.interpol.util.PageServletPath;
+
 public class LogoutCommand implements Command {
-    private static final String INDEX_PAGE = "/index.jsp";
     @Override
     public ResponseType execute(SessionRequestContent content) {
         ResponseTypeCreator builder = new ResponseTypeCreator();
         content.invalidateSession();
-        return builder.buildResponseType(INDEX_PAGE, SendType.REDIRECT);
+        return builder.buildResponseType(PageServletPath.INDEX_PAGE, SendType.REDIRECT);
     }
 }

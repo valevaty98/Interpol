@@ -2,19 +2,16 @@ package by.training.interpol.command;
 
 import by.training.interpol.entity.User;
 import by.training.interpol.entity.WantedPerson;
-import by.training.interpol.logic.LoginLogic;
 import by.training.interpol.logic.ReceiveWantedPersonInfoLogic;
 import by.training.interpol.logic.SignUpLogic;
+import by.training.interpol.util.AttributeParameterName;
+import by.training.interpol.util.PageServletPath;
 
 import java.util.List;
 import java.util.Optional;
 
 public class SignUpCommand implements Command {
-    private static final String LOGIN_PARAM = "login";
-    private static final String EMAIL_PARAM = "email";
-    private static final String PASSWORD_PARAM = "password";
-    private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
-    private static final String INDEX_PAGE = "/index.jsp";
+    public static final String ERROR_ATTR = "signUpError";
 
     @Override
     public ResponseType execute(SessionRequestContent content) {
@@ -25,20 +22,20 @@ public class SignUpCommand implements Command {
         String email;
         String password;
 
-        login = content.getFromRequestParameters(LOGIN_PARAM)[0];
-        email = content.getFromRequestParameters(EMAIL_PARAM)[0];
-        password = content.getFromRequestParameters(PASSWORD_PARAM)[0];
+        login = content.getFromRequestParameters(AttributeParameterName.LOGIN_PARAM)[0];
+        email = content.getFromRequestParameters(AttributeParameterName.EMAIL_PARAM)[0];
+        password = content.getFromRequestParameters(AttributeParameterName.PASSWORD_PARAM)[0];
         UserAndResultMessageWrapper  wrapper = SignUpLogic.signUpUser(login, email, password);
         user = wrapper.getUser();
         if (user.isPresent()) {
             wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleBrief();
-            content.putInSessionAttributes("user", user.get());
-            content.putInSessionAttributes("wantedPeople", wantedPeople);
-            return builder.buildResponseType(MAIN_PAGE_PATH, SendType.REDIRECT);
+            content.putInSessionAttributes(AttributeParameterName.USER_ATTR, user.get());
+            content.putInSessionAttributes(AttributeParameterName.WANTED_PEOPLE_ATTR, wantedPeople);
+            return builder.buildResponseType(PageServletPath.MAIN_PAGE, SendType.REDIRECT);
         } else {
             content.invalidateSession();
-            content.putInRequestAttributes("signUpError", wrapper.getResultMessage());
-            return builder.buildResponseType(INDEX_PAGE, SendType.FORWARD);
+            content.putInRequestAttributes(ERROR_ATTR, wrapper.getResultMessage());
+            return builder.buildResponseType(PageServletPath.INDEX_PAGE, SendType.FORWARD);
         }
     }
 }

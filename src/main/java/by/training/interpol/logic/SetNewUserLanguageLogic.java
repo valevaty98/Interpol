@@ -4,6 +4,7 @@ import by.training.interpol.dao.DaoException;
 import by.training.interpol.dao.impl.UserDaoImpl;
 import by.training.interpol.entity.Language;
 import by.training.interpol.entity.User;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +20,7 @@ public class SetNewUserLanguageLogic {
                 user.setLang(lang);
             }
         } catch (DaoException e) {
-            e.printStackTrace(); //todo log
+            logger.log(Level.ERROR, "DAO exception during updating language", e);
         }
         return isSet;
     }

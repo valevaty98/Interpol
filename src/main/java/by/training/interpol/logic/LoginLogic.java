@@ -13,8 +13,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.Optional;
 
 public class LoginLogic {
-    private static final String CANT_ENCODE_PASSWORD_MESSAGE = "Can't encode password to verify!";
     private static Logger logger = LogManager.getLogger();
+    private static final String CANT_ENCODE_PASSWORD_MESSAGE = "Can't encode password to verify!";
     private static final String ILLEGAL_LOGIN_MESSAGE = "Illegal login or password!";
     private static final String CANT_FIND_USER_MESSAGE = "Can't find appropriate user";
     private static final String OK_MESSAGE = "User found";

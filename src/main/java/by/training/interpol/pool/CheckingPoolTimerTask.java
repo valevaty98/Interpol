@@ -11,13 +11,13 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 
 class CheckingPoolTimerTask extends TimerTask {
+    private static Logger log = LogManager.getLogger();
     private CountDownLatch latch;
 
-    public CheckingPoolTimerTask(CountDownLatch latch) {
+    CheckingPoolTimerTask(CountDownLatch latch) {
         this.latch = latch;
     }
 
-    private static Logger log = LogManager.getLogger();
     @Override
     public void run() {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -31,8 +31,10 @@ class CheckingPoolTimerTask extends TimerTask {
             latch.countDown();
         } catch (InterruptedException e) {
             log.log(Level.ERROR, "Error during putting new connection to the available connections", e);
+            throw new RuntimeException(e);
         } catch (SQLException e) {
             log.log(Level.ERROR, "Error during creating connection.", e);
+            throw new RuntimeException(e);
         }
     }
 }

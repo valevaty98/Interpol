@@ -17,7 +17,7 @@
             <c:forEach var="person" items="${wantedPeople}">
                 <li>
                     <a href="<c:url value="/controller?command=show_full_person&person_id=${person.id}"/>">
-                        <img src="data:image/png;base64,<c:out value="${person.image}"/>" alt="<c:out value="${person.surname}"/>"/>
+                        <img src="data:imageEncoded/png;base64,<c:out value="${person.imageEncoded}"/>" alt="<c:out value="${person.surname}"/>"/>
                         <div class="person-info">
                             <h4><c:out value="${person.name}"/> <c:out value="${person.surname}"/></h4>
                             <div class="person-desc">
@@ -54,23 +54,23 @@
                     <div class="form-group">
                         <label for="person_name" class="filter-label"><fmt:message key="wanted-people.label.name"/>:</label>
                         <input type="text" class="form-control form-control-sm" id="person_name"
-                               name="wanted_person_name" value="<c:out value="${personName}"/>">
+                               name="personName" value="<c:out value="${personName}"/>">
                     </div>
                     <div class="form-group">
                         <label for="person_surname" class="filter-label"><fmt:message key="wanted-people.label.surname"/>:</label>
                         <input type="text" class="form-control form-control-sm" id="person_surname"
-                               name="wanted_person_surname" value="${personSurname}">
+                               name="personSurname" value="${personSurname}">
                     </div>
                     <div class="gender-group">
                         <label class="filter-label"><fmt:message key="wanted-people.label.gender"/>:</label>
                         <c:choose>
-                            <c:when test="${personGender eq 'male'}">
+                            <c:when test="${gender eq 'male'}">
                                 <label class="radio-inline male-label"><input type="radio" name="gender"
                                                                               value="male" checked><fmt:message key="wanted-people.label.gender.male"/></label>
                                 <label class="radio-inline"><input type="radio" name="gender" value="female"><fmt:message key="wanted-people.label.gender.female"/></label>
                                 <label class="radio-inline"><input type="radio" name="gender" value="unknown"><fmt:message key="wanted-people.label.gender.unknown"/></label>
                             </c:when>
-                            <c:when test="${personGender eq 'female'}">
+                            <c:when test="${gender eq 'female'}">
                                 <label class="radio-inline male-label"><input type="radio" name="gender"
                                                                               value="male"><fmt:message key="wanted-people.label.gender.male"/></label>
                                 <label class="radio-inline"><input type="radio" name="gender" value="female" checked><fmt:message key="wanted-people.label.gender.female"/></label>

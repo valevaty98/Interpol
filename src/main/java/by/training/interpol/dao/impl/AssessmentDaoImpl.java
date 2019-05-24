@@ -4,9 +4,6 @@ import by.training.interpol.dao.AssessmentDao;
 import by.training.interpol.dao.BaseDao;
 import by.training.interpol.dao.DaoException;
 import by.training.interpol.entity.Assessment;
-import by.training.interpol.entity.Role;
-import by.training.interpol.entity.User;
-import by.training.interpol.pool.ConnectionPool;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,14 +11,10 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class AssessmentDaoImpl extends BaseDao<Assessment> implements AssessmentDao {
     private static Logger logger = LogManager.getLogger();
-    private static AssessmentDaoImpl instance;
-    private static ReentrantLock locker = new ReentrantLock();
-    private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
+    private final static AssessmentDaoImpl INSTANCE = new AssessmentDaoImpl();
 
     private static final String SQL_INSERT_ASSESSMENT =
             "INSERT INTO assessments (number_of_messages, assessment) VALUES (?,?)";
@@ -37,18 +30,7 @@ public class AssessmentDaoImpl extends BaseDao<Assessment> implements Assessment
     }
 
     public static AssessmentDaoImpl getInstance() {
-        if (!isInstanceCreated.get()) {
-            locker.lock();
-            try {
-                if (instance == null) {
-                    instance = new AssessmentDaoImpl();
-                    isInstanceCreated.set(true);
-                }
-            } finally {
-                locker.unlock();
-            }
-        }
-        return instance;
+        return INSTANCE;
     }
 
     @Override

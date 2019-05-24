@@ -3,17 +3,18 @@ package by.training.interpol.command;
 import by.training.interpol.entity.WantedPerson;
 import by.training.interpol.logic.ReceiveWantedPersonInfoLogic;
 import by.training.interpol.logic.SearchLogic;
+import by.training.interpol.util.AttributeParameterName;
+import by.training.interpol.util.PageServletPath;
 
 import java.util.List;
 
 public class SearchCommand implements Command {
-    private static final String NAME_PARAM = "wanted_person_name";
-    private static final String SURNAME_PARAM = "wanted_person_surname";
+    private static final String NAME_PARAM = "personName";
+    private static final String SURNAME_PARAM = "personSurname";
     private static final String GENDER_PARAM = "gender";
     private static final String FROM_AGE_PARAM = "fromAge";
     private static final String TO_AGE_PARAM = "toAge";
     private static final String NATIONALITY_PARAM = "nation";
-    private static final String MAIN_PAGE_PATH = "/jsp/main_page.jsp";
 
     @Override
     public ResponseType execute(SessionRequestContent content) {
@@ -35,14 +36,14 @@ public class SearchCommand implements Command {
         wantedPeople = ReceiveWantedPersonInfoLogic.receiveWantedPeopleFull();
         filteredWantedPeople = SearchLogic.searchWantedPeople(wantedPeople, name, surname, gender, fromAge, toAge,
                  nation);
-        content.putInRequestAttributes("wantedPeople", filteredWantedPeople);
-        content.putInRequestAttributes("personName", name);
-        content.putInRequestAttributes("personSurname", surname);
-        content.putInRequestAttributes("personGender", gender);
-        content.putInRequestAttributes("fromAge", fromAge);
-        content.putInRequestAttributes("toAge", toAge);
-        content.putInRequestAttributes("nation", nation);
+        content.putInRequestAttributes(AttributeParameterName.WANTED_PEOPLE_ATTR, filteredWantedPeople);
+        content.putInRequestAttributes(NAME_PARAM, name);
+        content.putInRequestAttributes(SURNAME_PARAM, surname);
+        content.putInRequestAttributes(GENDER_PARAM, gender);
+        content.putInRequestAttributes(FROM_AGE_PARAM, fromAge);
+        content.putInRequestAttributes(TO_AGE_PARAM, toAge);
+        content.putInRequestAttributes(NATIONALITY_PARAM, nation);
 
-        return builder.buildResponseType(MAIN_PAGE_PATH, SendType.FORWARD);
+        return builder.buildResponseType(PageServletPath.MAIN_PAGE, SendType.FORWARD);
     }
 }

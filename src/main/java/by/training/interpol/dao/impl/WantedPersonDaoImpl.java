@@ -12,20 +12,14 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.*;
 
 public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements WantedPersonDao {
     private static Logger logger = LogManager.getLogger();
-    private static WantedPersonDaoImpl instance;
-    private static ReentrantLock locker = new ReentrantLock();
-    private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
+    private final static WantedPersonDaoImpl INSTANCE = new WantedPersonDaoImpl();
 
     private static final String SQL_SELECT_WANTED_PEOPLE_FULL =
             "SELECT w.person_id, w.name, w.surname, w.gender, w.characteristics, w.height, w.weight, w.charges, " +
@@ -63,18 +57,7 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
     }
 
     public static WantedPersonDaoImpl getInstance() {
-        if (!isInstanceCreated.get()) {
-            locker.lock();
-            try {
-                if (instance == null) {
-                    instance = new WantedPersonDaoImpl();
-                    isInstanceCreated.set(true);
-                }
-            } finally {
-                locker.unlock();
-            }
-        }
-        return instance;
+        return INSTANCE;
     }
 
     @Override
@@ -85,7 +68,6 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
             connection = pool.getConnection();
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(SQL_SELECT_WANTED_PEOPLE_BRIEF);
-           // ResultSet rs = statement.executeQuery(SQL_INSERT_WANTED_PERSON); //todo change
             return parseResultSetForEntitiesBrief(rs);
         } catch (SQLException e) {
             throw new DaoException("Exception while executing SQLQuery.", e);
@@ -133,9 +115,10 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
                 String surname = rs.getString("surname");
                 String birthDate = rs.getDate("birth_date").toString();
                 Blob image = rs.getBlob("image");
+                String imageEncoded = Base64.getEncoder().encodeToString(image.getBytes(1,(int)image.length()));
                 List<String> nationality = new ArrayList<>();
                 nationality.add(rs.getString("nationality"));
-                WantedPerson person = new WantedPerson(wantedPersonId, name, surname, birthDate, nationality, image);
+                WantedPerson person = new WantedPerson(wantedPersonId, name, surname, birthDate, nationality, imageEncoded);
                 wantedPeople.add(person);
                 previousPersonId = wantedPersonId;
             }
@@ -162,10 +145,11 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
                 String birthPlace = rs.getString("birth_place");
                 String birthDate = rs.getDate("birth_date").toString();
                 Blob image = rs.getBlob("image");
+                String imageEncoded = Base64.getEncoder().encodeToString(image.getBytes(1,(int)image.length()));
                 List<String> nationality = new ArrayList<>();
                 nationality.add(rs.getString("nationality"));
                 WantedPerson person = new WantedPerson(wantedPersonId, name, surname, gender, characteristics, height,
-                        weight, charges, new BirthPlace(birthPlace), birthDate, nationality, image);
+                        weight, charges, new BirthPlace(birthPlace), birthDate, nationality, imageEncoded);
                 wantedPeople.add(person);
                 previousPersonId = wantedPersonId;
             }
@@ -196,10 +180,12 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
                 String birthPlace = rs.getString("birth_place");
                 String birthDate = rs.getDate("birth_date").toString();
                 Blob image = rs.getBlob("image");
+                String imageEncoded = Base64.getEncoder().encodeToString(image.getBytes(1,(int)image.length()));
+
                 List<String> nationality = new ArrayList<>();
                 nationality.add(rs.getString("nationality"));
                 person = new WantedPerson(wantedPersonId, name, surname, gender, characteristics, height,
-                        weight, charges, new BirthPlace(birthPlace), birthDate, nationality, image);
+                        weight, charges, new BirthPlace(birthPlace), birthDate, nationality, imageEncoded);
                 wasFirstRow = true;
             } else {
                 person.getNationality().add(rs.getString("nationality"));
@@ -243,11 +229,10 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate personBirthDate = LocalDate.parse(entity.getBirthDate(), formatter);
-
         preparedStatement.setDate(9, Date.valueOf(personBirthDate), Calendar.getInstance());
 
-        InputStream is = entity.getImageIs();
-        int size = entity.getSize();
+        InputStream is = entity.getImageInputStream();
+        int size = entity.getImageSize();
         preparedStatement.setBinaryStream(10, is, size);
     }
 

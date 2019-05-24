@@ -1,16 +1,17 @@
 package by.training.interpol.command;
 
+import by.training.interpol.util.AttributeParameterName;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class CommandFactory {
     private static Logger logger = LogManager.getLogger();
-    private static final String DEFAULT_COMMAND_PARAM_NAME = "command";
+    private final static String ERROR_ATTR = "wrongCommand";
 
     public Command defineCommand(SessionRequestContent content) {
         Command command;
-        String[] stringCommands = content.getFromRequestParameters(DEFAULT_COMMAND_PARAM_NAME);
+        String[] stringCommands = content.getFromRequestParameters(AttributeParameterName.COMMAND_PARAM);
         String stringCommand;
 
         if (stringCommands != null) {
@@ -23,7 +24,7 @@ public class CommandFactory {
             command = CommandEnum.valueOf(stringCommand.toUpperCase()).getCommand();
         } catch (IllegalArgumentException e) {
             logger.log(Level.ERROR, "No such command in the command enum!", e);
-            content.putInRequestAttributes("wrongCommand", stringCommand);
+            content.putInRequestAttributes(ERROR_ATTR, stringCommand);
             command = new DefaultCommand();
         }
         return command;

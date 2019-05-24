@@ -8,12 +8,17 @@ import by.training.interpol.entity.BirthPlace;
 import by.training.interpol.entity.Gender;
 import by.training.interpol.entity.Nationality;
 import by.training.interpol.entity.WantedPerson;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
 public class AddWantedPersonLogic {
+    private static Logger logger = LogManager.getLogger();
+
     public static void addWantedPersonLogic(String name, String surname, String gender, String characteristics,
                                                               Float height, Float weight, String charges, String birthPlaceName,
                                                               String birthDate, InputStream imageIs, int imageSize,
@@ -31,8 +36,8 @@ public class AddWantedPersonLogic {
         wantedPerson.setWeight(weight);
         wantedPerson.setBirthDate(birthDate);
         wantedPerson.setCharges(charges);
-        wantedPerson.setImageIs(imageIs);
-        wantedPerson.setSize(imageSize);
+        wantedPerson.setImageInputStream(imageIs);
+        wantedPerson.setImageSize(imageSize);
 
         try {
             BirthPlace birthPlace = new BirthPlace(birthPlaceName);
@@ -42,32 +47,31 @@ public class AddWantedPersonLogic {
                 birthPlaceFromDb = birthPlaceDao.findBirthPlaceId(birthPlace);
             }
             wantedPerson.setBirthPlace(birthPlaceFromDb.get());
-
             wantedPersonDao.insert(wantedPerson);
 
             String[] nationalities = nationalitiesString.split(",");
             List<Nationality> existedNationalities = nationalityDao.findAll();
 
             long wantedPersonId = wantedPersonDao.findWantedPersonId(wantedPerson);
-            boolean doesDbContainNationality = false;
+            boolean doesDbContainsNationality = false;
             for (String nationality : nationalities) {
                 long nationalityId;
                 for (Nationality nationalityObject : existedNationalities) {
                     if (nationality.equals(nationalityObject.getName())) {
-                        doesDbContainNationality = true;
+                        doesDbContainsNationality = true;
                     }
                 }
-                if (doesDbContainNationality) {
+                if (doesDbContainsNationality) {
                     nationalityId = nationalityDao.findNationalityId(nationality).get().getId();
                 } else {
                     nationalityDao.insert(new Nationality(nationality));
                     nationalityId = nationalityDao.findNationalityId(nationality).get().getId();
                 }
-                doesDbContainNationality = false;
+                doesDbContainsNationality = false;
                 nationalityDao.insertNationPerson(wantedPersonId, nationalityId);
             }
         } catch (DaoException e) {
-            e.printStackTrace();//todo log
+            logger.log(Level.ERROR, "DAO exception during adding wanted person!", e);
         }
     }
 }

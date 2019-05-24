@@ -27,6 +27,7 @@ public class SignUpLogic {
     private static final int INITIAL_NUMBER_OF_MESSAGES = 0;
     private static final String INITIAL_ASSESSMENT_TEXT = "There was no help yet, but still ahead.";
     private static final String CANT_ENCODE_PASSWORD_MESSAGE = "Can't encode password.";
+    private static final Language DEFAULT_LANGUAGE_AFTER_REGISTRATION = Language.ENG;
     private static Logger logger = LogManager.getLogger();
 
     public static UserAndResultMessageWrapper signUpUser(String login, String email, String password) {
@@ -50,9 +51,9 @@ public class SignUpLogic {
                 return new UserAndResultMessageWrapper(Optional.empty(), LOGIN_ALREADY_TAKEN_MESSAGE);
             }
             if (assessmentDao.insert(assessment)) {
-                optionalAssessment = assessmentDao.findAssessmentIdByAssessment(assessment); //todo think
+                optionalAssessment = assessmentDao.findAssessmentIdByAssessment(assessment);
                 String encodedPassword = HashGenerator.encodePassword(password);
-                user = new User(login, encodedPassword, email, Role.GUEST, optionalAssessment.get(), Language.ENG);
+                user = new User(login, encodedPassword, email, Role.GUEST, optionalAssessment.get(), DEFAULT_LANGUAGE_AFTER_REGISTRATION);
                 userDao.insert(user);
                 return new UserAndResultMessageWrapper(userDao.findUserByLogin(user.getLogin()), OK_MESSAGE);
             } else {

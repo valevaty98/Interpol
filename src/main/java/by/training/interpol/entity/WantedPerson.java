@@ -1,7 +1,6 @@
 package by.training.interpol.entity;
 
 import java.io.InputStream;
-import java.sql.Blob;
 
 import java.sql.SQLException;
 import java.util.Base64;
@@ -20,44 +19,24 @@ public class WantedPerson extends Entity {
     private String birthDate;
     private BirthPlace birthPlace;
     private List<String> nationality;
-    private String image;
-    private InputStream imageIs;
-    private int size;
-
-    public InputStream getImageIs() {
-        return imageIs;
-    }
-
-    public void setImageIs(InputStream imageIs) {
-        this.imageIs = imageIs;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
+    private String imageEncoded;
+    private InputStream imageInputStream;
+    private int imageSize;
 
     public WantedPerson() {
     }
 
-    public WantedPerson(long id, String name, String surname, String birthDate, List<String> nationality, Blob img) {
+    public WantedPerson(long id, String name, String surname, String birthDate, List<String> nationality, String imageEncoded) {
         super(id);
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
         this.nationality = nationality;
-        try {
-            this.image = Base64.getEncoder().encodeToString(img.getBytes(1,(int)img.length()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        this.imageEncoded = imageEncoded;
     }
 
     public WantedPerson(String name, String surname, Gender gender, String characteristics, Float height,
-                        Float weight, String charges, BirthPlace birthPlace, String birthDate, List<String> nationality, Blob img) {
+                        Float weight, String charges, BirthPlace birthPlace, String birthDate, List<String> nationality, String imageEncoded) {
         this.name = name;
         this.surname = surname;
         this.gender = gender;
@@ -68,15 +47,11 @@ public class WantedPerson extends Entity {
         this.birthPlace = birthPlace;
         this.birthDate = birthDate;
         this.nationality = nationality;
-        try {
-            this.image = Base64.getEncoder().encodeToString(img.getBytes(1,(int)img.length()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        this.imageEncoded = imageEncoded;
     }
 
     public WantedPerson(long id, String name, String surname, Gender gender, String characteristics, Float height,
-                        Float weight, String charges, BirthPlace birthPlace, String birthDate, List<String> nationality, Blob img) {
+                        Float weight, String charges, BirthPlace birthPlace, String birthDate, List<String> nationality, String imageEncoded) {
         super(id);
         this.name = name;
         this.surname = surname;
@@ -88,11 +63,23 @@ public class WantedPerson extends Entity {
         this.birthPlace = birthPlace;
         this.birthDate = birthDate;
         this.nationality = nationality;
-        try {
-            this.image = Base64.getEncoder().encodeToString(img.getBytes(1,(int)img.length()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        this.imageEncoded = imageEncoded;
+    }
+
+    public InputStream getImageInputStream() {
+        return imageInputStream;
+    }
+
+    public void setImageInputStream(InputStream imageInputStream) {
+        this.imageInputStream = imageInputStream;
+    }
+
+    public int getImageSize() {
+        return imageSize;
+    }
+
+    public void setImageSize(int imageSize) {
+        this.imageSize = imageSize;
     }
 
     public String getName() {
@@ -175,12 +162,12 @@ public class WantedPerson extends Entity {
         this.nationality = nationality;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageEncoded() {
+        return imageEncoded;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageEncoded(String imageEncoded) {
+        this.imageEncoded = imageEncoded;
     }
 
     @Override

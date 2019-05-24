@@ -13,13 +13,9 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
-    private static MessageDaoImpl instance;
-    private static ReentrantLock locker = new ReentrantLock();
-    private static AtomicBoolean isInstanceCreated = new AtomicBoolean(false);
+    private final static MessageDaoImpl INSTANCE = new MessageDaoImpl();
 
     private static final String SQL_INSERT_MESSAGE =
             "INSERT INTO messages (subject, message, wanted_person_id, user_id, date, status) VALUES (?,?,?,?,?,?)";
@@ -37,24 +33,15 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
                     "INNER JOIN users u ON m.user_id = u.user_id " +
                     "INNER JOIN wanted_people w ON m.wanted_person_id = w.person_id " +
                     "WHERE m.message_id=?";
-    private static String SQL_DELETE_MESSAGES_BY_PERSON_ID =
+    private static final String SQL_DELETE_MESSAGES_BY_PERSON_ID =
             "DELETE FROM messages WHERE wanted_person_id=?";
+    private static final String SQL_SELECT_BY_ID =
+            "SELECT message FROM messages WHERE message_id=?";
     private MessageDaoImpl(){
     }
 
     public static MessageDaoImpl getInstance() {
-        if (!isInstanceCreated.get()) {
-            locker.lock();
-            try {
-                if (instance == null) {
-                    instance = new MessageDaoImpl();
-                    isInstanceCreated.set(true);
-                }
-            } finally {
-                locker.unlock();
-            }
-        }
-        return instance;
+        return INSTANCE;
     }
 
     @Override
@@ -64,7 +51,11 @@ public class MessageDaoImpl extends BaseDao<Message> implements MessageDao {
 
     @Override
     protected Optional<Message> parseResultSet(ResultSet rs) throws SQLException {
-        return Optional.empty();
+       if (rs.next()) {
+           String message= rs.getString("message");
+           return Optional.of(new Message(message));
+       }
+       return Optional.empty();
     }
 
     @Override

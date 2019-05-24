@@ -4,16 +4,14 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import java.util.Properties;
 
-public class SessionCreator {
-    private String smtpHost;
-    private String smtpPort;
+class SessionCreator {
     private String userName;
     private String userPassword;
     private Properties sessionProperties;
 
-    public SessionCreator(Properties configProperties) {
-        smtpHost = configProperties.getProperty("mail.smtp.host");
-        smtpPort = configProperties.getProperty("mail.smtp.port");
+    SessionCreator(Properties configProperties) {
+        String smtpHost = configProperties.getProperty("mail.smtp.host");
+        String smtpPort = configProperties.getProperty("mail.smtp.port");
         userName = configProperties.getProperty("mail.user.name");
         userPassword = configProperties.getProperty("mail.user.password");
         // загрузка параметров почтового сервера в свойства почтовой сессии
@@ -28,7 +26,7 @@ public class SessionCreator {
         sessionProperties.setProperty("mail.smtp.quitwait", "false");
 
     }
-    public Session createSession()
+    Session createSession()
     {
         return Session.getDefaultInstance(sessionProperties,
                 new javax.mail.Authenticator() {
