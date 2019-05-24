@@ -154,7 +154,6 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao {
             int numberOfMessages = rs.getInt(7);
             String assessment = rs.getString(8);
             Language lang = Language.valueOf(rs.getString(9).toUpperCase());
-            System.out.println(lang);
             Assessment userAssessment = new Assessment(assessmentId, numberOfMessages, assessment);
             return Optional.of(new User(userId, login, password, email, role, userAssessment, lang));
         } else {

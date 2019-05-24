@@ -40,8 +40,9 @@ public class CustomFooterTag extends TagSupport {
         String footerTagContent =
                 "<div id=\"footer\">\n" +
                         "<p class=\"right\">\n" +
+                        "User status: " +
                         userRole +
-                        "\t&copy; 2019 Interpol.\n" +
+                        ". &copy; 2019 Interpol.\n" +
                         designLabel +
                         ".</p>\n" +
                 "</div>";

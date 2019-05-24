@@ -33,7 +33,7 @@ public class MailServlet extends HttpServlet {
         String email = request.getParameter(AttributeParameterName.EMAIL_PARAM);
         String message = request.getParameter(AttributeParameterName.MESSAGE_PARAM);
         Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
-        if (subject == null || (email == null || emailPattern.matcher(email).matches()) || message == null) {
+        if (subject == null || email == null || !emailPattern.matcher(email).matches() || message == null) {
             logger.log(Level.ERROR, "Illegal params for sending response to user.");
             response.sendRedirect(PageServletPath.MAIN_PAGE);
         } else {

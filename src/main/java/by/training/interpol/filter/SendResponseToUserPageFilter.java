@@ -44,7 +44,6 @@ public class SendResponseToUserPageFilter implements Filter {
             try {
                 messageId = Long.parseLong(httpRequest.getParameter(AttributeParameterName.MESSAGE_ID_PARAM));
                 userEmail = httpRequest.getParameter(AttributeParameterName.USER_EMAIL_PARAM);
-                System.out.println(userEmail);
                 if (!MessageDaoImpl.getInstance().findById(messageId).isPresent() || userEmail == null ||
                         UserDaoImpl.getInstance().findUserIdsByEmail(userEmail).isEmpty()) {
                     logger.log(Level.ERROR, "Illegal params for sending response.");

@@ -26,7 +26,7 @@
         <input type="hidden" name="message_id" value="<c:out value="${param.message_id}"/>"/>
         <div class="field-wrap">
             <label>
-                <fmt:message key="send-response.label.send-message"/><span class="req">*</span>
+                <fmt:message key="send-response.label.subject"/><span class="req">*</span>
             </label>
             <input type="text" name="subject" required autocomplete="off"/>
         </div>
