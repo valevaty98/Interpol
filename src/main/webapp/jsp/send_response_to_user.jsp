@@ -24,6 +24,7 @@
     <form action="<c:url value="/mailServlet"/>" method="post">
         <input type="hidden" name="command" value="send_response_to_user"/>
         <input type="hidden" name="message_id" value="<c:out value="${param.message_id}"/>"/>
+        <input type="hidden" name="email" value="<c:out value="${param.user_email}"/>"/>
         <div class="field-wrap">
             <label>
                 <fmt:message key="send-response.label.subject"/><span class="req">*</span>
