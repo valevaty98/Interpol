@@ -9,6 +9,7 @@ public class AttributeParameterName {
     public static final String MESSAGE_INFO_LIST_ATTR = "messages_info_list";
     public static final String COMMAND_PARAM = "command";
     public static final String LOGIN_PARAM = "login";
+    public static final String USER_LOGIN_PARAM = "user_login";
     public static final String EMAIL_PARAM = "email";
     public static final String USER_EMAIL_PARAM = "user_email";
     public static final String PASSWORD_PARAM = "password";

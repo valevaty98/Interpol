@@ -5,6 +5,7 @@ import by.training.interpol.command.CommandEnum;
 import by.training.interpol.command.DefaultCommand;
 import by.training.interpol.entity.Role;
 import by.training.interpol.entity.User;
+import by.training.interpol.util.AttributeParameterName;
 import org.apache.logging.log4j.Level;
 
 import javax.servlet.*;
@@ -13,6 +14,7 @@ import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 @WebFilter( urlPatterns = {"/controller"},
         initParams = {@WebInitParam(name = "INDEX_PAGE", value = "/index.jsp"),
@@ -20,6 +22,9 @@ import java.io.IOException;
 public class FrontControllerFilter implements Filter {
     private String indexPagePath;
     private String mainPagePath;
+    private final static String LOGIN_PATTERN = "^[\\w.-]{1,19}[0-9a-zA-Z]$";
+    private final static String PASSWORD_PATTERN = "^[0-9a-zA-Z]{6,20}$";
+    private final static String EMAIL_PATTERN = "^([a-zA-Z0-9_\\-.]+)@([a-zA-Z0-9_\\-.]+)\\.([a-zA-Z]{2,5})$";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -31,9 +36,9 @@ public class FrontControllerFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-        Object userObject = httpRequest.getSession().getAttribute("user");
+        Object userObject = httpRequest.getSession().getAttribute(AttributeParameterName.USER_ATTR);
         CommandEnum command;
-        String stringCommand = httpRequest.getParameter("command");
+        String stringCommand = httpRequest.getParameter(AttributeParameterName.COMMAND_PARAM);
 
         if (stringCommand == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
@@ -56,9 +61,15 @@ public class FrontControllerFilter implements Filter {
                     }
                     break;
                 case SIGN_UP:
-                    if (httpRequest.getParameter("login") == null ||
-                            httpRequest.getParameter("password") == null ||
-                            httpRequest.getParameter("email") == null  ) {
+                    String login = httpRequest.getParameter(AttributeParameterName.LOGIN_PARAM);
+                    String password = httpRequest.getParameter(AttributeParameterName.PASSWORD_PARAM);
+                    String email = httpRequest.getParameter(AttributeParameterName.EMAIL_PARAM);
+                    Pattern loginPattern = Pattern.compile(EMAIL_PATTERN);
+                    Pattern passwordPattern = Pattern.compile(EMAIL_PATTERN);
+                    Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
+                    if (login == null || !loginPattern.matcher(login).matches() ||
+                            password == null || !passwordPattern.matcher(password).matches() ||
+                            email == null  || !emailPattern.matcher(email).matches()) {
                         httpResponse.sendRedirect(httpRequest.getContextPath() + indexPagePath);
                     } else {
                         filterChain.doFilter(httpRequest, httpResponse);
@@ -70,10 +81,6 @@ public class FrontControllerFilter implements Filter {
             }
         } else {
             switch (command) {
-                case LOGIN:
-                case SIGN_UP:
-                    httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
-                    break;
                 case HOME:
                 case LOGOUT:
                 case DEFAULT:

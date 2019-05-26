@@ -10,6 +10,10 @@ import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Abstract base DAO class
+ * @param <T> identified entity
+ */
 public abstract class BaseDao<T extends Entity> {
     private static Logger log = LogManager.getLogger();
     protected static ConnectionPool pool = ConnectionPool.getInstance();

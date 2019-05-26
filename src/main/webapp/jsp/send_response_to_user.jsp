@@ -29,7 +29,7 @@
             <label>
                 <fmt:message key="send-response.label.subject"/><span class="req">*</span>
             </label>
-            <input type="text" name="subject" required autocomplete="off"/>
+            <input type="text" name="subject" maxlength="50" required autocomplete="off"/>
         </div>
         <div class="field-wrap">
             <label class="active highlight">
@@ -41,7 +41,7 @@
             <label>
                 <fmt:message key="send-response.label.write"/>..<span class="req">*</span>
             </label>
-            <textarea name="message" rows="4" required autocomplete="off"></textarea>
+            <textarea name="message" rows="4" maxlength="500" required autocomplete="off"></textarea>
         </div>
         <div>
             <button type="submit" class="button button-block send-button"><fmt:message key="send-response.button.send"/></button>

@@ -35,7 +35,7 @@
             <label>
                 <fmt:message key="set-assessment.label.assessment"/>...<span class="req">*</span>
             </label>
-            <textarea name="assessment_message" rows="4" required autocomplete="off"></textarea>
+            <textarea name="assessment_message" maxlength="500" rows="4" required autocomplete="off"></textarea>
         </div>
         <div>
             <button type="submit" class="button button-block send-button"><fmt:message key="set-assessment.button.set"/></button>

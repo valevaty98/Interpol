@@ -1,5 +1,8 @@
 package by.training.interpol.dao;
 
+/**
+ * Dao Exception throws when there is exception in dao classes
+ */
 public class DaoException extends Exception {
     public DaoException() {
     }

@@ -92,10 +92,6 @@ public class WantedPersonDaoImpl extends BaseDao<WantedPerson> implements Wanted
             preparedStatement.setString(1, person.getName());
             preparedStatement.setString(2, person.getCharges());
             preparedStatement.setString(3, person.getBirthDate());
-
-            System.out.println(person.getName());
-            System.out.println(person.getCharges());
-            System.out.println(person.getBirthDate());
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 return rs.getLong("person_id");

@@ -14,7 +14,6 @@ class SessionCreator {
         String smtpPort = configProperties.getProperty("mail.smtp.port");
         userName = configProperties.getProperty("mail.user.name");
         userPassword = configProperties.getProperty("mail.user.password");
-        // загрузка параметров почтового сервера в свойства почтовой сессии
         sessionProperties = new Properties();
         sessionProperties.setProperty("mail.transport.protocol", "smtp");
         sessionProperties.setProperty("mail.host", smtpHost);

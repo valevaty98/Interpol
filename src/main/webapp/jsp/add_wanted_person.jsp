@@ -28,13 +28,13 @@
             <label>
                 <fmt:message key="add-person.label.name"/><span class="req">*</span>
             </label>
-            <input type="text" name="person_name" required autocomplete="off"/>
+            <input type="text" name="person_name" pattern="^[a-zA-Z ,.'-]+$" required autocomplete="off"/>
         </div>
         <div class="field-wrap">
             <label>
                 <fmt:message key="add-person.label.surname"/>
             </label>
-            <input type="text" name="person_surname" autocomplete="off"/>
+            <input type="text" name="person_surname" pattern="^[a-zA-Z ,.'-]+$" autocomplete="off"/>
         </div>
         <div class="field-wrap" style="height: 45px;">
             <label class="active highlight"><fmt:message key="add-person.label.gender"/></label>
@@ -76,7 +76,7 @@
                 <fmt:message key="add-person.label.nationalities"/><span class="req">*</span>
             </label>
             <input type="text" name="nationalities" required autocomplete="off"
-            pattern="^[a-zA-z]+[,]?[a-zA-Z]+$"/>
+            pattern="^[a-zA-z -]+[,]?[a-zA-Z -]+$"/>
         </div>
         <div class="field-wrap">
             <label class="active highlight">

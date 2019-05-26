@@ -4,6 +4,9 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Hash generator
+ */
 public class HashGenerator {
     private static final String ALGORITHM = "MD5";
     private static final String DEFAULT_CHARACTER_TO_FILL = "0";
@@ -12,6 +15,12 @@ public class HashGenerator {
     private static final int OFFSET_FOR_INSERTING = 0;
     private static final int PASSWORD_SIGNUM = 1;
 
+    /**
+     * Encode password via MD5 key
+     * @param password password to encode
+     * @return encoded password
+     * @throws EncodePasswordException if error occurred
+     */
     public static String encodePassword(String password) throws EncodePasswordException {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(ALGORITHM);

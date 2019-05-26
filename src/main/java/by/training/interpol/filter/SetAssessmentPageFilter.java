@@ -40,7 +40,7 @@ public class SetAssessmentPageFilter implements Filter {
         } else {
             String userLogin;
             try {
-                userLogin = httpRequest.getParameter(AttributeParameterName.LOGIN_PARAM);
+                userLogin = httpRequest.getParameter(AttributeParameterName.USER_LOGIN_PARAM);
                 if (userLogin == null || !UserDaoImpl.getInstance().findUserByLogin(userLogin).isPresent()) {
                     httpResponse.sendRedirect(httpRequest.getContextPath() + mainPagePath);
                 } else {
