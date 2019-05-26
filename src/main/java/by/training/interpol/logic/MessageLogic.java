@@ -7,6 +7,7 @@ import by.training.interpol.dao.impl.MessageDaoImpl;
 import by.training.interpol.dao.impl.UserDaoImpl;
 import by.training.interpol.dao.impl.WantedPersonDaoImpl;
 import by.training.interpol.entity.*;
+import by.training.interpol.util.ParamsValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,13 +61,15 @@ public class MessageLogic {
         MessageDaoImpl messageDao = MessageDaoImpl.getInstance();
         WantedPersonDaoImpl wantedPersonDao = WantedPersonDaoImpl.getInstance();
         try {
-            if (message.getSubject() == null || message.getMessage() == null ||
+            if (!ParamsValidator.isValidSubject(message.getSubject())
+                    || !ParamsValidator.isValidMessage(message.getMessage()) ||
                 !wantedPersonDao.findById(message.getWantedPersonId()).isPresent()) {
-                logger.log(Level.ERROR, "Illegal params for sending message");
+                logger.log(Level.WARN, "Illegal params for sending message");
                 return false;
             }
         } catch (DaoException e) {
             logger.log(Level.ERROR, "DAO exception during finding appropriate person", e);
+            return false;
         }
         try {
             return messageDao.insert(message);

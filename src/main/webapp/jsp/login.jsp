@@ -31,13 +31,13 @@
                     <label>
                         Login<span class="req">*</span>
                     </label>
-                    <input type="text" name="login" required autocomplete="off"/>
+                    <input type="text" name="login" pattern="^[\w.-]{1,19}[a-zA-Z\d]$" required autocomplete="off"/>
                 </div>
                 <div class="field-wrap">
                     <label>
                         Password<span class="req">*</span>
                     </label>
-                    <input type="password" name="password" required autocomplete="off"/>
+                    <input type="password" name="password" pattern="^[\w]{4,20}$" required autocomplete="off"/>
                 </div>
                 <button class="button button-block">Log In</button>
             </form>
@@ -50,7 +50,7 @@
                     <label>
                         Login<span class="req">*</span>
                     </label>
-                    <input type="text" name="login" pattern="^[\w.-]{1,19}[0-9a-zA-Z]$" required autocomplete="off"/>
+                    <input type="text" name="login" pattern="^[\w.-]{1,19}[a-zA-Z\d]$" required autocomplete="off"/>
                 </div>
                 <div class="field-wrap">
                     <label>
@@ -62,7 +62,7 @@
                     <label>
                         Set A Password<span class="req">*</span>
                     </label>
-                    <input type="password" name="password" pattern="^[0-9a-zA-Z]{6,20}$" required autocomplete="off"/>
+                    <input type="password" name="password" pattern="^[\w]{4,20}$" required autocomplete="off"/>
                 </div>
                 <button type="submit" class="button button-block">Sign In</button>
             </form>

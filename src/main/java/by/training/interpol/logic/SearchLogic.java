@@ -1,10 +1,6 @@
 package by.training.interpol.logic;
 
 import by.training.interpol.entity.WantedPerson;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;

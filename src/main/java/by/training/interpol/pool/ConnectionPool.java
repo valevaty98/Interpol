@@ -65,6 +65,10 @@ public class ConnectionPool {
             log.log(Level.WARN, "Some connections are being used!!");
         }
         try {
+            int numberOfUsedConnections = usedConnections.size();
+            for (int i = 0; i < numberOfUsedConnections; i++) {
+                releaseConnection(usedConnections.peek());
+            }
             for (int i = 0; i < actualPoolSize; i++) {
                 Connection connection = availableConnections.take();
                 connection.close();

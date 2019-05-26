@@ -33,7 +33,7 @@
             <label>
                 <fmt:message key="edit-email.label.password"/><span class="req">*</span>
             </label>
-            <input type="password" name="password" required autocomplete="off"/>
+            <input type="password" name="password" pattern="^[\w]{4,20}$" required autocomplete="off"/>
         </div>
         <div>
             <button type="submit" class="button button-block send-button"><fmt:message key="edit-email.button.save"/></button>

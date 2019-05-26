@@ -35,7 +35,6 @@ public class SendMessageCommand implements Command {
         long userId = user.getId();
         Date date = new Date();
         String currentTime = new SimpleDateFormat(DATE_TIME_FORMAT).format(date);
-
         Message message = new Message(subject, messageText, currentTime, wantedPersonId, userId, DEFAULT_MESSAGE_STATUS);
         if (MessageLogic.sendMessage(message)) {
             return builder.buildResponseType(PageServletPath.FRONT_CONTROLLER + TO_FULL_PERSON_ACTION + wantedPersonId, SendType.REDIRECT);

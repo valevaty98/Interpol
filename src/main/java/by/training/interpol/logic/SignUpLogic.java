@@ -1,9 +1,7 @@
 package by.training.interpol.logic;
 
 import by.training.interpol.command.UserAndResultMessageWrapper;
-import by.training.interpol.dao.BaseDao;
 import by.training.interpol.dao.DaoException;
-import by.training.interpol.dao.UserDao;
 import by.training.interpol.dao.impl.AssessmentDaoImpl;
 import by.training.interpol.dao.impl.UserDaoImpl;
 import by.training.interpol.entity.Assessment;
@@ -12,15 +10,15 @@ import by.training.interpol.entity.Role;
 import by.training.interpol.entity.User;
 import by.training.interpol.hash.EncodePasswordException;
 import by.training.interpol.hash.HashGenerator;
+import by.training.interpol.util.ParamsValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
-import java.util.Spliterator;
 
 public class SignUpLogic {
-    private static final String ILLEGAL_PARAMS_MESSAGE = "Illegal parameters for singing up.";
+    private static final String ILLEGAL_PARAMS_MESSAGE = "Invalid parameters for singing up.";
     private static final String LOGIN_ALREADY_TAKEN_MESSAGE = "Login already taken.";
     private static final String CANT_CREATE_USER_MESSAGE = "Can't create user.";
     private static final String OK_MESSAGE = "User created";
@@ -37,10 +35,9 @@ public class SignUpLogic {
         Optional<Assessment> optionalAssessment;
         User user;
 
-        if (login == null || login.isEmpty() ||
-                email == null || email.isEmpty() ||
-                password == null || password.isEmpty()
-        ) {
+        if (!ParamsValidator.isValidEmail(email)
+                || !ParamsValidator.isValidLogin(login)
+                || !ParamsValidator.isValidPassword(password)) {
             logger.log(Level.WARN, ILLEGAL_PARAMS_MESSAGE);
             return new UserAndResultMessageWrapper(Optional.empty(), ILLEGAL_PARAMS_MESSAGE);
         }

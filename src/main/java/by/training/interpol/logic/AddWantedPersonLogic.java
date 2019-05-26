@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,9 @@ public class AddWantedPersonLogic {
             wantedPersonDao.insert(wantedPerson);
 
             String[] nationalities = nationalitiesString.split(",");
+            for (int i = 0; i < nationalities.length; i++) {
+                nationalities[i] = nationalities[i].trim();
+            }
             List<Nationality> existedNationalities = nationalityDao.findAll();
 
             long wantedPersonId = wantedPersonDao.findWantedPersonId(wantedPerson);

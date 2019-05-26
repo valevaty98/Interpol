@@ -3,6 +3,7 @@ package by.training.interpol.logic;
 import by.training.interpol.dao.DaoException;
 import by.training.interpol.dao.impl.AssessmentDaoImpl;
 import by.training.interpol.dao.impl.UserDaoImpl;
+import by.training.interpol.util.ParamsValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +14,9 @@ public class SetUserAssessmentLogic {
     public static boolean setAssessmentToUser(String login, String assessmentMessage) {
         UserDaoImpl userDao = UserDaoImpl.getInstance();
         AssessmentDaoImpl assessmentDao = AssessmentDaoImpl.getInstance();
+        if (!ParamsValidator.isValidLogin(login) || !ParamsValidator.isValidMessage(assessmentMessage)) {
+            return false;
+        }
         try {
             long assessmentId = userDao.findAssessmentIdByUserLogin(login);
             return assessmentDao.updateAssessmentMessage(assessmentId, assessmentMessage);

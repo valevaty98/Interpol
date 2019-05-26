@@ -1,5 +1,7 @@
 package by.training.interpol.command;
 
+import by.training.interpol.entity.Role;
+import by.training.interpol.entity.User;
 import by.training.interpol.util.AttributeParameterName;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -24,8 +26,12 @@ public class CommandFactory {
             command = CommandEnum.valueOf(stringCommand.toUpperCase()).getCommand();
         } catch (IllegalArgumentException e) {
             logger.log(Level.ERROR, "No such command in the command enum!", e);
-            content.putInRequestAttributes(ERROR_ATTR, stringCommand);
-            command = new DefaultCommand();
+            content.putInRequestAttributes(ERROR_ATTR, "No such command: " + stringCommand);
+            if (content.getFromSessionAttributes(AttributeParameterName.USER_ATTR) != null) {
+                command = new HomeCommand();
+            } else {
+                command = new DefaultCommand();
+            }
         }
         return command;
     }

@@ -6,6 +6,7 @@ import by.training.interpol.dao.impl.UserDaoImpl;
 import by.training.interpol.entity.User;
 import by.training.interpol.hash.EncodePasswordException;
 import by.training.interpol.hash.HashGenerator;
+import by.training.interpol.util.ParamsValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +24,7 @@ public class LoginLogic {
         UserDaoImpl dao = UserDaoImpl.getInstance();
         Optional<User> user;
 
-        if (login == null || login.isEmpty() || password == null || password.isEmpty()) {
+        if (!ParamsValidator.isValidPassword(password) || !ParamsValidator.isValidLogin(login) ) {
             logger.log(Level.WARN, ILLEGAL_LOGIN_MESSAGE);
             return new UserAndResultMessageWrapper(Optional.empty(), ILLEGAL_LOGIN_MESSAGE);
         }
