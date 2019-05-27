@@ -1,7 +1,5 @@
 package by.training.interpol.command;
 
-import by.training.interpol.entity.Role;
-import by.training.interpol.entity.User;
 import by.training.interpol.util.AttributeParameterName;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

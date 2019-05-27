@@ -85,8 +85,7 @@
                         <c:if test="${wantedPerson.characteristics != null}">
                             <tr>
                                 <th scope="row" class="col-sm-3"><fmt:message key="full-wanted.label.description"/></th>
-                                <td>${wantedPerson.characteristics}
-                                </td>
+                                <td>${wantedPerson.characteristics}</td>
                             </tr>
                         </c:if>
                         </tbody>

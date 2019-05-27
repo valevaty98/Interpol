@@ -61,9 +61,9 @@ public class MessageLogic {
         MessageDaoImpl messageDao = MessageDaoImpl.getInstance();
         WantedPersonDaoImpl wantedPersonDao = WantedPersonDaoImpl.getInstance();
         try {
-            if (!ParamsValidator.isValidSubject(message.getSubject())
-                    || !ParamsValidator.isValidMessage(message.getMessage()) ||
-                !wantedPersonDao.findById(message.getWantedPersonId()).isPresent()) {
+            if (!ParamsValidator.isValidSubject(message.getSubject()) ||
+                    !ParamsValidator.isValidMessage(message.getMessage()) ||
+                    !wantedPersonDao.findById(message.getWantedPersonId()).isPresent()) {
                 logger.log(Level.WARN, "Illegal params for sending message");
                 return false;
             }
